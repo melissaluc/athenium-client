@@ -1,0 +1,75 @@
+{
+    "workouts_log":[
+        {   
+            "workout_id":1,
+            "last_completed":1715400000,
+            "frequency":10,
+            "workout_name":"Super Back",
+            "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis enim lobortis scelerisque fermentum dui faucibus in ornare quam. ",
+            "tags":["BackExercises","Summer","Cardio"],
+            "exercises":[
+                {
+                    "img_url":null,
+                    "category":"strength",
+                    "exercise_name":"lat pull down",
+                    "weight":80,
+                    "reps":15,
+                    "sets":5
+                },
+                {
+                    "img_url":null,
+                    "category":"strength",
+                    "exercise_name":"deadlift",
+                    "weight":150,
+                    "reps":15,
+                    "sets":5
+                },
+                {
+                    "img_url":null,
+                    "category":"strength",
+                    "exercise_name":"T-rows",
+                    "weight":60,
+                    "reps":15,
+                    "sets":5
+                },
+                {
+                    "img_url":null,
+                    "category":"cardio",
+                    "exercise_name":"running",
+                    "duration":null,
+                    "distance":10
+                },
+                {
+                    "img_url":null,
+                    "category":"cardio",
+                    "exercise_name":"swimming",
+                    "duration":60,
+                    "distance":null
+                }
+            ]
+        },
+        {   
+            "workout_id":2,
+            "last_completed":1715313600,
+            "frequency":1,
+            "workout_name":"Marathon Training",
+            "description":"Gravida neque convallis a cras semper auctor neque vitae tempus. Vitae justo eget magna fermentum iaculis eu non diam. Porta nibh venenatis cras sed felis eget",
+            "tags":["Marathon","Outdoor"],
+            "exercises":[
+                {   
+                    "img_url":null,
+                    "category":"cardio",
+                    "exercise_name":"running",
+                    "duration":null,
+                    "distance":10
+                }
+                
+            ]
+        }
+
+
+
+    ]
+        
+    
+}
