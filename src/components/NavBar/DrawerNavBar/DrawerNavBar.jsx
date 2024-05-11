@@ -24,7 +24,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 
 import { Link } from 'react-router-dom';
 
-export default function AnchorTemporaryDrawer() {
+export default function DrawerNavBar() {
   const [state, setState] = React.useState({
     right: false,
   });
