@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css'
 
-import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
 import SchedulePage from './pages/SchedulePage';
 import ResultsPage from './pages/ResultsPage';
 import GoalsPage from './pages/GoalsPage';
@@ -20,8 +20,8 @@ function App(){
 
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<HomePage/>}  />
-                <Route path='/dashboard' element={<HomePage/>}  />
+                <Route path='/' element={<DashboardPage/>}  />
+                <Route path='/dashboard' element={<DashboardPage/>}  />
                 <Route path='/schedule' element={<SchedulePage/>}  />
                 <Route path='/results' element={<ResultsPage/>}  />
                 <Route path='/goals' element={<GoalsPage/>}  />
