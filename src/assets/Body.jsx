@@ -5,7 +5,7 @@ import * as React from "react";
 
 const SvgBody = (props) => {
 
-  const paths = [
+  const pomPaths = [
     { id: "Neck", d: "M 98.864133,65.19878 H 110.2651" },
     { id: "R-Bicep", d: "m 68.283213,77.283669 v 8.402942" },
     { id: "L-Bicep", d: "m 136.30775,76.840132 v 9.583427" },
@@ -27,15 +27,17 @@ const SvgBody = (props) => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
+      // viewBox="0 0 200 250 "
       viewBox="0 0 200 250 "
       width="100%"
       height="100%"
+      style={{ width: props.width, height: props.height }}
       {...props}
     >
     {/* TODO: Check if selected label is correct */}
     {/* <text x="10" y="20">{props.selectLabel}</text> */}
     <g style={{ fill: "none" }}>
-        {paths.map((path, index) => (
+        {pomPaths.map((path, index) => (
           <path
             key={index}
             d={path.d}
