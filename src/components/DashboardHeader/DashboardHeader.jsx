@@ -1,8 +1,11 @@
 import { Button, Typography, Container, Box, Card, CardContent } from '@mui/material';
 import CircularAvatar from "../CircularAvatar/CircularAvatar"
+import DrawerNavBar from "../NavBar/DrawerNavBar/DrawerNavBar"
+import {useState} from 'react'
 
 
 function DashboardHeader ({userAvatar}) {
+    const [showNavBar, setShowNavBar] = useState(false)
     return(
         <Box sx={{display:'flex', width:"100%", justifyContent:'space-between'}}>
         <Box className='userNavBar' sx={{display:'flex', width:"100%", gap:'2rem'}}>
@@ -36,10 +39,9 @@ function DashboardHeader ({userAvatar}) {
             </Box>
         </Box>
 
-        <Box>
-            {/* NavBar popup */}
-            <Button variant="outlined">...</Button>
-        </Box>
+
+        <DrawerNavBar/>
+
     </Box>
 
     )

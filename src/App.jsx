@@ -29,7 +29,7 @@ function App(){
                 <Route path='/nutrition' element={<NutritionLog/>}  />
                 <Route path='/onboarding' element={<OnboardingPage/>}  />
                 <Route path='/trends' element={<TrendsPage/>}  />
-                <Route path='/workout-log' element={<WorkoutLogPage/>}  />
+                <Route path='/workouts' element={<WorkoutLogPage/>}  />
             </Routes>
         </BrowserRouter>
 
