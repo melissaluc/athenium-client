@@ -65,6 +65,7 @@ function SortPopOver({buttonDisplay, onSort}) {
           placement="bottom-start"
           transition
           disablePortal
+          style={{ zIndex: 9999 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -82,10 +83,10 @@ function SortPopOver({buttonDisplay, onSort}) {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                  <MenuItem onClick={(event) => {onSort('desc', 'frequency'); handleClose(event);}}>Sort By Most Frequent</MenuItem>
-                  <MenuItem onClick={(event) => {onSort('asc', 'frequency'); handleClose(event);}}>Sort By Least Frequent</MenuItem>
                   <MenuItem onClick={(event) => {onSort('desc', 'last_completed'); handleClose(event);}}>Sort By Most Recent</MenuItem>
                   <MenuItem onClick={(event) => {onSort('asc', 'last_completed'); handleClose(event);}}>Sort By Least Recent</MenuItem>
+                  <MenuItem onClick={(event) => {onSort('desc', 'frequency'); handleClose(event);}}>Sort By Most Frequent</MenuItem>
+                  <MenuItem onClick={(event) => {onSort('asc', 'frequency'); handleClose(event);}}>Sort By Least Frequent</MenuItem>
                   <MenuItem onClick={(event) => {onSort('asc', 'workout_name'); handleClose(event);}}>Sort By A-Z</MenuItem>
                   <MenuItem onClick={(event) => {onSort('desc', 'workout_name'); handleClose(event);}}>Sort By Z-A</MenuItem>
 

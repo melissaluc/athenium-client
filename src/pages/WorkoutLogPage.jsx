@@ -5,7 +5,7 @@ import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import TuneIcon from '@mui/icons-material/Tune';
 import SortPopover from "../components/Popovers/SortPopover";
-
+import FilterPopover from "../components/Popovers/FilterPopover"
 import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 
 import workoutLogData from "../data/workouts.json"
@@ -17,7 +17,7 @@ import {useState} from 'react'
 function WorkoutLogPage({}){
     const [originalWorkoutData, setOriginalWorkoutData] = useState(workoutLogData.workouts_log);
     const [workoutData, setWorkoutData] = useState(workoutLogData.workouts_log)
-   
+    
    
     const onSort = (order, category) => {
         handleSort(order, category)
@@ -36,16 +36,19 @@ function WorkoutLogPage({}){
         setWorkoutData(sortedData);
     };
     
-    
+    const onFilter = (filterText) => {
+        if (!filterText) {
+            setWorkoutData(originalWorkoutData);
+        } else {
+            handleFilter(filterText)
+        }
+    }
+
     const handleFilter = (filterCriteria) => {
-        // Logic to filter workoutData based on filterCriteria
-        // Update workoutData state with filtered data
-        // setWorkoutData(filteredData);
+        const filteredData = workoutData.filter(item => item.workout_name === filterCriteria)
+        setWorkoutData(filteredData);
     };
     
-    const resetFilter = () => {
-        setWorkoutData(originalWorkoutData);
-    };
 
     return (
         <Container>
@@ -58,7 +61,7 @@ function WorkoutLogPage({}){
 
             {/* Filter + sort */}
             <Box sx={{display:'flex', justifyContent:'flex-end', alignItems:'center'}}>
-                <TuneIcon/>
+                <FilterPopover buttonDisplay={<TuneIcon/>} data={workoutData} onFilter={onFilter}/>
                 <SortPopover buttonDisplay={<SwapVertIcon/>} onSort={onSort}/>
             </Box>
 
