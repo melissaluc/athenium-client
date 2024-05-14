@@ -1,0 +1,108 @@
+{
+    "muscle_groups":{
+        
+        "Chest": [
+            {
+                "date_calculated":1715400000,
+                "exercise_name":"Bench Press1",
+                "category":"Chest",
+                "body_weight":120,
+                "relative_strength_demographic":20,
+                "relative_strength":60,
+                "one_rep_max":150,
+                "strength":20,
+                "strength_level":"beg",
+                "next_strength_level":"nov",
+                "strength_boundaries":{
+                    "beg":24,
+                    "nov":42,
+                    "int":65,
+                    "adv":94,
+                    "elite":126
+                }
+            },
+            {
+                "date_calculated":1715400000,
+                "exercise_name":"Bench Press2",
+                "category":"Chest",
+                "body_weight":120,
+                "relative_strength_demographic":20,
+                "relative_strength":60,
+                "one_rep_max":150,
+                "strength":120,
+                "strength_level":"adv",
+                "next_strength_level":"elite",
+                "strength_boundaries":{
+                    "beg":24,
+                    "nov":42,
+                    "int":65,
+                    "adv":94,
+                    "elite":126
+                }
+            },
+            {
+                "date_calculated":1715400000,
+                "exercise_name":"Bench Press3",
+                "category":"Chest",
+                "body_weight":120,
+                "relative_strength_demographic":20,
+                "relative_strength":60,
+                "one_rep_max":150,
+                "strength":130,
+                "strength_level":"elite",
+                "next_strength_level":null,
+                "strength_boundaries":{
+                    "beg":24,
+                    "nov":42,
+                    "int":65,
+                    "adv":94,
+                    "elite":126
+                }
+            }
+        ],
+        "Back":[
+            {
+                "date_calculated":1715400000,
+                "exercise_name":"Pull Ups",
+                "category":"Back",
+                "body_weight":120,
+                "relative_strength_demographic":20,
+                "relative_strength":60,
+                "one_rep_max":150,
+                "strength":120,
+                "strength_level":"adv",
+                "next_strength_level":"elite",
+                "strength_boundaries":{
+                    "beg":24,
+                    "nov":42,
+                    "int":65,
+                    "adv":94,
+                    "elite":126
+                }
+            },
+            {
+                "date_calculated":1715400000,
+                "exercise_name":"Cable Reverse Fly",
+                "category":"Back",
+                "body_weight":120,
+                "relative_strength_demographic":20,
+                "relative_strength":60,
+                "one_rep_max":150,
+                "strength":60,
+                "strength_level":"nov",
+                "next_strength_level":"int",
+                "strength_boundaries":{
+                    "beg":24,
+                    "nov":42,
+                    "int":65,
+                    "adv":94,
+                    "elite":126
+                }
+            }
+        ]
+
+    }
+
+}
+
+

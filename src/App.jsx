@@ -11,6 +11,7 @@ import NutritionLog from './pages/NutritionLog';
 import OnboardingPage from './pages/OnboardingPage';
 import TrendsPage from './pages/TrendsPage';
 import WorkoutLogPage from './pages/WorkoutLogPage';
+import StrengthPage from './pages/StrengthPage';
 
 
 function App(){
@@ -30,6 +31,7 @@ function App(){
                 <Route path='/onboarding' element={<OnboardingPage/>}  />
                 <Route path='/trends' element={<TrendsPage/>}  />
                 <Route path='/workouts' element={<WorkoutLogPage/>}  />
+                <Route path='/strength' element={<StrengthPage/>}  />
             </Routes>
         </BrowserRouter>
 
