@@ -8,7 +8,7 @@ import userAvatar from "../assets/placeholderuseravatar.jpg"
 import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { useNavigate } from 'react-router-dom';
-import MiniScheduleCard from '../components/Cards/MiniScheduleCard/MiniScheduleCard';
+import MiniScheduleCard from '../components/Cards/ScheduleCard/ScheduleCard';
 
 
 function DashboardPage({}){
