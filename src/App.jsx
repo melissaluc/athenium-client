@@ -7,7 +7,7 @@ import SchedulePage from './pages/SchedulePage';
 import ResultsPage from './pages/ResultsPage';
 import GoalsPage from './pages/GoalsPage';
 import MeasurementPage from './pages/MeasurementsPage';
-import NutritionLog from './pages/NutritionLog';
+import NutritionPage from './pages/NutritionPage';
 import OnboardingPage from './pages/OnboardingPage';
 import TrendsPage from './pages/TrendsPage';
 import WorkoutLogPage from './pages/WorkoutLogPage';
@@ -17,8 +17,7 @@ import StrengthPage from './pages/StrengthPage';
 function App(){
 
     return(
-        <>
-
+   
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<DashboardPage/>}  />
@@ -27,7 +26,7 @@ function App(){
                 <Route path='/results' element={<ResultsPage/>}  />
                 <Route path='/goals' element={<GoalsPage/>}  />
                 <Route path='/measurements' element={<MeasurementPage/>}  />
-                <Route path='/nutrition' element={<NutritionLog/>}  />
+                <Route path='/nutrition' element={<NutritionPage/>}  />
                 <Route path='/onboarding' element={<OnboardingPage/>}  />
                 <Route path='/trends' element={<TrendsPage/>}  />
                 <Route path='/workouts' element={<WorkoutLogPage/>}  />
@@ -35,7 +34,7 @@ function App(){
             </Routes>
         </BrowserRouter>
 
-        </>
+
 
     )
 }
