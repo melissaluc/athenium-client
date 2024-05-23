@@ -1,0 +1,33 @@
+[
+    {
+        "activity_id":"74e179e4-3a58-4beb-a58a-2beb08962480",
+        "planned_time":1716460967,
+        "activity_category": "nutrition",
+        "activity_subcategory":"meal",
+        "activity_name": "Breakfast",
+        "food_list":["chicken breast","kale","brown rice","bell pepper"],
+        "macros":{
+            "uom":"g",
+            "data":{
+                "protein":35, 
+                "carbs":10, 
+                "fat":0
+            }
+        }
+    },
+    {
+        "activity_id":"74e179e4-3a58-4beb-a58a-2beb08962480",
+        "planned_time":	1716471767,
+        "activity_category": "workout",
+        "activity_subcategory":"sports",
+        "activity_name": "Tennis Session"
+    },
+    {
+        "activity_id":"74e179e4-3a58-4beb-a58a-2beb08962480",
+        "planned_time":1716493367,
+        "activity_category": "workout",
+        "activity_subcategory":"weights",
+        "activity_name": "Upper Body Workout",
+        "exercise_list":["Dumbell Press","Push Up","Squat","Leg Press","Lat Pull","Shoulder Press","Kettlebell Swing"]
+    }
+]

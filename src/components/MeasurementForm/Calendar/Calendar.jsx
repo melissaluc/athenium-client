@@ -24,6 +24,9 @@ function MyDatePicker(props) {
   const handleDateSelect = (selectedDates) => {
     const selectedDate = selectedDates[0]; // Get the selected date
     setSelectedDate(selectedDate); // Update the state with the selected date
+    if(props.setParentSelectDate){
+      props.setParentSelectDate(selectedDate)
+    }
   };
 
   const handleInputFocus = () => {
