@@ -1,0 +1,61 @@
+{
+    "goals": [
+      {
+        "id": "1",
+        "name": "Weight Loss",
+        "category": "Fitness",
+        "description": "Achieve a specific weight loss goal within a given timeframe.",
+        "metric": "weight",
+        "units": "lbs",
+        "updated_on":1716411215,
+        "start_date":1716411215,
+        "target_value": 10,
+        "current_value":8,
+        "start_value":0,
+        "status": "in progress"
+      },
+      {
+        "id": "2",
+        "name": "Muscle Gain",
+        "category": "Fitness",
+        "description": "Increase muscle mass and strength through targeted resistance training.",
+        "metric": "muscle_mass",
+        "units": "lbs",
+        "updated_on":1716411215,
+        "start_date":1716411215,
+        "target_value": 5,
+        "current_value":0,
+        "start_value":0,
+        "status": "pending"
+      },
+      {
+        "id": "3",
+        "name": "Run a 10k Race",
+        "category": "Endurance",
+        "description": "Complete a 10-kilometer race within a specific time goal.",
+        "metric": "race_time",
+        "units": "minutes",
+        "updated_on":1716411215,
+        "start_date":1716411215,
+        "target_value": 50,
+        "current_value":50,
+        "start_value":0,
+        "status": "achieved"
+      },
+      {
+        "id": "4",
+        "name": "Custom Metric Goal",
+        "category": "Custom",
+        "description": "User-defined fitness goal.",
+        "metric": "custom_metric",
+        "units": "custom_units",
+        "updated_on":1716411215,
+        "start_date":1716411215,
+        "target_value": 100,
+        "current_value":5,
+        "start_value":0,
+        "status": "in progress"
+      }
+    ]
+  }
+  
