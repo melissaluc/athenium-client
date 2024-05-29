@@ -1,0 +1,306 @@
+{
+    "body_composition":{
+        "uom":{
+            "weight":"lbs",
+            "body_fat":"%",
+            "lean_muscle_mass":"lbs",
+            "bmi":"kg/m**2"
+
+        },
+        "options":["weight", "body_fat", "lean_muscle_mass", "bmi"],
+        "data": [
+            {
+                "timestamp": 1652589431,
+                "weight": 70.5,
+                "body_fat": 15.2,
+                "lean_muscle_mass": 62.3,
+                "bmi": 22.6
+            },
+            {
+                "timestamp": 1653194231,
+                "weight": 71.2,
+                "body_fat": 15.0,
+                "lean_muscle_mass": 62.7,
+                "bmi": 22.8
+            },
+            {
+                "timestamp": 1653799031,
+                "weight": 71.9,
+                "body_fat": 14.8,
+                "lean_muscle_mass": 63.1,
+                "bmi": 23.0
+            }
+        ]
+    },
+
+    "measurements": {
+        "uom": "inch",
+        "options":[
+            "neck",
+            "chest",
+            "shoulder",
+            "rbicep",
+            "lbicep",
+            "waist",
+            "abdomen",
+            "hip",
+            "rupperthigh",
+            "lupperthigh",
+            "rthigh",
+            "lthigh",
+            "rcalf",
+            "lcalf"
+        ],
+        "data": [
+            {
+                "timestamp": 1715476031,
+                "neck": 12,
+                "chest": 34,
+                "abdomen": 30,
+                "lbicep": 12,
+                "lupperthigh": 21,
+                "lthigh": 19,
+                "lcalf": 13,
+                "shoulder": 36,
+                "waist": 25,
+                "hip": 36,
+                "rbicep": 12,
+                "rupperthigh": 21,
+                "rthigh": 19,
+                "rcalf": 13
+            },
+            {
+                "timestamp": 1716080831,
+                "neck": 12.1,
+                "chest": 34.5,
+                "abdomen": 30.2,
+                "lbicep": 12.2,
+                "lupper thigh": 21.3,
+                "lthigh": 19.1,
+                "lcalf": 13.2,
+                "shoulder": 36.5,
+                "waist": 25.1,
+                "hip": 36.2,
+                "rbicep": 12.1,
+                "rupperthigh": 21.2,
+                "rthigh": 19.1,
+                "rcalf": 13.1
+            },
+            {
+                "timestamp": 1716685631,
+                "neck": 12.2,
+                "chest": 35,
+                "abdomen": 30.4,
+                "lbicep": 12.4,
+                "lupperthigh": 21.5,
+                "lthigh": 19.2,
+                "lcalf": 13.3,
+                "shoulder": 37,
+                "waist": 25.2,
+                "hip": 36.4,
+                "rbicep": 12.2,
+                "rupperthigh": 21.4,
+                "rthigh": 19.2,
+                "rcalf": 13.2
+            }
+        ]
+    },
+    "nutrition": {
+        "uom": {
+            "macros": "g",
+            "calories": "cal"
+        },
+        "options":[
+            "protein",
+            "carbs",
+            "fat",
+            "calories"
+        ],
+        "data": [
+            {
+                "timestamp": 1652589431,
+                "protein": 80,
+                "carbs": 150,
+                "fat": 40,
+                "calories": 1600
+            },
+            {
+                "timestamp": 1653194231,
+                "protein": 85,
+                "carbs": 155,
+                "fat": 45,
+                "calories": 1650
+            },
+            {
+                "timestamp": 1653799031,
+                "protein": 90,
+                "carbs": 160,
+                "fat": 50,
+                "calories": 1700
+            },
+            {
+                "timestamp": 1654403831,
+                "protein": 95,
+                "carbs": 165,
+                "fat": 55,
+                "calories": 1750
+            }
+        ]
+    },
+
+    
+    "strength":{
+        "uom":{
+            "lift": "lbs",
+            "one_rep_max": "lbs"
+        },
+        "options":{
+            "Chest":[
+                "Bench Press", 
+                "Dumbbell Bench Press"
+            ],
+            "Legs":[
+                "Squat", 
+                "Sled Leg Press"
+            ]
+        },
+        "data": {
+            "Chest": [
+              {
+                "exercise": "Bench Press",
+                "data": [
+                  {
+                    "timestamp": 1622582400,
+                    "lift": 100,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.8333333333,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622668800,
+                    "lift": 105,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.875,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622755200,
+                    "lift": 110,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.9166666667,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  }
+                ]
+              },
+              {
+                "exercise": "Dumbbell Bench Press",
+                "data": [
+                  {
+                    "timestamp": 1622582400,
+                    "lift": 95,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.7916666667,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622668800,
+                    "lift": 100,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.8333333333,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622755200,
+                    "lift": 105,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 0.875,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  }
+                ]
+              }
+            ],
+            "Legs": [
+              {
+                "exercise": "Squat",
+                "data": [
+                  {
+                    "timestamp": 1622582400,
+                    "lift": 135,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 1.125,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622668800,
+                    "lift": 140,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 1.1666666667,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622755200,
+                    "lift": 145,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 1.2083333333,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  }
+                ]
+              },
+              {
+                "exercise": "Sled Leg Press",
+                "data": [
+                  {
+                    "timestamp": 1622582400,
+                    "lift": 250,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 2.0833333333,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622668800,
+                    "lift": 255,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 2.125,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  },
+                  {
+                    "timestamp": 1622755200,
+                    "lift": 260,
+                    "reps": 10,
+                    "sets": 3,
+                    "relative_strength": 2.1666666667,
+                    "strength_level": "Novice",
+                    "one_rep_max": 150
+                  }
+                ]
+              }
+            ]
+          }
+          
+          
+          
+          
+    }
+}
