@@ -20,7 +20,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-
+import AtheniumLogo from "../../../assets/AtheniumLogo"
 
 import { Link } from 'react-router-dom';
 
@@ -60,6 +60,9 @@ export default function DrawerNavBar() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
+            <Box sx={{padding:"1rem 0rem 1.5rem 1rem"}}>
+              <AtheniumLogo width='200px'/>
+            </Box>
             <Box
               sx={{ width: '250px' }}
               role="presentation"
