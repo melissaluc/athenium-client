@@ -101,8 +101,6 @@ function NutritionPage(){
         
 
     // Echarts
-    echarts.use([SVGRenderer, CanvasRenderer]);
-    
     const barChartOptions = {
 
         tooltip: {
