@@ -12,7 +12,7 @@ typography: {
       main: '#776dde',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#F3F0FB',
     },
     progress: {
       level1: '#F4D35E', // Yellow

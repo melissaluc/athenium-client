@@ -3,10 +3,11 @@ import { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import StrengthLevelExerciseList from "./StrengthLevelExerciseList";
+import { useTheme } from "@emotion/react";
 
 
 function MuscleGroupStrengthCard ({muscleGroup, exercises}) {
-
+    const theme = useTheme()
     const [expandWorkout, setExpandWorkout] = useState(false)
 
     return(
@@ -22,10 +23,11 @@ function MuscleGroupStrengthCard ({muscleGroup, exercises}) {
                 }
             </CardContent>
             <CardActionArea sx={{
+                height:'4vh',
                 width:'100%', 
                 margin:'0px', 
-                padding:'0px', 
-                backgroundColor:'gray', 
+                backgroundColor:theme.palette.secondary.main, 
+                opacity:"40%",
                 borderTopLeftRadius: 0,
                 borderTopRightRadius: 0
                 }}>
