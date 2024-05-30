@@ -22,12 +22,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AtheniumLogo from "../../../assets/AtheniumLogo"
 
+import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
 export default function DrawerNavBar() {
   const [state, setState] = React.useState({
     right: false,
   });
+
+  const theme = useTheme();
 
   const menuItems = [
     { text: 'Settings', path: '../settings', icon: <SettingsIcon /> },
@@ -72,7 +75,23 @@ export default function DrawerNavBar() {
               <List>
                 {menuItems.map((menuItem, index) => (
                   <ListItem key={menuItem.text} disablePadding>
-                    <ListItemButton component={Link} to={menuItem.path}>
+                    <ListItemButton component={Link} to={menuItem.path}
+                    sx={{
+                      '&.Mui-selected': {
+                        backgroundColor: theme.palette.primary.main,
+                        color: 'white',
+                        '& .MuiListItemIcon-root': {
+                          color: 'white',
+                        },
+                      },
+                      '&:hover': {
+                        backgroundColor: theme.palette.primary.main,
+                        color: 'white',
+                        '& .MuiListItemIcon-root': {
+                          color: 'white',
+                        },
+                      },
+                    }}>
                       <ListItemIcon>
                         {menuItem.icon}
                       </ListItemIcon>

@@ -9,10 +9,17 @@ typography: {
     },
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#776dde',
     },
     secondary: {
       main: '#dc004e',
+    },
+    progress: {
+      level1: '#F4D35E', // Yellow
+      level2: '#E09DAD', // Pink
+      level3: '#BDB2FF', // Light Purple
+      level4: '#9A4C95', // Purple
+      level5: '#00F5D4', // Green
     },
   },
   breakpoints: {
