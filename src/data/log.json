@@ -1,0 +1,34 @@
+[
+    {
+        "id":"95eed145-2d24-43a4-9d67-b1f21b810b20",
+        "timestamp":1716411215,
+        "metric":"body_weight",
+        "value":125,
+        "uom":"lbs",
+        "notes":null
+    },
+    {
+        "id":"b3d25238-1a01-412a-bd75-5f04755648f8",
+        "timestamp":1716411215,
+        "metric":"lean_muscle_mass",
+        "value":98,
+        "uom":"lbs",
+        "notes":null
+    },
+    {
+        "id":"405bc265-b859-4fe1-8f04-e900acf44ff2",
+        "timestamp":1716411215,
+        "metric":"running_time",
+        "value":45,
+        "uom":"minutes",
+        "notes":null
+    },
+    {
+        "id":"eaa61aa7-4b1d-4566-896b-11954803e35a",
+        "timestamp":1716411215,
+        "metric":"custom",
+        "value":50,
+        "uom":"custom",
+        "notes":null
+    }
+]

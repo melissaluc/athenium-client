@@ -5,6 +5,7 @@ import './App.css'
 import DashboardPage from './pages/DashboardPage';
 import SchedulePage from './pages/SchedulePage';
 import ResultsPage from './pages/ResultsPage';
+import LogPage from './pages/LogPage';
 import GoalsPage from './pages/GoalsPage';
 import MeasurementPage from './pages/MeasurementsPage';
 import NutritionPage from './pages/NutritionPage';
@@ -24,6 +25,7 @@ function App(){
                 <Route path='/dashboard' element={<DashboardPage/>}  />
                 <Route path='/schedule' element={<SchedulePage/>}  />
                 <Route path='/results' element={<ResultsPage/>}  />
+                <Route path='/log' element={<LogPage/>}  />
                 <Route path='/goals' element={<GoalsPage/>}  />
                 <Route path='/measurements' element={<MeasurementPage/>}  />
                 <Route path='/nutrition' element={<NutritionPage/>}  />
