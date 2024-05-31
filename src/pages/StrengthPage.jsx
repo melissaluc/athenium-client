@@ -10,7 +10,7 @@ function StrengthPage() {
 
     const [toggleView,setToggleView] = useState(false)
     
-
+    
 
     return (
         <Container>

@@ -21,6 +21,11 @@ typography: {
       level4: '#9A4C95', // Purple
       level5: '#00F5D4', // Green
     },
+    macros:{
+      protein:"#ed254e",
+      carbs:"#4dccbd",
+      fat:"#f9dc5c"
+    }
   },
   breakpoints: {
     values:{
