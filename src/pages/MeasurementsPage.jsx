@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
-import MeasurementPageHeader from '../components/MeasurementForm/MeasurementPageHeader';
+import DrawerNavBar from '../components/NavBar/DrawerNavBar/DrawerNavBar';
 
 
 function MeasurementPage({}){
@@ -74,7 +74,23 @@ function MeasurementPage({}){
                 }}
             >
             {/* Title and navigation */}
-            <MeasurementPageHeader/>
+            <Box 
+
+            sx={{ 
+                // border:"1px solid magenta",
+                // height:"1rem",
+                width: "100%",
+                display: 'flex',
+                justifyContent:'flex-end',
+                alignItems:"center"
+            
+    
+            }}
+        >
+            <DrawerNavBar />
+
+
+        </Box>
             {/* TODO: Access backend user data to determine measurement units */}
             </Box>
             <Typography color='primary'>In Inches</Typography>
