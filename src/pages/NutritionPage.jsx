@@ -7,6 +7,7 @@ import nutritionData from '../data/nutrition.json'
 import MealList from "../components/MealList";
 import { startOfWeek, endOfWeek, format } from 'date-fns';
 import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
+import { useTheme } from "@emotion/react";
 
 
 const getOrdinalSuffix = (day) => {
@@ -63,6 +64,9 @@ const groupDataByWeek = (data) => {
 
 
 function NutritionPage(){
+
+    const theme = useTheme()
+
     // Date formatting
     const date = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -126,21 +130,21 @@ function NutritionPage(){
         series: [
             {
                 name: 'Protein',
-                itemStyle: {normal: {color: "#6C4B5E"}},
+                itemStyle: {normal: {color: theme.palette.macros.protein}},
                 type: 'bar',
                 stack: 'stack',
                 data: barChartDataSeries.map(macro => macro.value[0])
             },
             {
                 name: 'Carbs',
-                itemStyle: {normal: {color: '#D7907B'}},
+                itemStyle: {normal: {color: theme.palette.macros.carbs}},
                 type: 'bar',
                 stack: 'stack',
                 data: barChartDataSeries.map(macro => macro.value[1])
             },
             {
                 name: 'Fat',
-                itemStyle: {normal: {color: '#B3679B'}},
+                itemStyle: {normal: {color: theme.palette.macros.fat}},
                 type: 'bar',
                 stack: 'stack',
                 data: barChartDataSeries.map(macro => macro.value[2])
@@ -192,9 +196,9 @@ function NutritionPage(){
                     show: false
                 },
                 data: [
-                    {value: todayMacros.totalProtein, name: 'Protein', itemStyle: {color: "#6C4B5E"}},
-                    {value: todayMacros.totalCarbs, name: 'Carbs', itemStyle: {color: '#D7907B'}},
-                    {value: todayMacros.totalFat, name: 'Fat', itemStyle: {color: '#B3679B'}}
+                    {value: todayMacros.totalProtein, name: 'Protein', itemStyle: {color:theme.palette.macros.protein}},
+                    {value: todayMacros.totalCarbs, name: 'Carbs', itemStyle: {color: theme.palette.macros.carbs}},
+                    {value: todayMacros.totalFat, name: 'Fat', itemStyle: {color: theme.palette.macros.fat}}
                 ]
             }
         ]

@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Button } from "@mui/material"; 
 import { useEffect, useState } from "react";
 import TrendsGraph from "./TrendsGraph"
+import { useTheme } from "@emotion/react";
 
 
 
@@ -13,7 +14,7 @@ function TrendsGroup ({
                     }){
     
 
-
+    const theme = useTheme();
     const [selectMetrics, setSelectMetrics] =useState([])
     const [showOptions, setShowOptions] = useState(false)
     // const [showOptions, setShowOptions] = useState({options: false, suboptions: false})
@@ -29,15 +30,16 @@ function TrendsGroup ({
 
     return (
 
-        <Box sx={{display:'flex', flexDirection:'column', gap:'0.5rem'}}>
-            <Box  sx={{display:'flex', justifyContent:'space-between'}}>
+        <Box sx={{display:'flex', flexDirection:'column', gap:'0.2rem'}}>
+            <Box  sx={{
+                display:'flex', 
+                justifyContent:'space-between', 
+                borderBottom:`2px solid ${theme.palette.primary.main}`
+                }}>
                 <Button fontWeight={'bold'} onClick={()=>{setShowOptions(prev => !prev)}}>
                     {groupTitle.replace(/_/g, " ").toUpperCase()}
                 </Button>
-                {groupTitle === "nutrition" | groupTitle === "strength" ?
-                    <Button onClick={()=>{setToggleGraph(prev => !prev)}}>toggle</Button> : null
-
-                }
+                <Button onClick={()=>{setToggleGraph(prev => !prev)}}>toggle</Button> 
             </Box>
 
             {showOptions && <Box sx={{

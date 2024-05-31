@@ -1,3 +1,4 @@
+import { useTheme } from "@emotion/react";
 import { Box, Typography } from "@mui/material"; 
 import * as echarts from 'echarts';
 import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
@@ -18,7 +19,7 @@ const getMacroCalories = (macro) => {
 }
 
 // Helper function to extract data
-const extractData = (groupData, attribute, groupTitle, toggleGraph) => {
+const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
     const extractedData = groupData.map(entry => ({
         timestamp: entry.timestamp,
         value: entry[attribute]
@@ -31,7 +32,8 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph) => {
                 .filter(entry => attribute !== "calories") 
                 .map(entry => ({
                     timestamp: entry.timestamp,
-                    value: entry.value * getMacroCalories(attribute)
+                    value: entry.value * getMacroCalories(attribute),
+                    itemStyle:{color:theme.palette.macros[attribute]}
                 }));
         } else {
             // If toggleGraph is true, return values as is and exclude "calories"
@@ -39,7 +41,8 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph) => {
                 .filter(entry => attribute !== "calories") 
                 .map(entry => ({
                     timestamp: entry.timestamp,
-                    value: entry.value
+                    value: entry.value,
+                    itemStyle:{color:theme.palette.macros[attribute]}
                 }));
         }
     } 
@@ -50,7 +53,7 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph) => {
 
 
 // Function to generate ECharts options
-const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels) => {
+const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme) => {
     switch (groupTitle) {
         case "nutrition":
             return {
@@ -72,7 +75,7 @@ const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hide
                     name: option,
                     type: 'bar',
                     stack: toggleGraph ? null : 'nutrition',
-                    data: extractData(groupData, option, groupTitle, toggleGraph)
+                    data: extractData(groupData, option, groupTitle, toggleGraph, theme)
                 }))
             };
         case "strength":
@@ -117,7 +120,7 @@ const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hide
                 series: selectOptions.map(option => ({
                     name: option,
                     type: 'line',
-                    data: extractData(groupData, option, groupTitle, toggleGraph)
+                    data: extractData(groupData, option, groupTitle, toggleGraph, theme)
                 }))
             };
     }
@@ -126,7 +129,7 @@ const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hide
 function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setToggleText}) {
     const [hideLegend, setHideLegend] = useState(true);
     const [hideXAxisLabels, setHideXAxisLabels] = useState(true);
-
+    const theme = useTheme()
     const handleSetToggleText = (text) => {
         setToggleText(text)
     }
@@ -135,7 +138,7 @@ function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setTog
     useEffect(() => {
         echarts.use([SVGRenderer, CanvasRenderer]);
         const chart = echarts.init(document.getElementById(`TrendChart${groupTitle}`), null, { renderer: 'svg' });
-        chart.setOption(generateOptions(groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels));
+        chart.setOption(generateOptions(groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme));
         return () => {
             chart.dispose();
         };

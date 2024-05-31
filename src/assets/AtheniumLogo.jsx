@@ -1,10 +1,11 @@
 import * as React from "react";
-
+import { useTheme } from '@mui/material/styles';
 
 
 const AtheniumLogo = ({width}) => {
 
-  const colour = "#007bff"
+  const theme = useTheme();
+  const colour = theme.palette.primary.main;
   const height = width * (44.557576927215365 / 275.59999999999997);
 
 
@@ -29,3 +30,6 @@ const AtheniumLogo = ({width}) => {
 
 };
 export default AtheniumLogo;
+
+
+

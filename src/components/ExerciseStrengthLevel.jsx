@@ -1,23 +1,24 @@
 import { Box, Container, Typography, LinearProgress, Card,CardContent, CardActionArea, CardActions, Button} from "@mui/material";
+import { useTheme } from '@mui/material/styles';
 
-
-function getProgressColour(strengthLevel) {
+function getProgressColour(strengthLevel, theme) {
+    
     let colour = null;
     switch (strengthLevel) {
         case "beg":
-            colour = "#ADD5F7";
+            colour = theme.palette.progress.level1;
             break;
         case "nov":
-            colour = "#7FB2F0";
+            colour = theme.palette.progress.level2;
             break;
         case "int":
-            colour = "#4E7AC7";
+            colour = theme.palette.progress.level3;
             break;
         case "adv":
-            colour = "#35478C";
+            colour = theme.palette.progress.level4;
             break;
         case "elite":
-            colour = "#00d664";
+            colour = theme.palette.progress.level5;
             break;
         default:
             colour = null;
@@ -39,7 +40,8 @@ function ExerciseStrengthLevel ({
                                 next_strength_level,
                                 strength_boundaries,
                                 view}) {
-
+                                
+    const theme = useTheme();
     const dateFormatted = new Date(date_calculated)
     const progressValue = parseFloat(((strength - strength_boundaries[strength_level]) / (strength_boundaries[strength_level]) * 100).toFixed(1));
 
@@ -87,7 +89,7 @@ function ExerciseStrengthLevel ({
                 borderRadius: 5,
                 bgcolor: '#DEDBDE',
                 '& .MuiLinearProgress-bar': {
-                    bgcolor: getProgressColour(strength_level), 
+                    bgcolor: getProgressColour(strength_level, theme), 
                 },
             }}
         />

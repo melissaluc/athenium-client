@@ -7,6 +7,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ListItemExerciseCard from "./ListItemExerciseCard";
 
 import { useState } from "react";
+import { useTheme } from "@emotion/react";
 
 
 function WorkoutCard ({data}) {
@@ -17,7 +18,7 @@ function WorkoutCard ({data}) {
         day: 'numeric',
         year: 'numeric'
     });
-
+    const theme = useTheme()
     return(
         <Card>
         <CardContent>
@@ -52,7 +53,8 @@ function WorkoutCard ({data}) {
             width:'100%', 
             margin:'0px', 
             padding:'0px', 
-            backgroundColor:'gray', 
+            backgroundColor:theme.palette.secondary.main, 
+            opacity:"40%",
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0
             }}>

@@ -10,13 +10,13 @@ function StrengthPage() {
 
     const [toggleView,setToggleView] = useState(false)
     
-
+    
 
     return (
         <Container>
             {/* Header + Nav */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography>Strength</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+  
                 <DrawerNavBar />
             </Box>
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
