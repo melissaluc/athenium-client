@@ -5,6 +5,7 @@ import { useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import DrawerNavBar from '../components/NavBar/DrawerNavBar/DrawerNavBar';
+import GoalModal from '../components/GoalModal';
 
 
 function MeasurementPage({}){
@@ -45,6 +46,7 @@ function MeasurementPage({}){
         setWaistHipRatio(inputValues["right"]["Waist"]/inputValues["right"]["Hip"])
     },[inputValues])
     
+
 
     const handleSubmit = (e) => {
         // Handle form submission and update backend data with inputValues
@@ -100,9 +102,9 @@ function MeasurementPage({}){
 
             {/* Buttons Add a new measurement goal or Submit form */}
             <Box gap="0.5rem" display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="100%">
-
-                <Button onClick={()=>alert("add goal")} variant='contained' sx={{ width: '80%' }}>+ Add Goal</Button>
-                <Button onClick={handleSubmit} variant='contained' sx={{ width: '80%' }}>Save</Button>
+                <GoalModal sx={{ width: '80%' }} values={{...inputValues.left,...inputValues.right}}/>
+                {/* <Button onClick={()=>{handleSetGoal()}} variant='contained' sx={{ width: '80%' }}>+ Add Goal</Button> */}
+                <Button onClick={handleSubmit}  sx={{ width: '80%' }}>Save</Button>
 
             </Box>
         </Container>
