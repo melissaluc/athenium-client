@@ -8,7 +8,7 @@ function GoalsPage() {
   const [selectDate, setSelectDate] = useState(new Date());
   const [originalData] = useState(goalsData.goals);
   const [data, setData] = useState(goalsData.goals);
-  const [activeView, setActiveView] = useState('all');
+  const [activeView, setActiveView] = useState('in progress');
 
   console.log(activeView)
   const filterData = (filterValue) => {
