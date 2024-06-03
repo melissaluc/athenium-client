@@ -1,6 +1,8 @@
 import { Box, Container, Typography, LinearProgress, Card,CardContent, CardActionArea,CardHeader, CardActions, Button} from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useState } from "react";
+import EditGoalModal from "./Modals/EditModal";
+
 
 function getProgressColour(progress) {
     let colour = null;
@@ -21,17 +23,19 @@ function getProgressColour(progress) {
 }
 
 function GoalProgress ({
+                        id,
                         name,
                         category,
                         description,
                         metric,
-                        units,
+                        unit,
                         updated_on,
                         start_date,
                         target_value,
                         current_value,
                         start_value,
-                        status}) {
+                        status,
+                        handleEditGoal }) {
     const [expandWorkout, setExpandWorkout] = useState(false)
     const updateDateFormatted = new Date(updated_on*1000)
     const startDateFormatted = new Date(start_date*1000)
@@ -48,7 +52,19 @@ function GoalProgress ({
                             {/* <Typography fontSize={'0.7rem'}>{emoji}</Typography> */}
                         </Box>
 
-                        <Button>Edit</Button>
+                        <EditGoalModal data={{
+                                            id,
+                                            name,
+                                            category,
+                                            description,
+                                            metric,
+                                            unit,
+                                            updated_on,
+                                            start_date,
+                                            target_value,
+                                            start_value,
+                                            status,}}
+                                        handleEditGoal={handleEditGoal}/>
                     </Box>
                     <Box>
                         <Typography fontSize={'0.7rem'}>{category}</Typography>
@@ -59,6 +75,7 @@ function GoalProgress ({
                     </Box>
                 </Box>
                 <Box>
+                {/* Start Progress Bar */}
                 <Box sx={{ display: 'flex', justifyContent:'space-between'}}>
                     <Box sx={{ 
                         display: 'flex', 
@@ -85,16 +102,18 @@ function GoalProgress ({
                 />
                 <Box sx={{display:'flex', justifyContent:'space-between'}}>
                     {/* Value at current level */}
-                    <Typography>{start_value}{units}</Typography>
+                    <Typography>{start_value}{unit}</Typography>
                     {/* Value at next level */}
-                    <Typography>{current_value === "achieved"? `${current_value}${units}` : `${target_value}${units}`}</Typography>
+                    <Typography>{current_value === "achieved"? `${current_value}${unit}` : `${target_value}${unit}`}</Typography>
                 </Box>
+                {/* End Progress Bar */}
+                
                 </Box>
                 {expandWorkout &&    
                 <Box>
                     <Box sx={{margin:'0.7rem 0',padding:'0.5rem 0', borderTop:'1px solid black', borderBottom:'1px solid black'}}>
                         <Typography fontSize='0.8rem'>{`Metric: ${metric}`.toUpperCase()}</Typography>
-                        <Typography fontSize='0.8rem'>{`Units: ${units}`.toUpperCase()}</Typography>
+                        <Typography fontSize='0.8rem'>{`Units: ${unit}`.toUpperCase()}</Typography>
                         <Typography fontSize='0.8rem'>{`Start Date: ${startDateFormatted.toLocaleDateString()}`.toUpperCase()}</Typography>
                     </Box>
                     <Typography>
