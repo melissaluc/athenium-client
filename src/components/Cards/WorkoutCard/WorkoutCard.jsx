@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useTheme } from "@emotion/react";
 
 
-function WorkoutCard ({data, handleAddTag, handleAddExercise, handleDeleteExercise, handleUpdateData}) {
+function WorkoutCard ({data, handleAddTag, handleAddExercise, handleDeleteExercise, handleUpdateData, handleDeleteWorkout }) {
     const [expandWorkout, setExpandWorkout] = useState(false)
     const [editMode, setEditMode]=useState(false)
     const [formData, setFormData] = useState({
@@ -77,8 +77,10 @@ function WorkoutCard ({data, handleAddTag, handleAddExercise, handleDeleteExerci
             <Box >
                 <Typography fontSize='0.7rem'>Last completed on {convertedDate}</Typography>
                 <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'baseline'}}>
-                    {editMode?
-                    <TextField name='workout_name' value={formData.workout_name} onChange={handleChange}></TextField> :
+                    {editMode?(<Box sx={{display:'flex', alignItems:'center', gap:'1rem'}}>
+                        <TextField name='workout_name' value={formData.workout_name} onChange={handleChange}></TextField> 
+                        <Button onClick={()=>handleDeleteWorkout(data.workout_id)}>Delete</Button>
+                    </Box>):
                     <Typography>{data.workout_name}</Typography>}
                     {editMode? (
                         <Button type="submit" onClick={()=>{setEditMode(false)}}>Save</Button> 
@@ -124,7 +126,7 @@ function WorkoutCard ({data, handleAddTag, handleAddExercise, handleDeleteExerci
                     {data.exercises.length ? data.exercises.map((item)=>{
                         return <ListItemExerciseCard 
                                 key={item.id} 
-                                data={{...item, ...data.workout_id}} 
+                                data={{...item, workout_id: data.workout_id}}
                                 editMode={editMode} 
                                 handleClickAddExercise={handleClickAddExercise} 
                                 handleDeleteExercise={handleDeleteExercise}

@@ -2,10 +2,10 @@ import { Box, Typography, Grid, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
 
-function ListItemExerciseCard({ workout_id, data, editMode, handleClickAddExercise, handleDeleteExercise, handleExerciseChanges}) {
+function ListItemExerciseCard({data, editMode, handleClickAddExercise, handleDeleteExercise, handleExerciseChanges}) {
 
 
-    const [formData, setFormData] = useState({...workout_id,...data});
+    const [formData, setFormData] = useState(data);
 
     
     const handleChange = (e) => {
@@ -15,6 +15,7 @@ function ListItemExerciseCard({ workout_id, data, editMode, handleClickAddExerci
           [name]: value
         }));
         handleExerciseChanges(formData)
+
       };
 
 
@@ -105,7 +106,7 @@ function ListItemExerciseCard({ workout_id, data, editMode, handleClickAddExerci
                 <>
                     {formData.category === 'strength' ? renderStrengthFields() : renderCardioFields()}
                     <Grid item xs={1}>
-                        <Button onClick={() => handleDeleteExercise({ workout_id, ...data })}>X</Button>
+                        <Button onClick={() => handleDeleteExercise(data)}>X</Button>
                     </Grid>
                 </>
             ) : (

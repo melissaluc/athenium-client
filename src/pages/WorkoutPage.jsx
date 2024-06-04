@@ -47,10 +47,16 @@ function WorkoutPage({}){
         setOriginalWorkoutData(updatedWorkouts)
     }
 
+    const handleDeleteWorkout = (workout_id) => {
+        const updatedData = originalWorkoutData.filter(workout=> workout.workout_id !== workout_id)
+        console.log(updatedData)
+        setOriginalWorkoutData(updatedData)
+    }
+
     const handleDeleteExercise = (data) => {
-        console.log(data)
         const updatedData = originalWorkoutData.map(workout=>{
-            if (workout.id === data.workout_id) {
+            console.log('map',workout)
+            if (workout.workout_id === data.workout_id) {
                 return {
                     ...workout,
                     exercises: workout.exercises.filter(exercise => exercise.id !== data.id)
@@ -132,7 +138,8 @@ function WorkoutPage({}){
                             handleAddTag ={handleAddTag} 
                             handleAddExercise={handleAddExercise} 
                             handleDeleteExercise={handleDeleteExercise}
-                            handleUpdateData={handleUpdateData}/>
+                            handleUpdateData={handleUpdateData}
+                            handleDeleteWorkout={handleDeleteWorkout }/>
                 })}
             </Box>
         </Container>
