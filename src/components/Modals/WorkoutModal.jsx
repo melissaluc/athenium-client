@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import AddWorkoutForm from '../Forms/AddWokoutForm';
+import AddWorkoutForm from '../Forms/AddWorkoutForm';
 import { maxHeight } from '@mui/system';
 
 const style = {

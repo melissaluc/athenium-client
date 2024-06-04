@@ -11,7 +11,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '70vw',
   bgcolor: 'background.paper',
 //   border: '2px solid #000',
   boxShadow: 24,
@@ -21,7 +21,7 @@ const style = {
 
 
 
-function GoalModal({values}) {
+function MeasurementModal({values}) {
     const [selectBodyPart, setSelectBodyPart] = useState(null);
     const [open, setOpen] = useState(false);
     const [bodyMeasurementGoal, setBodyMeasurementGoal] = useState(0);
@@ -104,4 +104,4 @@ function GoalModal({values}) {
 }
 
 
-export default GoalModal;
+export default MeasurementModal;

@@ -219,8 +219,7 @@ function NutritionPage(){
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography>Nutrition</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <DrawerNavBar />
             </Box>
 

@@ -5,7 +5,7 @@ import { useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import DrawerNavBar from '../components/NavBar/DrawerNavBar/DrawerNavBar';
-import GoalModal from '../components/GoalModal';
+import MeasurementModal from '../components/MeasurementModal';
 
 
 function MeasurementPage({}){
@@ -102,7 +102,7 @@ function MeasurementPage({}){
 
             {/* Buttons Add a new measurement goal or Submit form */}
             <Box gap="0.5rem" display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="100%">
-                <GoalModal sx={{ width: '80%' }} values={{...inputValues.left,...inputValues.right}}/>
+                <MeasurementModal sx={{ width: '80vw' }} values={{...inputValues.left,...inputValues.right}}/>
                 {/* <Button onClick={()=>{handleSetGoal()}} variant='contained' sx={{ width: '80%' }}>+ Add Goal</Button> */}
                 <Button onClick={handleSubmit}  sx={{ width: '80%' }}>Save</Button>
 
