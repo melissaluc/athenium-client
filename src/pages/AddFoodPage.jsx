@@ -231,7 +231,7 @@ function AddFoodPage() {
                             inputProps={{ 'aria-label': 'search-food' }}
                             onChange={handleSearchInputChange}
                         />
-                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
+                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch} disabled={!searchFoodName.trim()}>
                             <SearchIcon />
                         </IconButton>
                         {foodDataList.map((food) => {
