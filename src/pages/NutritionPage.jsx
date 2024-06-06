@@ -8,7 +8,7 @@ import MealList from "../components/MealList";
 import { startOfWeek, endOfWeek, format } from 'date-fns';
 import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
 import { useTheme } from "@emotion/react";
-
+import {useNavigate} from "react-router-dom" 
 
 const getOrdinalSuffix = (day) => {
     if (day > 3 && day < 21) return 'th'; // special case for 11th-13th
@@ -64,7 +64,7 @@ const groupDataByWeek = (data) => {
 
 
 function NutritionPage(){
-
+    const navigate = useNavigate()
     const theme = useTheme()
 
     // Date formatting
@@ -223,7 +223,7 @@ function NutritionPage(){
                 <DrawerNavBar />
             </Box>
 
-            <Button sx={{width:"100%"}}>+ Add Food</Button>
+            <Button sx={{width:"100%"}} onClick={()=>navigate("./add-food")}>+ Add Food</Button>
             <Box sx={{margin:'2rem 0', borderBottom:'2px solid black'}}>
                 <Typography fontWeight='bold'>Caloric Intake - Last 7 Days</Typography>
                 {/* <Typography variant='h6'>{`Week ${format(new Date(startDate),'MMM dd, yyyy')} - ${format(new Date(endDate),'MMM dd, yyyy')}`}</Typography> */}
@@ -233,7 +233,7 @@ function NutritionPage(){
 
 
 
-            <Box sx={{margin:'2rem 0'}}>
+            <Box className='select-date-meal' sx={{margin:'2rem 0'}}>
                 <Box sx={{borderBottom:'2px solid black'}}>
                     <Typography fontWeight='bold'>Today {`${month} ${dayWithSuffix}, ${year}`}</Typography>
                 </Box>
