@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+// src/components/AddGoalModal.jsx
+import { useState} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import AddWorkoutForm from '../Forms/AddWorkoutForm';
-import { maxHeight } from '@mui/system';
+
+import AddFood from '../AddFood';
+
 
 const style = {
   position: 'absolute',
@@ -21,30 +23,33 @@ const style = {
 
 };
 
-function WorkoutModal({handleAddWorkout}) {
+
+function AddFoodModal({setSelectedData}) {
 
   const [open, setOpen] = useState(false);
+
 
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
+
   return (
     <Box>
-      <Button onClick={handleOpen}>+ Add Workout</Button>
+      <Button onClick={handleOpen}>+ Add Food</Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-       <Box sx={style}>
-          <AddWorkoutForm onClose={handleClose} handleAddWorkout={handleAddWorkout}/>
-        </Box>
-    
+      <Box sx={style}>
+          <AddFood setSelectedData={setSelectedData} handleClose={handleClose}/>
+      </Box>
       </Modal>
     </Box>
   );
 }
 
-export default WorkoutModal;
+export default AddFoodModal;

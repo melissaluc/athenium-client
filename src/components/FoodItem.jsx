@@ -1,6 +1,10 @@
-import { Box, Typography} from "@mui/material"; 
+import { Box, Typography, Button} from "@mui/material"; 
+import {useState} from 'react'
 
-function FoodItem ({foodName, protein, carbs, fat, calories}) {
+
+function FoodItem ({foodName, protein, carbs, fat, calories,  quantity, uom}) {
+    const [showEdit, setShowEdit] = useState(false)
+
     return(
         <Box sx={{
             borderBottom:'1px solid black', 
@@ -8,8 +12,15 @@ function FoodItem ({foodName, protein, carbs, fat, calories}) {
             borderBottom: 'none',
             },
             padding:'0.5rem 0',
-            }}>
-        <Typography>{foodName}</Typography>
+            }}
+            >
+        <Box sx={{display: 'flex', justifyContent: 'space-between'}} >
+            <Typography onClick={()=>setShowEdit(true)} sx={{width:'50%'}}>{foodName}, {quantity} {uom}</Typography>
+            {showEdit && <Box sx={{zIndex:10}}>
+                <Button onClick={()=>setShowEdit(false)}>Cancel</Button>
+                <Button >Edit</Button>
+            </Box>}
+        </Box>
         <Box sx={{display:'flex', justifyContent:'space-between'}}>
             <Box sx={{display:'flex'}}>
                 <Box>

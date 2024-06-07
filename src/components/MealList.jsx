@@ -10,19 +10,26 @@ function MealList ({mealName, foodList}) {
         }, 0);
     }
 
-    const totalCalories = sumMealCalories(foodList)
+    const totalCalories = Math.round(sumMealCalories(foodList))
 
     return (
         <Box sx={{marginBottom:'1rem'}}>
         <Box sx={{borderBottom:'2px solid black', display:'flex', justifyContent:'space-between'}}>
-            <Typography fontWeight="bold">{mealName.toUpperCase()}</Typography>
+            <Typography fontWeight="bold">{mealName.replace(/_+/g, " ").toUpperCase()}</Typography>
             <Typography fontWeight="bold">{totalCalories} cal</Typography>
         </Box>
         {
             foodList && 
             foodList.map((item, index)=>{
-                const {food_name, quantity, protein, carbs, fat, calories} = item
-                return <FoodItem key={index} foodName={food_name} protein={protein} carbs={carbs} fat={fat} calories={calories} />
+                const {food_name, quantity, protein, carbs, fat, calories, uom} = item
+                return <FoodItem 
+                        key={index} 
+                        foodName={food_name} 
+                        protein={protein} 
+                        carbs={carbs} fat={fat} 
+                        calories={calories}  
+                        quantity={quantity} 
+                        uom={uom}/>
 
             })
         }

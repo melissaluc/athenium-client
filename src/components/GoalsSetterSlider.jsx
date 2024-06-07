@@ -7,19 +7,7 @@ const GoalBodyMeasurementSlider = ({ bodyPart, value, onChange, currentValue }) 
     const [maxValue, setMaxValue] = useState(500);
     const [range, setRange] = useState(1)
 
-    // const generateMarks = (min, max, step) => {
-    // let marksArray = [];
-    // for (let i = min; i <= max; i += step) {
-    //     if (i % 1 === 0 || i % 0.25 === 0) {
-    //     marksArray.push({ value: i, label: `${i.toFixed(2)}` });
-    //     }
-    // }
-    // return marksArray;
-    // };
 
-    const handleOnClickSave = () => {
-        // send data to api endpoint
-    }   
 
     useEffect(() => {
     const min = value - range;
@@ -58,7 +46,10 @@ const GoalBodyMeasurementSlider = ({ bodyPart, value, onChange, currentValue }) 
         <Typography sx={{ fontSize: '0.75rem' }}>
         {value && currentValue && `${(value - currentValue).toFixed(2)} inches`}
         </Typography>
-        <Button>Save</Button>
+        <Box sx={{display:'flex', flexDirection:'column', gap:'1rem', margin:'0.8rem 0 0 0'}}>
+            <Button>Save</Button>
+            <Button>Cancel</Button>
+        </Box>
     </Box>
     );
 };
