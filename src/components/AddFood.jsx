@@ -2,7 +2,7 @@ import { Box, Container, Typography, Button, TextField, IconButton, InputBase, F
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 
 // Function to perform conversions
 function convertGramsToOtherUnits(grams) {
@@ -24,8 +24,8 @@ function convertGramsToOtherUnits(grams) {
 }
 
 
-function AddFoodPage() {
-    const navigate = useNavigate();
+function AddFood({setSelectedData, handleClose}) {
+
     const [searchFoodName, setSearchFoodName] = useState('');
     const [foodDataList, setFoodDataList] = useState([]);
     const [selectedFood, setSelectedFood] = useState(null);
@@ -115,15 +115,16 @@ function AddFoodPage() {
                 const nutrition = calculateMacros(selectedFoodNutrition, quantity, key);
                 updatedState = {
                     ...prevState,
-                    [group]: key,
-                    nutrition: { ...nutrition }
+                    nutrition: { ...nutrition },
+                    serving: { ...prevState.serving, [group.split('.')[1]]: key }
                 };
             } else {
                 updatedState = {
                     ...prevState,
-                    [group]: { ...prevState[group], [key]: true }
+                    [group]: key
                 };
             }
+            console.log(updatedState)
             return updatedState;
         });
     };
@@ -155,13 +156,31 @@ function AddFoodPage() {
         e.preventDefault();
         
         const dataToSend = {
-            label: selectedFood.label,
-            nutrition: assignFood.nutrition,
-            serving: assignFood.serving,
-            meal: assignFood.meal,
+            food_name: selectedFood.label,
+            protein:  Math.round(assignFood.nutrition.protein),
+            carbs:  Math.round(assignFood.nutrition.carbs),
+            fat: Math.round(assignFood.nutrition.fat),
+            calories:  Math.round(assignFood.nutrition.calories),
+            quantity: assignFood.serving.quantity,
+            uom: assignFood.serving.uom,
         };
-        console.log(dataToSend )
-        navigate('../nutrition/')
+        console.log('new data',assignFood.meal)
+        setSelectedData((prevData) => {
+      
+            const updatedData = { ...prevData };
+            console.log('in setSelected data',updatedData[assignFood.meal])
+            // Check if the selected meal already exists in the data
+            if (updatedData[assignFood.meal]) {
+                // If the meal exists, push the new entry to its array
+                updatedData[assignFood.meal].push(dataToSend);
+            } else {
+                // If the meal doesn't exist, create a new array and add the new entry
+                updatedData[assignFood.meal] = [dataToSend];
+            }
+    
+            return updatedData;
+        });
+        handleClose()
         
     }
 
@@ -171,7 +190,8 @@ function AddFoodPage() {
                 {selectedFood ? (
                     <Box>
                         <Box>
-                            <Typography>{selectedFood.label}</Typography>
+                            <Typography variant="h6">{selectedFood.label}</Typography>
+                            {selectedFood.brand && <Typography>{selectedFood.brand}</Typography>}
                             <FormControl>
                                 <FormGroup
                                     row
@@ -181,17 +201,17 @@ function AddFoodPage() {
                                     onChange={() => { }}
                                 >
                                     {options.meal.map((meal) => (
-                                        <Button key={meal} onClick={() => handleGroupSelection('meal', meal)}>
+                                        <Button key={meal} onClick={() => {handleGroupSelection('meal', meal)}}>
                                             {meal.replace(/_+/g, " ")}
                                         </Button>
                                     ))}
                                 </FormGroup>
                                 <Box>
                                     <Box>
-                                        <Typography>Protein: {assignFood.nutrition.protein.toFixed(2)} g</Typography>
-                                        <Typography>Carbs: {assignFood.nutrition.carbs.toFixed(2)} g</Typography>
-                                        <Typography>Fat: {assignFood.nutrition.fat.toFixed(2)} g</Typography>
-                                        <Typography>Calories: {assignFood.nutrition.calories.toFixed(2)} g</Typography>
+                                        <Typography>Protein: {Math.round(assignFood.nutrition.protein)} g</Typography>
+                                        <Typography>Carbs: {Math.round(assignFood.nutrition.carbs)} g</Typography>
+                                        <Typography>Fat: {Math.round(assignFood.nutrition.fat)} g</Typography>
+                                        <Typography>Calories: {Math.round(assignFood.nutrition.calories)} g</Typography>
                                     </Box>
                                     <Button disabled={!quantityInput} onClick={()=>handleGroupSelection('serving.uom',assignFood.serving.uom)}>Re-calculate</Button>
                                 </Box>
@@ -205,7 +225,7 @@ function AddFoodPage() {
                                 >
                                     {/* User change UoM */}
                                     {options.uom.map((uom) => (
-                                        <Button key={uom} onClick={() => handleGroupSelection('serving.uom', uom)}>
+                                        <Button key={uom} onClick={() => {handleGroupSelection('serving.uom', uom);}}>
                                             {uom}
                                         </Button>
                                     ))}
@@ -223,7 +243,7 @@ function AddFoodPage() {
                     <Box>
                         <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                             <Typography>Add Food</Typography>
-                            <Button onClick={() => {setSelectedFood(null); navigate('../nutrition/');}}>Cancel</Button>
+                            <Button onClick={() => {setSelectedFood(null); handleClose();}}>Cancel</Button>
                         </Box>
                         <InputBase
                             sx={{ ml: 1, flex: 1 }}
@@ -243,10 +263,10 @@ function AddFoodPage() {
                                 >
                                     <Typography>{food.food.label}</Typography>
                                     <Box sx={{ display: 'flex', gap: '2rem' }}>
-                                        <Typography>{parseFloat(ENERC_KCAL).toFixed(2)}</Typography>
-                                        <Typography>{parseFloat(PROCNT).toFixed(2)}</Typography>
-                                        <Typography>{parseFloat(CHOCDF).toFixed(2)}</Typography>
-                                        <Typography>{parseFloat(FAT).toFixed(2)}</Typography>
+                                        <Typography>{Math.round(parseFloat(ENERC_KCAL))}</Typography>
+                                        <Typography>{Math.round(parseFloat(PROCNT))}</Typography>
+                                        <Typography>{Math.round(parseFloat(CHOCDF))}</Typography>
+                                        <Typography>{Math.round(parseFloat(FAT))}</Typography>
                                     </Box>
                                 </Box>
                             );
@@ -258,4 +278,4 @@ function AddFoodPage() {
     );
 }
 
-export default AddFoodPage;
+export default AddFood;

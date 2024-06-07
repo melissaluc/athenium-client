@@ -9,7 +9,6 @@ import LogPage from './pages/LogPage';
 import GoalsPage from './pages/GoalsPage';
 import MeasurementPage from './pages/MeasurementsPage';
 import NutritionPage from './pages/NutritionPage';
-import AddFoodPage from './pages/AddFoodPage';
 import OnboardingPage from './pages/OnboardingPage';
 import TrendsPage from './pages/TrendsPage';
 import WorkoutPage from './pages/WorkoutPage';
@@ -30,7 +29,6 @@ function App(){
                 <Route path='/goals' element={<GoalsPage/>}  />
                 <Route path='/measurements' element={<MeasurementPage/>}  />
                 <Route path='/nutrition' element={<NutritionPage/>}  />
-                <Route path='/nutrition/add-food' element={<AddFoodPage/>}  />
                 <Route path='/onboarding' element={<OnboardingPage/>}  />
                 <Route path='/trends' element={<TrendsPage/>}  />
                 <Route path='/workouts' element={<WorkoutPage/>}  />

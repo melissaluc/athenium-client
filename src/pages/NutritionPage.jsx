@@ -1,6 +1,6 @@
 import { Box, Container, Typography, Button} from "@mui/material"; 
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
-import {useEffect} from "react"
+import {useState, useEffect} from "react"
 import * as echarts from 'echarts';
 import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
 import nutritionData from '../data/nutrition.json'
@@ -9,6 +9,7 @@ import { startOfWeek, endOfWeek, format } from 'date-fns';
 import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
 import { useTheme } from "@emotion/react";
 import {useNavigate} from "react-router-dom" 
+import AddFoodModal from "../components/Modals/AddFoodModal";
 
 const getOrdinalSuffix = (day) => {
     if (day > 3 && day < 21) return 'th'; // special case for 11th-13th
@@ -64,9 +65,9 @@ const groupDataByWeek = (data) => {
 
 
 function NutritionPage(){
-    const navigate = useNavigate()
-    const theme = useTheme()
 
+    const theme = useTheme()
+    const [selectedData, setSelectedData] = useState(nutritionData.today.meals)
     // Date formatting
     const date = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -84,7 +85,7 @@ function NutritionPage(){
         totalFat:0,
         totalCalories:0
     }
-    Object.values(nutritionData.today.meals).forEach(meal => {
+    Object.values(selectedData,).forEach(meal => {
         meal.forEach(foodItem => {
             todayMacros.totalProtein += foodItem.protein;
             todayMacros.totalCarbs += foodItem.carbs;
@@ -222,8 +223,9 @@ function NutritionPage(){
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <DrawerNavBar />
             </Box>
-
-            <Button sx={{width:"100%"}} onClick={()=>navigate("./add-food")}>+ Add Food</Button>
+            <Box sx={{ display: 'flex', justifyContent:'center'}}>
+                <AddFoodModal setSelectedData={setSelectedData}/>
+            </Box>
             <Box sx={{margin:'2rem 0', borderBottom:'2px solid black'}}>
                 <Typography fontWeight='bold'>Caloric Intake - Last 7 Days</Typography>
                 {/* <Typography variant='h6'>{`Week ${format(new Date(startDate),'MMM dd, yyyy')} - ${format(new Date(endDate),'MMM dd, yyyy')}`}</Typography> */}
@@ -243,7 +245,7 @@ function NutritionPage(){
                 </Box>
    
                 {
-                    Object.entries(nutritionData.today.meals).map(([meal, foodList, index])=>{
+                    Object.entries(selectedData).map(([meal, foodList, index])=>{
                         return <MealList mealName={meal} foodList={foodList}/>
                     })
                 }
