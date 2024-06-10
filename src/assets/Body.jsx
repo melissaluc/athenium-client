@@ -23,6 +23,60 @@ const SvgBody = (props) => {
     { id: "L-Upper Thigh", d: "M 122.42133,150.94479 H 104.1554" }
   ];
 
+  // const pomRefLine = [
+  //   {id:"midline",  d: "m 103.394, 30  v 250"},
+  //   // Relative to user measurements
+  //   {id:"rlowerlegline", d:"M88.324 193.198  v50 "},
+  //   {id:"llowerlegline", d:"M88.324 193.198 v50 "},
+  //   {id:"lupperlegline", d:"M86.141 148.957 v50 "},
+  //   {id:"rupperlegline", d:"M86.141 148.957 v50 "},
+  //   // Fixed measurements
+  //   {id:"shoulderline", d:"M85.37 72.862 h36.607"},
+  //   {id:"chestline", d:"M85.567 95.294 h36.765"},
+  //   {id:"waistline", d:"M85.483 112.577 h18.335"},
+  //   {id:"hipline", d:"M88.352 143.777 h12.632"},
+  //   {id:"abdomenline", d:"M87.6 137.565 h11.217"},
+  //   {id:"upperthighline", d:"M109.156 137.565 h11.217"},
+  //   {id:"innerkneeline", d:"M107.06 195.211 h12.632"},
+  //   {id:"outerkneeline", d:"M104.086 182.768 h18.335"},
+  //   {id:"calvesline", d:"M104.086 205.217 h18.335"}
+  // ]
+  // const pomRefPoints = [
+  //   {id:"Bicep", d:"M64.161 77.284 h7.607 v8.403 h-7.607z"},
+  //   {id:"L-Bicep", d:"M132.504 77.43 h7.607 v8.403 h-7.607z"},
+  //   {id:"Neck", d:"M98.86 62.84 h11.244 v8.347 H98.86z"},
+  //   {id:"Shoulder", d:"M86.141 73.143 h35.558 v8.105 H86.141z"},
+  //   {id:"Chest", d:"M88.324 92.164 h32.459 v8.13 H88.324z"},
+  //   {id:"Waist", d:"M88.656 108.635 h30.259 v8.148 H88.656z"},
+  //   {id:"Abdomen", d:"M85.37 133.649 h36.607 v8.097 H85.37z"},
+  //   {id:"Hip", d:"M85.567 139.729 h36.765 v8.096 H85.567z"},
+  //   {id:"R-Upper Thigh", d:"M85.483 148.956 h18.335v5.418 H85.483z"},
+  //   {id:"R-Thigh", d:"M88.352 172.307 h12.632v2.209 H88.352z"},
+  //   {id:"R-Calf", d:"M87.6 203.104 h11.217v4.226 H87.6z"},
+  //   {id:"L-Calf", d:"M109.156 203.754 h11.217v4.226 h-11.217z"},
+  //   {id:"L-Thigh", d:"M107.06 172.175 h12.632v2.209 H107.06z"},
+  //   {id:"L-Upper Thigh", d:"M104.086 148.765 h18.335 v5.418 h-18.335z"}
+  // ]
+
+  const pomRectangles = [
+    {id:"Bicep", d:"M64.161 77.284 h7.607 v8.403 h-7.607z"},
+    {id:"L-Bicep", d:"M132.504 77.43 h7.607 v8.403 h-7.607z"},
+    {id:"Neck", d:"M98.86 62.84 h11.244 v8.347 H98.86z"},
+    {id:"Shoulder", d:"M86.141 73.143 h35.558 v8.105 H86.141z"},
+    {id:"Chest", d:"M88.324 92.164 h32.459 v8.13 H88.324z"},
+    {id:"Waist", d:"M88.656 108.635 h30.259 v8.148 H88.656z"},
+    {id:"Abdomen", d:"M85.37 133.649 h36.607 v8.097 H85.37z"},
+    {id:"Hip", d:"M85.567 139.729 h36.765 v8.096 H85.567z"},
+    {id:"R-Upper Thigh", d:"M85.483 148.956 h18.335v5.418 H85.483z"},
+    {id:"R-Thigh", d:"M88.352 172.307 h12.632v2.209 H88.352z"},
+    {id:"R-Calf", d:"M87.6 203.104 h11.217v4.226 H87.6z"},
+    {id:"L-Calf", d:"M109.156 203.754 h11.217v4.226 h-11.217z"},
+    {id:"L-Thigh", d:"M107.06 172.175 h12.632v2.209 H107.06z"},
+    {id:"L-Upper Thigh", d:"M104.086 148.765 h18.335 v5.418 h-18.335z"}
+  ]
+
+  
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -51,6 +105,41 @@ const SvgBody = (props) => {
           />
         ))}
       </g>
+      <g>
+        {pomRectangles.map((rectangle, index) => (
+          <g name={rectangle.id}>
+          <path
+            key={index}
+            d={rectangle.d}
+            style={{
+              stroke:"#0a70ff25",
+              fill:"#0a70ff25",
+              strokeWidth: "1px",
+              strokeLinecap: "butt",
+              strokeLinejoin: "miter",
+              strokeOpacity: 1
+            }}
+          />
+          </g>
+        ))}
+      </g>
+      {/* <g>
+        {pomRefLine.map((line, index) => (
+          <g name={line.id}>
+          <path
+            key={index}
+            d={line.d}
+            style={{
+              stroke:"#ea00ff",
+              strokeWidth: "1px",
+              strokeLinecap: "butt",
+              strokeLinejoin: "miter",
+              strokeOpacity: 1
+            }}
+          />
+          </g>
+        ))}
+      </g> */}
       <g
         style={{
           display: "inline",
@@ -83,7 +172,10 @@ const SvgBody = (props) => {
       </g>
 
 
-    </svg>
+ 
+  </svg>
+      
+
 
   )
 
