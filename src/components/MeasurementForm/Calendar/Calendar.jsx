@@ -23,8 +23,10 @@ function MyDatePicker({handleSelectDate}) {
   
   const handleDateSelect = (selectedDates) => {
     const selectedDate = selectedDates[0]; // Get the selected date
-    setSelectedDate(selectedDate); // Update the state with the selected date
-    handleSelectDate(selectedDate)
+    selectedDate.setHours(0, 0, 0, 0); 
+    const isoString = selectedDate.toISOString()
+    setSelectedDate(selectedDate);
+    handleSelectDate(isoString)
   };
 
   const handleInputFocus = () => {

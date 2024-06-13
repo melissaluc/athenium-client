@@ -9,7 +9,7 @@ function MeasurementPage() {
     const [waistHipRatio, setWaistHipRatio] = useState(null);
     const [data, setData] = useState([]);
     const [inputValues, setInputValues] = useState({
-        dateSelected: new Date().getTime(),
+        dateSelected: new Date().setHours(0, 0, 0, 0) / 1000,
         left: {
             Neck: 0,
             Chest: 0,
@@ -48,7 +48,7 @@ function MeasurementPage() {
         // Check if UNIX timestamp
         const isValidUnixTimestamp = selectedDate > 0;
         // Convert selectedDate to UNIX timestamp
-        const selectedTimestamp = isValidUnixTimestamp ? selectedDate : new Date(selectedDate).getTime() / 1000;
+        const selectedTimestamp = isValidUnixTimestamp ? selectedDate : Math.trunc(new Date(selectedDate).getTime() / 1000);
     
         // Sort the data array by created_on in descending order
         const sortedData = [...data].sort((a, b) => new Date(b.created_on).getTime() - new Date(a.created_on).getTime());
@@ -75,7 +75,7 @@ function MeasurementPage() {
         const selectedData = findClosestData(selectedDate);
         if (selectedData) {
             const newData = {
-                dateSelected: new Date(selectedDate).getTime(),
+                dateSelected: selectedDate,
                 left: {
                     ...inputValues.left,
                     Neck: selectedData.neck_cm || 0,
@@ -117,32 +117,55 @@ function MeasurementPage() {
     }, [inputValues]);
 
     const handleSubmit = (e) => {
-        const postData = {
-            dateSelected: inputValues.dateSelected,
+        const { left, right, dateSelected } = inputValues;
+        const selectedData = findClosestData(dateSelected);
+
+        // const convertDateSelected = dateSelected > 0 ? new Date(dateSelected).toISOString() : dateSelected
+        // const convertDateSelected = dateSelected > 0 ? dateSelected : new Date(dateSelected).getTime() / 1000
+        const dateSelectedObj = new Date(dateSelected);
+        const convertDateSelected = dateSelectedObj.toISOString()
+        console.log('converted date ',convertDateSelected )
+
+        const newData = {
+            dateSelected: convertDateSelected,
             newMeasurements: {
-                neck_cm: inputValues.left.Neck,
-                shoulder_cm: inputValues.right.Shoulder,
-                chest_cm: inputValues.left.Chest,
-                abdomen_cm: inputValues.left.Abdomen,
-                waist_cm: inputValues.right.Waist,
-                hip_cm: inputValues.right.Hip,
-                r_bicep_cm: inputValues.right['R-Bicep'],
-                l_bicep_cm: inputValues.left['L-Bicep'],
-                r_thigh_cm: inputValues.right['R-Thigh'],
-                l_thigh_cm: inputValues.left['L-Thigh'],
-                r_calf_cm: inputValues.right['R-Calf'],
-                l_calf_cm: inputValues.left['L-Calf'],
+                neck_cm: left.Neck,
+                shoulder_cm: right.Shoulder,
+                chest_cm: left.Chest,
+                abdomen_cm: left.Abdomen,
+                waist_cm: right.Waist,
+                hip_cm: right.Hip,
+                r_bicep_cm: right['R-Bicep'],
+                l_bicep_cm: left['L-Bicep'],
+                r_thigh_cm: right['R-Thigh'],
+                l_thigh_cm: left['L-Thigh'],
+                r_calf_cm: right['R-Calf'],
+                l_calf_cm: left['L-Calf'],
             },
         };
-        axios.post('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423', postData)
-            .then(res => {
-                console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
-            })
-            .catch(error => {
-                console.log('Error submitting data:', error);
-            });
+        // Determine if the data for dateSelected already exists
+        if (selectedData) {
+            // PATCH request to update existing data
+            axios.patch('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423', newData)
+                .then(res => {
+                    console.log(`Data updated: \n ${JSON.stringify(inputValues)} \n ${res}`);
+                    // fetchData(); // Fetch updated data after successful update
+                })
+                .catch(error => {
+                    console.log('Error updating data:', error);
+                });
+        } else {
+            //POST request to create new data
+            axios.post('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423', newData)
+                .then(res => {
+                    console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
+                    // fetchData(); // Fetch updated data after successful creation
+                })
+                .catch(error => {
+                    console.log('Error submitting data:', error);
+                });
+        }
     };
-    
     useEffect(() => {
         // Update inputValues whenever data changes
         if (data.length > 0) {
