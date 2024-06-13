@@ -4,7 +4,7 @@ import 'flatpickr/dist/themes/material_blue.css'; // You can choose a theme
 import { Box, Typography } from '@mui/material';
 
 
-function MyDatePicker(props) {
+function MyDatePicker({handleSelectDate}) {
   const [selectedDate, setSelectedDate] = useState(new Date()); // State to hold the selected date
   const inputRef = useRef(null);
 
@@ -24,9 +24,7 @@ function MyDatePicker(props) {
   const handleDateSelect = (selectedDates) => {
     const selectedDate = selectedDates[0]; // Get the selected date
     setSelectedDate(selectedDate); // Update the state with the selected date
-    if(props.setParentSelectDate){
-      props.setParentSelectDate(selectedDate)
-    }
+    handleSelectDate(selectedDate)
   };
 
   const handleInputFocus = () => {

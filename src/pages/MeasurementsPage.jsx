@@ -1,70 +1,166 @@
 import { Button, Typography, Container, Box } from '@mui/material';
-import { border, flexbox } from '@mui/system';
-import { useTheme } from '@mui/material/styles';
-import { useMediaQuery } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import DrawerNavBar from '../components/NavBar/DrawerNavBar/DrawerNavBar';
 import MeasurementModal from '../components/MeasurementModal';
+import axios from 'axios';
 
-
-function MeasurementPage({}){
-    const [waistHipRatio, setWaistHipRatio] = useState(null)
+function MeasurementPage() {
+    const [waistHipRatio, setWaistHipRatio] = useState(null);
+    const [data, setData] = useState([]);
     const [inputValues, setInputValues] = useState({
+        dateSelected: new Date().getTime(),
         left: {
-            Neck: 12,
-            Chest: 34,
-            Abdomen: 30,
-            'L-Bicep': 12,
-            'L-Upper Thigh': 21,
-            'L-Thigh': 19,
-            'L-Calf': 13,
+            Neck: 0,
+            Chest: 0,
+            Abdomen: 0,
+            'L-Bicep': 0,
+            'L-Upper Thigh': 0,
+            'L-Thigh': 0,
+            'L-Calf': 0,
         },
         right: {
-            Shoulder: 36,
-            Waist: 25,
-            Hip: 36,
-            'R-Bicep': 12,
-            'R-Upper Thigh': 21,
-            'R-Thigh': 19,
-            'R-Calf': 13,
+            Shoulder: 0,
+            Waist: 0,
+            Hip: 0,
+            'R-Bicep': 0,
+            'R-Upper Thigh': 0,
+            'R-Thigh': 0,
+            'R-Calf': 0,
         },
     });
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423')
+            .then(response => {
+                setData(response.data);  // Make sure response.data is correctly set
+                const currentTime = new Date().getTime();
+                handleSelectDate(currentTime);  // Ensure handleSelectDate is called correctly
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
     
+    const findClosestData = (selectedDate) => {
+        let closestData = null;
+    
+        // Check if UNIX timestamp
+        const isValidUnixTimestamp = selectedDate > 0;
+        // Convert selectedDate to UNIX timestamp
+        const selectedTimestamp = isValidUnixTimestamp ? selectedDate : new Date(selectedDate).getTime() / 1000;
+    
+        // Sort the data array by created_on in descending order
+        const sortedData = [...data].sort((a, b) => new Date(b.created_on).getTime() - new Date(a.created_on).getTime());
+    
+        console.log('Selected Timestamp:', selectedTimestamp);
+        console.log('Sorted Data:', sortedData);
+    
+        for (let i = 0; i < sortedData.length; i++) {
+            const item = sortedData[i];
+            const itemTimestamp = new Date(item.created_on).getTime() / 1000;
+            console.log('Item Timestamp:', itemTimestamp, 'Item:', item);
+            if (selectedTimestamp >= itemTimestamp) {
+                closestData = item;
+                break;
+            }
+        }
+        console.log('Closest Data:', closestData);
+        return closestData;
+    };
+    
+    
+
+    const handleSelectDate = (selectedDate) => {
+        const selectedData = findClosestData(selectedDate);
+        if (selectedData) {
+            const newData = {
+                dateSelected: new Date(selectedDate).getTime(),
+                left: {
+                    ...inputValues.left,
+                    Neck: selectedData.neck_cm || 0,
+                    Chest: selectedData.chest_cm || 0,
+                    Abdomen: selectedData.abdomen_cm || 0,
+                    'L-Bicep': selectedData.l_bicep_cm || 0,
+                    'L-Upper Thigh': selectedData.l_upper_thigh_cm || 0,
+                    'L-Thigh': selectedData.l_thigh_cm || 0,
+                    'L-Calf': selectedData.l_calf_cm || 0,
+                },
+                right: {
+                    ...inputValues.right,
+                    Shoulder: selectedData.shoulder_cm || 0,
+                    Waist: selectedData.waist_cm || 0,
+                    Hip: selectedData.hip_cm || 0,
+                    'R-Bicep': selectedData.r_bicep_cm || 0,
+                    'R-Upper Thigh': selectedData.r_upper_thigh_cm || 0,
+                    'R-Thigh': selectedData.r_thigh_cm || 0,
+                    'R-Calf': selectedData.r_calf_cm || 0,
+                },
+            };
+            setInputValues(newData);
+            console.log('new inputvalues', inputValues);
+        }
+    };
+
     const handleInputChange = (side, label, value) => {
         setInputValues(prevState => ({
             ...prevState,
             [side]: {
                 ...prevState[side],
-                [label]: value,
+                [label]: value || 0,
             },
         }));
     };
 
-
-    useEffect(()=>{
-        setWaistHipRatio(inputValues["right"]["Waist"]/inputValues["right"]["Hip"])
-    },[inputValues])
-    
-
+    useEffect(() => {
+        setWaistHipRatio((inputValues.right.Waist / inputValues.right.Hip) || 0);
+    }, [inputValues]);
 
     const handleSubmit = (e) => {
-        // Handle form submission and update backend data with inputValues
-        console.log(`data submitted: \n ${JSON.stringify(inputValues)}`)
+        const postData = {
+            dateSelected: inputValues.dateSelected,
+            newMeasurements: {
+                neck_cm: inputValues.left.Neck,
+                shoulder_cm: inputValues.right.Shoulder,
+                chest_cm: inputValues.left.Chest,
+                abdomen_cm: inputValues.left.Abdomen,
+                waist_cm: inputValues.right.Waist,
+                hip_cm: inputValues.right.Hip,
+                r_bicep_cm: inputValues.right['R-Bicep'],
+                l_bicep_cm: inputValues.left['L-Bicep'],
+                r_thigh_cm: inputValues.right['R-Thigh'],
+                l_thigh_cm: inputValues.left['L-Thigh'],
+                r_calf_cm: inputValues.right['R-Calf'],
+                l_calf_cm: inputValues.left['L-Calf'],
+            },
+        };
+        axios.post('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423', postData)
+            .then(res => {
+                console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
+            })
+            .catch(error => {
+                console.log('Error submitting data:', error);
+            });
     };
-
-
+    
+    useEffect(() => {
+        // Update inputValues whenever data changes
+        if (data.length > 0) {
+            const selectedDate = new Date().getTime();  // Example timestamp
+            handleSelectDate(selectedDate);
+        }
+    }, [data]);
+    
     return (
-
         <Container
-            sx={{ 
+            sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent:'center',
-                alignItems:"center",
-                gap:"1rem",
+                justifyContent: 'center',
+                alignItems: "center",
+                gap: "1rem",
             }}
-        > 
+        >
             <Box
                 sx={{
                     width: "100%",
@@ -75,43 +171,40 @@ function MeasurementPage({}){
                     alignItems: 'center',
                 }}
             >
-            {/* Title and navigation */}
-            <Box 
-
-            sx={{ 
-                // border:"1px solid magenta",
-                // height:"1rem",
-                width: "100%",
-                display: 'flex',
-                justifyContent:'flex-end',
-                alignItems:"center"
-            
-    
-            }}
-        >
-            <DrawerNavBar />
-
-
-        </Box>
-            {/* TODO: Access backend user data to determine measurement units */}
+                <Box
+                    sx={{
+                        width: "100%",
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: "center",
+                    }}
+                >
+                    <DrawerNavBar />
+                </Box>
             </Box>
             <Typography color='primary'>In Inches</Typography>
-            {/* Input measurements in the form */}
-            <MeasurementForm handleInputChange={handleInputChange} inputValues={inputValues} waistHipRatio={waistHipRatio}/>
-
-
-            {/* Buttons Add a new measurement goal or Submit form */}
-            <Box gap="0.5rem" display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="100%">
-                <MeasurementModal sx={{ width: '80vw' }} values={{...inputValues.left,...inputValues.right}}/>
-                {/* <Button onClick={()=>{handleSetGoal()}} variant='contained' sx={{ width: '80%' }}>+ Add Goal</Button> */}
-                <Button onClick={handleSubmit}  sx={{ width: '80%' }}>Save</Button>
-
+            <MeasurementForm
+                handleInputChange={handleInputChange}
+                inputValues={inputValues}
+                waistHipRatio={waistHipRatio}
+                handleSelectDate={handleSelectDate}
+            />
+            <Box
+                gap="0.5rem"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                width="100%"
+            >
+                <MeasurementModal
+                    sx={{ width: '80vw' }}
+                    values={{ ...inputValues.left, ...inputValues.right }}
+                />
+                <Button onClick={handleSubmit} sx={{ width: '80%' }}>Save</Button>
             </Box>
         </Container>
-     
-    )
-            
-
+    );
 }
 
 export default MeasurementPage;

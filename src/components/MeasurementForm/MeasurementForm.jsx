@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { Button, Typography, Container, Box, TextField } from '@mui/material';
 import BodyAvatar from '../../assets/Body';
 
-function MeasurementForm({ waistHipRatio, inputValues, handleInputChange }) {
+function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handleSelectDate }) {
     const [selectLabel, setSelectLabel] = useState(false);
-    const hasWaistHipRatio = waistHipRatio !== null;
+
 
     const handleInputClick = (label) => {
         console.log(label);
@@ -15,7 +15,7 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange }) {
 
     return (
         <Container>
-            <Calendar />
+            <Calendar handleSelectDate={handleSelectDate} />
             <Box
                 sx={{
                     display: 'flex',
@@ -32,30 +32,30 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange }) {
                         alignItems: 'center',
                     }}
                 >
-                    {hasWaistHipRatio && (
-                        <Box sx={{ marginBottom: '1rem' }}>
-                            <TextField
-                                id="outlined-read-only-input"
-                                label="Waist-to-Hip Ratio"
-                                defaultValue={waistHipRatio.toFixed(2)}
-                                InputProps={{
-                                    readOnly: true,
-                                    style: {
-                                        fontSize: '0.7rem', // Adjust the font size as needed
-                                        textAlign:'center'
-                                    },
-                                }}
-                                sx={{
-                                    width: '3.5rem',
-                                    paddingTop: '1rem', // Adjusted top padding
-                                    '& .MuiInputLabel-root': {
-                                        whiteSpace: 'normal',
-                                        fontSize: '0.8rem', // Adjusted font size
-                                    },
-                                }}
-                            />
-                        </Box>
-                    )}
+          
+                    {/* <Box sx={{ marginBottom: '1rem' }}>
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="Waist-to-Hip Ratio"
+                            defaultValue={waistHipRatio && waistHipRatio.toFixed(2)}
+                            InputProps={{
+                                readOnly: true,
+                                style: {
+                                    fontSize: '0.7rem', // Adjust the font size as needed
+                                    textAlign:'center'
+                                },
+                            }}
+                            sx={{
+                                width: '3.5rem',
+                                paddingTop: '1rem', // Adjusted top padding
+                                '& .MuiInputLabel-root': {
+                                    whiteSpace: 'normal',
+                                    fontSize: '0.8rem', // Adjusted font size
+                                },
+                            }}
+                        />
+                    </Box> */}
+             
 
                     <BodyAvatar selectLabel={selectLabel} sx={{ width: '150px', height: 'auto' }} /> {/* Adjusted avatar size */}
                 </Box>
