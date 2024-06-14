@@ -10,7 +10,7 @@ function MeasurementInput({ inputs, handleInputChange, handleInputClick, side })
             gap:"-2rem"
         }}>
             {Object.entries(inputs).map(([label, value]) => (
-                <FormControl key={label} sx={{ marginBottom: '0.5rem', height: '3rem' }}>
+                <FormControl key={label} sx={{ marginBottom: '0.5rem', height: '3rem', }}>
                     <FormLabel
                         sx={{
                             fontSize: '0.7rem',
@@ -35,7 +35,7 @@ function MeasurementInput({ inputs, handleInputChange, handleInputClick, side })
                         sx={{
                             width: '4rem',
                             height: '2rem',
-                            fontSize: '0.7rem',
+                            fontSize: '0.5rem',
                         }}
                     />
                 </FormControl>

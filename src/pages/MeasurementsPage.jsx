@@ -117,6 +117,7 @@ function MeasurementPage() {
     }, [inputValues]);
 
     const handleSubmit = (e) => {
+        e.preventDefault()
         const { left, right, dateSelected } = inputValues;
         const selectedData = findClosestData(dateSelected);
 
@@ -135,6 +136,8 @@ function MeasurementPage() {
                 abdomen_cm: left.Abdomen,
                 waist_cm: right.Waist,
                 hip_cm: right.Hip,
+                r_upper_thigh_cm: right['R-Upper Thigh'],
+                l_upper_thigh_cm: left['L-Upper Thigh'],
                 r_bicep_cm: right['R-Bicep'],
                 l_bicep_cm: left['L-Bicep'],
                 r_thigh_cm: right['R-Thigh'],
@@ -143,8 +146,12 @@ function MeasurementPage() {
                 l_calf_cm: left['L-Calf'],
             },
         };
+
+
+        console.log("post-put",selectedData.created_on=== convertDateSelected )
+        console.log("post-put",selectedData.created_on,convertDateSelected )
         // Determine if the data for dateSelected already exists
-        if (selectedData) {
+        if (selectedData.created_on === convertDateSelected ) {
             // PATCH request to update existing data
             axios.patch('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423', newData)
                 .then(res => {
