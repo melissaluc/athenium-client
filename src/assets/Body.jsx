@@ -3,7 +3,7 @@ import * as React from "react";
 
 
 
-const SvgBody = (props) => {
+const SvgBody = ({selectLabel, width, height}) => {
 
   const pomPaths = [
     { id: "Neck", d: "M 98.864133,65.19878 H 110.2651" },
@@ -85,8 +85,8 @@ const SvgBody = (props) => {
       viewBox="0 0 200 250 "
       width="100%"
       height="100%"
-      style={{ width: props.width, height: props.height }}
-      {...props}
+      style={{ width:width, height:height }}
+     
     >
     {/* TODO: Check if selected label is correct */}
     {/* <text x="10" y="20">{props.selectLabel}</text> */}
@@ -96,7 +96,7 @@ const SvgBody = (props) => {
             key={index}
             d={path.d}
             style={{
-              stroke: props.selectLabel === path.id ? "#ff0000" : "none",
+              stroke: selectLabel === path.id ? "#ff0000" : "none",
               strokeWidth: "1px",
               strokeLinecap: "butt",
               strokeLinejoin: "miter",
@@ -107,7 +107,7 @@ const SvgBody = (props) => {
       </g>
       <g>
         {pomRectangles.map((rectangle, index) => (
-          <g name={rectangle.id}>
+          <g key={rectangle.id}>
           <path
             key={index}
             d={rectangle.d}

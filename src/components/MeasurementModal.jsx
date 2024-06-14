@@ -73,7 +73,7 @@ function MeasurementModal({values}) {
             <Box sx={{display:'flex', flexWrap:'wrap' ,gap:'0.5rem'}}>
             {values && Object.keys(values).map((key)=>{
                 return(
-                    <Button onClick={()=>{handleSelectBodyPart(key)}} 
+                    <Button key={key} onClick={()=>{handleSelectBodyPart(key)}} 
                     sx={{border:'1px solid black', padding:'0.5rem'}}>
                         <Typography>{key}</Typography>
                     </Button>
@@ -89,7 +89,8 @@ function MeasurementModal({values}) {
                     <Typography>
                         {`Current measurement is ${values[selectBodyPart]} inches`}
                     </Typography>
-                    <GoalBodyMeasurementSlider 
+                    <GoalBodyMeasurementSlider
+                        handleClose={handleClose}
                         currentValue={values[selectBodyPart]}
                         bodyPart={selectBodyPart}
                         value={bodyMeasurementGoal}

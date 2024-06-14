@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Slider, Typography, Button, Box } from '@mui/material';
 
-const GoalBodyMeasurementSlider = ({ bodyPart, value, onChange, currentValue }) => {
+const GoalBodyMeasurementSlider = ({handleClose, bodyPart, value, onChange, currentValue }) => {
     const [marks, setMarks] = useState([]);
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(500);
@@ -48,7 +48,7 @@ const GoalBodyMeasurementSlider = ({ bodyPart, value, onChange, currentValue }) 
         </Typography>
         <Box sx={{display:'flex', flexDirection:'column', gap:'1rem', margin:'0.8rem 0 0 0'}}>
             <Button>Save</Button>
-            <Button>Cancel</Button>
+            <Button onClick={handleClose}>Cancel</Button>
         </Box>
     </Box>
     );

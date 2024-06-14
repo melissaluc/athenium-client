@@ -13,13 +13,23 @@ import workoutLogData from "../data/workouts.json"
 import {useState, useEffect} from 'react'
 
 
-function WorkoutPage({}){
+function WorkoutPage(){
     const [originalWorkoutData, setOriginalWorkoutData] = useState(workoutLogData.workouts_log);
     const [workoutData, setWorkoutData] = useState(workoutLogData.workouts_log)
+
     
-    useEffect(() => {
-        setWorkoutData(originalWorkoutData);
-    }, [originalWorkoutData]);
+    // useEffect(() => {
+    //     setWorkoutData(originalWorkoutData);
+    // }, []);
+
+    // useEffect(() => {
+
+    //     setWorkoutData(originalWorkoutData);
+    // }, [originalWorkoutData]);
+
+    // useEffect(() => {
+
+    // }, [workoutData]);
 
     const onSort = (order, category) => {
         handleSort(order, category)
@@ -34,14 +44,29 @@ function WorkoutPage({}){
                 return order === 'asc' ? a[category] - b[category] : b[category] - a[category];
             }
         });
-        console.log(sortedData);
+        console.log('Sort Data ' , sortedData);
         setWorkoutData(sortedData);
+        setOriginalWorkoutData(sortedData);
     };
 
     const handleUpdateData = (data) =>{
-        console.log(data)
-        // update database datasend to backend
+
+        const updatedData = originalWorkoutData.map(workout=>{
+            if (workout.workout_id === data.workout_id) {
+                return {
+                    ...workout,
+                    workout_name: data.workout_name,
+                    description: data.description,
+                    exercises: data.exercises
+                }
+            }
+            return workout
+            }
+        )
+        console.log('Workout updated ',updatedData)
+        setOriginalWorkoutData(updatedData)
     }
+
     const handleAddWorkout = (newWorkout) => {
         const updatedWorkouts = [newWorkout,...originalWorkoutData];
         setOriginalWorkoutData(updatedWorkouts)
@@ -49,7 +74,7 @@ function WorkoutPage({}){
 
     const handleDeleteWorkout = (workout_id) => {
         const updatedData = originalWorkoutData.filter(workout=> workout.workout_id !== workout_id)
-        console.log(updatedData)
+        console.log("workout deleted ",updatedData)
         setOriginalWorkoutData(updatedData)
     }
 
@@ -65,8 +90,8 @@ function WorkoutPage({}){
             return workout
             }
         )
-        console.log(updatedData)
-        setOriginalWorkoutData(updatedData)
+        console.log("exercise deleted", updatedData)
+        setWorkoutData(updatedData)
     }
 
     const handleAddTag = ()=>{

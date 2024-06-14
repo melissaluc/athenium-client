@@ -4,6 +4,8 @@ import FoodItem from './FoodItem'
 
 
 function MealList ({mealName, foodList}) {
+   
+
     const sumMealCalories = (foodList) => {
         return foodList.reduce((acc, foodItem) => {
             return acc + foodItem.calories;
@@ -29,7 +31,8 @@ function MealList ({mealName, foodList}) {
                         carbs={carbs} fat={fat} 
                         calories={calories}  
                         quantity={quantity} 
-                        uom={uom}/>
+                        uom={uom}
+                        />
 
             })
         }

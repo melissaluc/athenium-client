@@ -1,34 +1,31 @@
 import { Box, Typography, Grid, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-
-function ListItemExerciseCard({data, editMode, handleClickAddExercise, handleDeleteExercise, handleExerciseChanges}) {
-
-
+function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges }) {
     const [formData, setFormData] = useState(data);
 
-    
+    useEffect(() => {
+        handleExerciseChanges(formData);
+    }, [formData]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
-          ...prev,
-          [name]: value
+            ...prev,
+            [name]: value
         }));
-        handleExerciseChanges(formData)
-
-      };
-
+    };
 
     const renderStrengthFields = () => (
         <>
             <Grid item xs={1}>
-                <TextField name='weight' value={formData.weight} label="Lift Weight" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='weight' value={formData.weight} label="Lift Weight" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
             <Grid item xs={1}>
-                <TextField name='reps' value={formData.reps} label="Reps" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='reps' value={formData.reps} label="Reps" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
             <Grid item xs={1}>
-                <TextField name='sets' value={formData.sets} label="Sets" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='sets' value={formData.sets} label="Sets" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
         </>
     );
@@ -36,13 +33,13 @@ function ListItemExerciseCard({data, editMode, handleClickAddExercise, handleDel
     const renderCardioFields = () => (
         <>
             <Grid item xs={1}>
-                <TextField name='distance' value={formData.distance} label="Distance" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='distance' value={formData.distance} label="Distance" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
             <Grid item xs={1}>
-                <TextField name='duration' value={formData.duration} label="Duration" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='duration' value={formData.duration} label="Duration" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
             <Grid item xs={1}>
-                <TextField name='sets' value={formData.sets} label="Sets" variant="outlined" size="small" onChange={handleChange}/>
+                <TextField name='sets' value={formData.sets} label="Sets" variant="outlined" size="small" onChange={handleChange} />
             </Grid>
         </>
     );
@@ -106,7 +103,7 @@ function ListItemExerciseCard({data, editMode, handleClickAddExercise, handleDel
                 <>
                     {formData.category === 'strength' ? renderStrengthFields() : renderCardioFields()}
                     <Grid item xs={1}>
-                        <Button onClick={() => handleDeleteExercise(data)}>X</Button>
+                        <Button onClick={() => handleClickDeleteExercise(data)}>X</Button>
                     </Grid>
                 </>
             ) : (
