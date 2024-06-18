@@ -1,141 +1,362 @@
-{
-
-        "historical":{
-            "1715313600":{
-                "macros_cal":{
-                    "protein":100,
-                    "carbs":35,
-                    "fat":25
-                },
-                "macros_g":{
-                    "protein":89,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715400000":{
-                "macros_cal":{
-                    "protein":50,
-                    "carbs":35,
-                    "fat":25
-                },
-                "macros_g":{
-                    "protein":89,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715486400":{
-                "macros_cal":{
-                    "protein":40,
-                    "carbs":35,
-                    "fat":25
-                },
-                "macros_g":{
-                    "protein":89,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715572800":{
-                "macros_cal":{
-                    "protein":80,
-                    "carbs":35,
-                    "fat":25
-                },
-                "macros_g":{
-                    "protein":89,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715659200":{
-                "macros_cal":{
-                    "protein":0,
-                    "carbs":0,
-                    "fat":0
-                },
-                "macros_g":{
-                    "protein":0,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715745600":{
-                "macros_cal":{
-                    "protein":0,
-                    "carbs":0,
-                    "fat":0
-                },
-                "macros_g":{
-                    "protein":0,
-                    "carbs":21,
-                    "fat":10
-                }
-            },
-            "1715832000":{
-                "macros_cal":{
-                    "protein":0,
-                    "carbs":0,
-                    "fat":0
-                },
-                "macros_g":{
-                    "protein":0,
-                    "carbs":21,
-                    "fat":10
-                }
-            }
-
+[
+  {
+    "datetimestamp": 1718683200,
+    "meals": {
+      "breakfast": [
+        {
+          "food_name": "chicken breast",
+          "quantity": 500,
+          "protein": 37,
+          "carbs": 10,
+          "fat": 5,
+          "calories": 200
         },
-        "today":{
-            "meals":{
-
-                "breakfast":[
-                    {
-                        "food_name":"chicken breast",
-                        "quantity":500,
-                        "protein":37,
-                        "carbs":10,
-                        "fat":5,
-                        "calories":200
-    
-                    },
-                    {
-                        "food_name":"kale",
-                        "quantity":200,
-                        "protein":7,
-                        "carbs":10,
-                        "fat":5,
-                        "calories":10
-                        
-                    }
-                ],
-                "lunch":[
-                    {
-                        "food_name":"chicken breast",
-                        "quantity":500,
-                        "protein":37,
-                        "carbs":10,
-                        "fat":5,
-                        "calories":200
-                    }
-
-                ]
-
-            },
-            "totals":{
-                "macros_cal":{
-                    "protein":40,
-                    "carbs":35,
-                    "fat":25
-                },
-                "macros_g":{
-                    "protein":89,
-                    "carbs":21,
-                    "fat":10
-                }
-
-            }
+        {
+          "food_name": "kale",
+          "quantity": 200,
+          "protein": 7,
+          "carbs": 10,
+          "fat": 5,
+          "calories": 10
         }
-
-}
+      ],
+      "lunch": [
+        {
+          "food_name": "chicken breast",
+          "quantity": 500,
+          "protein": 37,
+          "carbs": 10,
+          "fat": 5,
+          "calories": 200
+        }
+      ]
+    },
+    "totals": {
+      "macros_cal": {
+        "protein": 40,
+        "carbs": 35,
+        "fat": 25
+      },
+      "macros_g": {
+        "protein": 89,
+        "carbs": 21,
+        "fat": 10
+      }
+    }
+  },
+  {
+    "datetimestamp": 1715313600,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715400000,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715486400,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715572800,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715659200,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715745600,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    },
+  {
+    "datetimestamp": 1715832000,
+    "meals": {
+        "breakfast": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          },
+          {
+            "food_name": "kale",
+            "quantity": 200,
+            "protein": 7,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 10
+          }
+        ],
+        "lunch": [
+          {
+            "food_name": "chicken breast",
+            "quantity": 500,
+            "protein": 37,
+            "carbs": 10,
+            "fat": 5,
+            "calories": 200
+          }
+        ]
+      },
+      "totals": {
+        "macros_cal": {
+          "protein": 40,
+          "carbs": 35,
+          "fat": 25
+        },
+        "macros_g": {
+          "protein": 89,
+          "carbs": 21,
+          "fat": 10
+        }
+      }
+    }
+]

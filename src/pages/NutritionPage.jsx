@@ -1,14 +1,13 @@
-import { Box, Container, Typography, Button} from "@mui/material"; 
+import { Box, Container, Typography, useScrollTrigger} from "@mui/material"; 
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
-import {useState, useEffect} from "react"
+import {useState, useEffect, useRef} from "react"
 import * as echarts from 'echarts';
-import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
+// import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
 import nutritionData from '../data/nutrition.json'
 import MealList from "../components/MealList";
 import { startOfWeek, endOfWeek, format } from 'date-fns';
 import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
 import { useTheme } from "@emotion/react";
-import {useNavigate} from "react-router-dom" 
 import AddFoodModal from "../components/Modals/AddFoodModal";
 
 const getOrdinalSuffix = (day) => {
@@ -31,8 +30,10 @@ const getWeekRange = (date) => {
 const groupDataByWeek = (data) => {
     const groupedData = {};
 
-    Object.keys(data).forEach(timestamp => {
-        const date = new Date(timestamp * 1000); // unix timestamp to Date obj
+    data.forEach(day => {
+        const datetimestamp = day.datetimestamp
+
+        const date = new Date(datetimestamp  * 1000); // unix timestamp to Date obj
         const { start } = getWeekRange(date);
         const weekKey = format(start, 'yyyy-MM-dd');
 
@@ -44,14 +45,14 @@ const groupDataByWeek = (data) => {
         }
 
         const dayKey = format(date, 'yyyy-MM-dd');
-        const dailyCalories = data[timestamp].macros_cal.protein +
-                              data[timestamp].macros_cal.carbs +
-                              data[timestamp].macros_cal.fat;
+        const dailyCalories = day.totals.macros_cal.protein +
+                              day.totals.macros_cal.carbs +
+                              day.totals.macros_cal.fat;
 
         groupedData[weekKey].days[dayKey] = {
             date: date,
             totalCalories: dailyCalories,
-            macros_g: data[timestamp].macros_g,
+            macros_g: day.totals.macros_g,
 
 
         }
@@ -66,8 +67,14 @@ const groupDataByWeek = (data) => {
 
 function NutritionPage(){
 
-    const theme = useTheme()
-    const [selectedData, setSelectedData] = useState(nutritionData.today.meals)
+    const theme = useTheme();
+    const [fullData, setFullData] = useState([]);
+    const [historicalData, setHistoricalData] = useState(nutritionData.slice(1));
+    const [selectedData, setSelectedData] = useState(nutritionData[0]);
+    const [groupedData, setGroupedData] = useState({});
+    // Chart Refs
+    const caloriesBarChartRef = useRef(null)
+    const caloriesDoughnutChartRef = useRef(null)
     // Date formatting
     const date = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -76,16 +83,35 @@ function NutritionPage(){
     const year = date.getFullYear();
     const dayWithSuffix = day + getOrdinalSuffix(day);
     const { start:startDate, end:endDate } = getWeekRange(date);
-    // Group data
-    const groupedData = groupDataByWeek(nutritionData.historical)
+
+    useEffect(()=>{
+        console.log('selected Data ',selectedData)
+    },[selectedData])
+
+    useEffect(() => {
+        // Simulate fetching data (replace with actual data fetching logic)
+        // For now, set the mock data
+        setFullData(nutritionData);
+        
+        
+        // Group data by week
+        const groupedData = groupDataByWeek(fullData);
+        setGroupedData(groupedData)
+        console.log('group Data ',groupedData); // Verify grouped data in console
+        console.log('selected Data ',selectedData); // Verify grouped data in console
+        console.log('historical Data ',historicalData); // Verify grouped data in console
+        
+    }, [fullData, nutritionData]);
     
+    
+
     const todayMacros = {
         totalProtein: 0,
         totalCarbs:0,
         totalFat:0,
         totalCalories:0
     }
-    Object.values(selectedData,).forEach(meal => {
+    Object.values(selectedData.meals).forEach(meal => {
         meal.forEach(foodItem => {
             todayMacros.totalProtein += foodItem.protein;
             todayMacros.totalCarbs += foodItem.carbs;
@@ -96,14 +122,13 @@ function NutritionPage(){
 
     // Chart data
     // TODO: limit data view to current week or plot the last 7 days including today
-    const chartDays = Object.keys(nutritionData.historical).map(unixTime => new Date(parseInt(unixTime)*1000).toLocaleDateString())
-    const barChartDataSeries = Object.values(nutritionData.historical).map(entry => ({value: [
-                                                                            entry.macros_cal.protein,
-                                                                            entry.macros_cal.carbs,
-                                                                            entry.macros_cal.fat,
-                                                                            ]}))
-    
-        
+    const chartDays = historicalData.map(data => new Date(parseInt(data.datetimestamp)*1000).toLocaleDateString())
+    const barChartDataSeries = historicalData.map(entry => ( {value: [
+                                                                        entry.totals.macros_cal.protein,
+                                                                        entry.totals.macros_cal.carbs,
+                                                                        entry.totals.macros_cal.fat,
+                                                                        ]}
+                                                            ))
 
     // Echarts
     const barChartOptions = {
@@ -206,14 +231,20 @@ function NutritionPage(){
     };
 
     useEffect(() => {
-        const caloriesBarChart = echarts.init(document.getElementById('caloriesBarChart'),  null, { renderer: 'svg' });
-        const caloriesDoughnutChart= echarts.init(document.getElementById('caloriesDoughnutChart'),  null, { renderer: 'svg' });
+        // Initialize caloriesBarChart
+        const caloriesBarChart = echarts.init(caloriesBarChartRef.current, null, { renderer: 'svg' });
         caloriesBarChart.setOption(barChartOptions);
+
+        // Initialize caloriesDoughnutChart
+        const caloriesDoughnutChart = echarts.init(caloriesDoughnutChartRef.current, null, { renderer: 'svg' });
         caloriesDoughnutChart.setOption(doughnutChartOptions);
+
+        // Clean up function to dispose the charts
         return () => {
             caloriesBarChart.dispose();
             caloriesDoughnutChart.dispose();
         };
+
     }, []);
     
 
@@ -223,15 +254,16 @@ function NutritionPage(){
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <DrawerNavBar />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent:'center'}}>
-                <AddFoodModal setSelectedData={setSelectedData}/>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <AddFoodModal setSelectedData={setSelectedData} />
             </Box>
+
             <Box sx={{margin:'2rem 0', borderBottom:'2px solid black'}}>
                 <Typography fontWeight='bold'>Caloric Intake - Last 7 Days</Typography>
                 {/* <Typography variant='h6'>{`Week ${format(new Date(startDate),'MMM dd, yyyy')} - ${format(new Date(endDate),'MMM dd, yyyy')}`}</Typography> */}
             </Box>
 
-            <Box id="caloriesBarChart" sx={{ width: '100%', height: '400px'}}></Box>
+            <Box ref={caloriesBarChartRef} sx={{ width: '100%', height: '400px' }}></Box>
 
 
 
@@ -241,11 +273,12 @@ function NutritionPage(){
                 </Box>
 
                 <Box sx={{display:'flex'}}>
-                    <Box id="caloriesDoughnutChart" sx={{ width: "100%", height: '20vh'}}></Box>
+                    <Box ref={caloriesDoughnutChartRef} sx={{ width: '100%', height: '400px' }}></Box>
+
                 </Box>
    
                 {
-                    Object.entries(selectedData).map(([meal, foodList, index])=>{
+                    Object.entries(selectedData.meals).map(([meal, foodList, index])=>{
                         return <MealList mealName={meal} foodList={foodList}/>
                     })
                 }
@@ -257,9 +290,8 @@ function NutritionPage(){
                 })
 
 
-            }
-
-        </Container>
+            } 
+    </Container>
     )
 
 }

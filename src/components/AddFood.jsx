@@ -154,35 +154,37 @@ function AddFood({setSelectedData, handleClose}) {
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        
+    
         const dataToSend = {
             food_name: selectedFood.label,
-            protein:  Math.round(assignFood.nutrition.protein),
-            carbs:  Math.round(assignFood.nutrition.carbs),
+            protein: Math.round(assignFood.nutrition.protein),
+            carbs: Math.round(assignFood.nutrition.carbs),
             fat: Math.round(assignFood.nutrition.fat),
-            calories:  Math.round(assignFood.nutrition.calories),
+            calories: Math.round(assignFood.nutrition.calories),
             quantity: assignFood.serving.quantity,
             uom: assignFood.serving.uom,
         };
-        console.log('new data',assignFood.meal)
+    
         setSelectedData((prevData) => {
-      
+            console.log('prevData',prevData)
             const updatedData = { ...prevData };
-            console.log('in setSelected data',updatedData[assignFood.meal])
+    
             // Check if the selected meal already exists in the data
-            if (updatedData[assignFood.meal]) {
+            if (updatedData.meals[assignFood.meal]) {
                 // If the meal exists, push the new entry to its array
-                updatedData[assignFood.meal].push(dataToSend);
+                updatedData.meals[assignFood.meal].push(dataToSend);
             } else {
                 // If the meal doesn't exist, create a new array and add the new entry
-                updatedData[assignFood.meal] = [dataToSend];
+                updatedData.meals[assignFood.meal] = [dataToSend];
             }
     
             return updatedData;
         });
-        handleClose()
-        
-    }
+    
+        handleClose();
+    };
+    
+    
 
     return (
         <Container>
