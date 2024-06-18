@@ -110,7 +110,7 @@ function WorkoutCard({
             <CardContent component="form" onSubmit={handleSubmit} noValidate>
                 <Box>
                     {/* TODO: update conversion of last_completed */}
-                    <Typography>Last completed on {data.last_completed}</Typography>
+                    <Typography>{data.last_completed && `Last completed on  ${new Date(data.last_completed).toLocaleDateString()}`}</Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                         {editMode ? (
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

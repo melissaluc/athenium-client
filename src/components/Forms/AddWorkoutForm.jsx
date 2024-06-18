@@ -9,7 +9,7 @@ const AddWorkoutForm = ({ onClose, handleAddWorkout }) => {
     description: '',
     tags: [],
     last_completed:null,
-    created_on: Date.now()*1000,
+    created_on: new Date(Date.now()*1000).toISOString(),
     frequency:'',
     exercises:[]
  

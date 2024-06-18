@@ -72,7 +72,7 @@ function WorkoutPage(){
             workout_name,
             description,
             exercises:[],
-            // last_completed:last_completed,
+            last_completed:null,
             // frequency:workout.frequency,
             tags: tags ? tags : null 
         }
