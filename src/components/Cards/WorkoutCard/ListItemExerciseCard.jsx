@@ -1,8 +1,10 @@
 import { Box, Typography, Grid, Button, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 
-function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges }) {
+function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
     const [formData, setFormData] = useState(data);
+
+
 
     useEffect(() => {
         handleExerciseChanges(formData);
@@ -10,10 +12,19 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        setUpdatedExercises(prev => [
+            ...prev,
+            {
+                [name]: value,
+                uid: data.id
+            }
+        ]);
         setFormData((prev) => ({
             ...prev,
+            uid: data.id,
             [name]: value
         }));
+        
     };
 
     const renderStrengthFields = () => (
