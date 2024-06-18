@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material"; 
+import { Box, Container } from "@mui/material"; 
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -6,30 +6,19 @@ import SortPopover from "../components/Popovers/SortPopover";
 import FilterPopover from "../components/Popovers/FilterPopover"
 import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 import WorkoutModal from "../components/Modals/WorkoutModal"
-
-import workoutLogData from "../data/workouts.json"
-
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 import {useState, useEffect} from 'react'
 
 
 function WorkoutPage(){
-    const [originalWorkoutData, setOriginalWorkoutData] = useState(workoutLogData.workouts_log);
-    const [workoutData, setWorkoutData] = useState(workoutLogData.workouts_log)
+    const [originalWorkoutData, setOriginalWorkoutData] = useState([]);
+    const [workoutData, setWorkoutData] = useState([])
+    const [addedExercises, setAddedExercises] = useState([])
+    const [deletedExercises, setDeletedExercises] = useState([])
+    const [updatedExercises, setUpdatedExercises] = useState([])
 
-    
-    // useEffect(() => {
-    //     setWorkoutData(originalWorkoutData);
-    // }, []);
-
-    // useEffect(() => {
-
-    //     setWorkoutData(originalWorkoutData);
-    // }, [originalWorkoutData]);
-
-    // useEffect(() => {
-
-    // }, [workoutData]);
 
     const onSort = (order, category) => {
         handleSort(order, category)
@@ -53,12 +42,16 @@ function WorkoutPage(){
 
         const updatedData = originalWorkoutData.map(workout=>{
             if (workout.workout_id === data.workout_id) {
-                return {
+                const newData =  {
                     ...workout,
                     workout_name: data.workout_name,
                     description: data.description,
                     exercises: data.exercises
                 }
+
+  
+
+                return newData
             }
             return workout
             }
@@ -68,30 +61,66 @@ function WorkoutPage(){
     }
 
     const handleAddWorkout = (newWorkout) => {
-        const updatedWorkouts = [newWorkout,...originalWorkoutData];
-        setOriginalWorkoutData(updatedWorkouts)
-    }
 
-    const handleDeleteWorkout = (workout_id) => {
-        const updatedData = originalWorkoutData.filter(workout=> workout.workout_id !== workout_id)
-        console.log("workout deleted ",updatedData)
-        setOriginalWorkoutData(updatedData)
+        const {description, tags, workout_name, workout_id} = newWorkout
+        
+        setOriginalWorkoutData([newWorkout,...originalWorkoutData])
+        setWorkoutData([newWorkout,...workoutData])
+        console.log('new workout ', newWorkout)
+        const postData = {
+            workout_id,
+            workout_name,
+            description,
+            exercises:[],
+            last_completed:null,
+            // frequency:workout.frequency,
+            tags: tags ? tags : null 
+        }
+        axios.post("http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423",postData)
+            .then(response=>{
+                console.log(response)
+            })
     }
+    
+    const handleDeleteWorkout = (workout_id) => {
+        // Filter out workout from originalWorkoutData
+        const updatedOriginalData = originalWorkoutData.filter(workout => workout.workout_id !== workout_id);
+        setOriginalWorkoutData(updatedOriginalData);
+    
+        // Filter out workout from workoutData
+        const updatedData = workoutData.filter(workout => workout.workout_id !== workout_id);
+        setWorkoutData(updatedData);
+    
+        // DELETE request to backend
+        axios.delete(`http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423/${workout_id}`)
+            .then(response => {
+                console.log(response);
+                // Handle success or further updates if needed
+            })
+            .catch(error => {
+                console.error('Error deleting workout:', error);
+                // Handle error if needed
+            });
+    };
 
     const handleDeleteExercise = (data) => {
+
         const updatedData = originalWorkoutData.map(workout=>{
-            console.log('map',workout)
             if (workout.workout_id === data.workout_id) {
-                return {
+                const newDeleteExercise = {
                     ...workout,
                     exercises: workout.exercises.filter(exercise => exercise.id !== data.id)
                 }
+                return newDeleteExercise
             }
             return workout
-            }
-        )
-        console.log("exercise deleted", updatedData)
+        })
+
         setWorkoutData(updatedData)
+        setOriginalWorkoutData(updatedData)
+        
+        setDeletedExercises(prev => [...prev, data.id]);
+
     }
 
     const handleAddTag = ()=>{
@@ -100,28 +129,37 @@ function WorkoutPage(){
 
     
 
-    const handleAddExercise = (exercise)=>{
-        const {workout_id, exercise_name, group} = exercise
-        const updatedData = originalWorkoutData.map((workout)=>{
-            if(workout.workout_id === workout_id) {
-                workout.exercises.push(
-                    {
-                        id:Date.now(),
-                        "img_url":null,
-                        "category":"strength",
-                        group,
-                        exercise_name,
-                        "weight":0,
-                        "reps":0,
-                        "sets":0
-                    }
-                
-                )
-            } return workout
-        })
-        setOriginalWorkoutData(updatedData)
-    }
+    const handleAddExercise = (exercise) => {
+        const { workout_id, exercise_name, group } = exercise;
 
+        const newExercise = {
+            id: uuidv4(),
+            img_url: null,
+            category: "strength",
+            group,
+            exercise_name,
+            weight: 0,
+            reps: 0,
+            sets: 0
+        };
+
+        const updatedData = originalWorkoutData.map(workout => {
+            if (workout.workout_id === workout_id) {
+                return {
+                    ...workout,
+                    exercises: [...workout.exercises, newExercise]
+                };
+            }
+            return workout;
+        });
+
+        setOriginalWorkoutData(updatedData);
+        setWorkoutData(updatedData);
+
+        setAddedExercises(prev => [...prev, newExercise]);
+
+    };
+    
 
     const onFilter = (filterText) => {
         if (!filterText) {
@@ -135,6 +173,20 @@ function WorkoutPage(){
         const filteredData = workoutData.filter(item => item.workout_name === filterCriteria)
         setWorkoutData(filteredData);
     };
+
+    const getUserWorkoutData = () => {
+        axios.get("http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423")
+        .then(response =>{
+            setOriginalWorkoutData(response.data)
+            setWorkoutData(response.data)
+        })
+        .catch(error=>console.error(error))
+
+    }
+
+    useEffect(()=>{
+        getUserWorkoutData()
+    },[])
     
 
     return (
@@ -164,7 +216,13 @@ function WorkoutPage(){
                             handleAddExercise={handleAddExercise} 
                             handleDeleteExercise={handleDeleteExercise}
                             handleUpdateData={handleUpdateData}
-                            handleDeleteWorkout={handleDeleteWorkout }/>
+                            handleDeleteWorkout={handleDeleteWorkout }
+                            setUpdatedExercises={setUpdatedExercises}
+                            addedExercises={addedExercises} 
+                            setAddedExercises={setAddedExercises}
+                            deletedExercises={deletedExercises} 
+                            setDeletedExercises={setDeletedExercises}
+                            updatedExercises={updatedExercises} />
                 })}
             </Box>
         </Container>

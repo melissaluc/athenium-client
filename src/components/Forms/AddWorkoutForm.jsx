@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Grid, Autocomplete } from '@mui/material';
+import { Box, Button, TextField, Typography, Grid} from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
-
-const AddWorkoutForm = ({ onClose, handleAddWorkout, handleEditWorkout }) => {
+const AddWorkoutForm = ({ onClose, handleAddWorkout }) => {
   const [formData, setFormData] = useState({
-    workout_id: Date.now(),
+    workout_id: null,
     workout_name: '',
     description: '',
     tags: [],
     last_completed:null,
-    created_on: Date.now()*1000,
+    created_on: new Date(Date.now()*1000).toISOString(),
     frequency:'',
     exercises:[]
  
@@ -22,11 +22,16 @@ const AddWorkoutForm = ({ onClose, handleAddWorkout, handleEditWorkout }) => {
       ...prev,
       [name]: value,
     }));
+
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleAddWorkout(formData);
+    const newFormData = {
+      ...formData,
+      workout_id: uuidv4()
+    };
+    handleAddWorkout(newFormData);
     onClose();
   };
 
