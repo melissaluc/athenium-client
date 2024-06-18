@@ -31,8 +31,6 @@ function WorkoutCard({
     useEffect(() => {
         setFormData(data);
         setOriginalData(data);
-        console.log(updatedExercises)
-        // console.log('formData ',formData)
     }, [data]);
     
 
