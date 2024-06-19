@@ -24,7 +24,7 @@ function convertGramsToOtherUnits(grams) {
 }
 
 
-function AddFood({setSelectedData, handleClose}) {
+function AddFood({selectedDate, setSelectedData, handleClose}) {
 
     const [searchFoodName, setSearchFoodName] = useState('');
     const [foodDataList, setFoodDataList] = useState([]);
@@ -154,7 +154,7 @@ function AddFood({setSelectedData, handleClose}) {
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
-    
+        
         const dataToSend = {
             food_name: selectedFood.label,
             protein: Math.round(assignFood.nutrition.protein),
@@ -164,6 +164,18 @@ function AddFood({setSelectedData, handleClose}) {
             quantity: assignFood.serving.quantity,
             uom: assignFood.serving.uom,
         };
+
+        axios.post('http://localhost:5000/api/v1/nutrition/39b17fed-61d6-492a-b528-4507290d5423/', 
+        {
+            datetimestamp:selectedDate ? selectedDate : new Date().toISOString().split('T')[0],
+            meal_name:assignFood.meal,
+            data:dataToSend
+
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => console.error(error))
     
         setSelectedData((prevData) => {
             console.log('prevData',prevData)

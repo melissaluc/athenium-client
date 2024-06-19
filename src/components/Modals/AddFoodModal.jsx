@@ -24,7 +24,7 @@ const style = {
 };
 
 
-function AddFoodModal({setSelectedData}) {
+function AddFoodModal({selectedDate, setSelectedData}) {
 
   const [open, setOpen] = useState(false);
 
@@ -45,7 +45,7 @@ function AddFoodModal({setSelectedData}) {
         aria-describedby="modal-modal-description"
       >
       <Box sx={style}>
-          <AddFood setSelectedData={setSelectedData} handleClose={handleClose}/>
+          <AddFood setSelectedData={setSelectedData} selectedDate={selectedDate} handleClose={handleClose}/>
       </Box>
       </Modal>
     </Box>
