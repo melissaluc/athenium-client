@@ -27,6 +27,12 @@ function GoalsPage() {
     setActiveView('pending');
   };
 
+  const handleDeleteGoal = (deleteGoal) => {
+    const updatedFullData = fullData.filter(goal => goal.id !== deleteGoal);
+    setFullData(updatedFullData);
+    // setActiveView('pending');
+  };
+
   const filterData = (filterValue) => {
     if (filterValue === 'all') {
       setData([...fullData]);
@@ -82,6 +88,7 @@ function GoalsPage() {
               start_value={start_value}
               status={status}
               handleEditGoal={handleEditGoal}
+              handleDeleteGoal={handleDeleteGoal}
             />
           );
         })}

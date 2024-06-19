@@ -35,7 +35,8 @@ function GoalProgress ({
                         current_value,
                         start_value,
                         status,
-                        handleEditGoal }) {
+                        handleEditGoal,
+                        handleDeleteGoal }) {
     const [expandWorkout, setExpandWorkout] = useState(false)
     const updateDateFormatted = new Date(updated_on*1000)
     const startDateFormatted = new Date(start_date*1000)
@@ -64,7 +65,8 @@ function GoalProgress ({
                                             target_value,
                                             start_value,
                                             status,}}
-                                        handleEditGoal={handleEditGoal}/>
+                                        handleEditGoal={handleEditGoal}
+                                        handleDeleteGoal={handleDeleteGoal}/>
                     </Box>
                     <Box>
                         <Typography fontSize={'0.7rem'}>{category}</Typography>
