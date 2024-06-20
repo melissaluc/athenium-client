@@ -4,15 +4,17 @@ import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import GoalsCard from '../components/GoalsCard';
 import goalsData from '../data/goals.json';
 import GoalModal from "../components/Modals/GoalModal";
+import axios from 'axios'
+
 
 function GoalsPage() {
-  const [fullData, setFullData] = useState(goalsData.goals);
-  const [data, setData] = useState(goalsData.goals);
+  const [fullData, setFullData] = useState([]);
+  const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
 
   const handleEditGoal = (goalData) => {
     const updatedData = fullData.map(goal => {
-      if (goal.id === goalData.id) {
+      if (goal.uid === goalData.uid) {
         return { ...goal, ...goalData };
       }
       return goal;
@@ -28,8 +30,14 @@ function GoalsPage() {
   };
 
   const handleDeleteGoal = (deleteGoal) => {
-    const updatedFullData = fullData.filter(goal => goal.id !== deleteGoal);
-    setFullData(updatedFullData);
+    console.log(deleteGoal)
+    const updatedFullData = fullData.filter(goal => goal.uid !== deleteGoal);
+    axios.delete(`http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/${deleteGoal}`)
+    .then(response => {
+      console.log(response.data)
+      setFullData(updatedFullData);
+    })
+    .catch(error => console.error(error))
     // setActiveView('pending');
   };
 
@@ -45,6 +53,16 @@ function GoalsPage() {
   useEffect(() => {
     filterData(activeView);
   }, [fullData, activeView]);
+
+  useEffect(()=>{
+    axios.get('http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/')
+    .then(response => {
+      console.log(response.data)
+      setFullData(response.data)
+      setData(response.data)
+    })
+    .catch(error => console.error(error))
+  },[])
 
   const getButtonStyle = (view) => ({
     backgroundColor: activeView === view ? '#d7aecf' : 'default',
@@ -71,16 +89,16 @@ function GoalsPage() {
       
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {data.map((goal) => {
-          const { id, name, category, description, metric, unit, updated_on, start_date, target_value, current_value, start_value, status } = goal;
+          const { uid, goal_name, category, description, metric, uom, updated_on, start_date, target_value, current_value, start_value, status } = goal;
           return (
             <GoalsCard
-              key={id}
-              id={id}
-              name={name}
+              key={uid}
+              id={uid}
+              name={goal_name}
               category={category}
               description={description}
               metric={metric}
-              unit={unit}
+              unit={uom}
               updated_on={updated_on}
               start_date={start_date}
               target_value={target_value}
