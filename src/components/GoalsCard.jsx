@@ -35,8 +35,7 @@ function GoalProgress({
     start_value,
     status,
     handleEditGoal,
-    handleDeleteGoal,
-    setUpdatedFields}) {
+    handleDeleteGoal,}) {
 
     const [expandWorkout, setExpandWorkout] = useState(false);
     const updateDateFormatted = new Date(updated_on * 1000);
@@ -77,8 +76,7 @@ function GoalProgress({
                             status,
                         }}
                             handleEditGoal={handleEditGoal}
-                            handleDeleteGoal={handleDeleteGoal}
-                            setUpdatedFields={setUpdatedFields} />
+                            handleDeleteGoal={handleDeleteGoal} />
                     </Box>
                     <Box>
                         <Typography fontSize={'0.7rem'}>{category}</Typography>

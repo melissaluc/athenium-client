@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, TextField, Typography, Grid, Autocomplete } from '@mui/material';
 
-const EditGoalForm = ({ onClose, data, handleEditGoal, handleDeleteGoal, setUpdatedFields }) => {
+const EditGoalForm = ({ onClose, data, handleEditGoal, handleDeleteGoal, }) => {
 
   const [formData, setFormData] = useState({
     id:'',

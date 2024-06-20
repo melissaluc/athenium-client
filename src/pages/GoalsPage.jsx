@@ -10,7 +10,6 @@ function GoalsPage() {
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
-  const [updatedFields, setUpdatedFields] = useState([])
 
   const handleEditGoal = (goalData) => {
  
@@ -126,7 +125,6 @@ function GoalsPage() {
               status={status}
               handleEditGoal={handleEditGoal}
               handleDeleteGoal={handleDeleteGoal}
-              setUpdatedFields={setUpdatedFields}
             />
           );
         })}
