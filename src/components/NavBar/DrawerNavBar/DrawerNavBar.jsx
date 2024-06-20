@@ -38,7 +38,7 @@ export default function DrawerNavBar() {
     { text: 'Trend', path: '../trends', icon: <TimelineIcon /> },
     { text: 'Strength', path: '../strength', icon: <AssessmentIcon /> },
     { text: 'Schedule', path: '../schedule', icon: <TodayIcon /> },
-    { text: 'Log', path: '../log', icon: <FormatListBulletedIcon /> },
+    // { text: 'Log', path: '../log', icon: <FormatListBulletedIcon /> },
     { text: 'Goals', path: '../goals', icon: <FlagIcon /> },
     { text: 'Workouts', path: '../workouts', icon: <FitnessCenterIcon /> },
     { text: 'Nutrition', path: '../nutrition', icon: <RestaurantIcon /> },

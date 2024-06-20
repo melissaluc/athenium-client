@@ -25,7 +25,7 @@ function App(){
                 <Route path='/dashboard' element={<DashboardPage/>}  />
                 <Route path='/schedule' element={<SchedulePage/>}  />
                 <Route path='/results' element={<ResultsPage/>}  />
-                <Route path='/log' element={<LogPage/>}  />
+                {/* <Route path='/log' element={<LogPage/>}  /> */}
                 <Route path='/goals' element={<GoalsPage/>}  />
                 <Route path='/measurements' element={<MeasurementPage/>}  />
                 <Route path='/nutrition' element={<NutritionPage/>}  />

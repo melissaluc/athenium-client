@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Grid, Autocomplete } from '@mui/material';
 
+
 const GoalForm = ({ onClose, handleAddGoal }) => {
   const [formData, setFormData] = useState({
     id: Date.now(),
-    name: '',
+    goal_name: '',
     description: '',
     category: '',
     metric: '',
-    unit: '',
+    uom: '',
     start_value: null,
     target_value: null,
     current_value: null,
-    updated_on: 1716411215,
-    start_date: 1716411215,
+    achieved_on:null,
+    updated_on: Date.now(),
+    start_date: null,
     status: 'pending',
+    rank:1,
+    priority_level: 1,
   });
 
   const formOptions = {
     category: ['mobility', 'strength progression', 'change body composition'],
     metric: ['runtime', 'lift', 'weight'],
-    unit: ['km', 'lbs'],
+    uom: ['km', 'lbs'],
   };
 
   const handleDropdownChange = (e, value, name) => {
@@ -57,7 +61,7 @@ const GoalForm = ({ onClose, handleAddGoal }) => {
         <Typography variant="h4" gutterBottom>
           Set a Goal
         </Typography>
-        <Button>Set Start Date</Button>
+        <Button onClick={()=>alert("datepicker")}>Set Start Date</Button>
       </Box>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 0.5, mb: 0.5 }}>
         <Grid container spacing={1}>
@@ -66,12 +70,12 @@ const GoalForm = ({ onClose, handleAddGoal }) => {
               margin="normal"
               required
               fullWidth
-              id="name"
+              id="goal_name"
               label="Goal Name"
-              name="name"
+              name="goal_name"
               value={formData.name}
               onChange={handleChange}
-              autoComplete="name"
+              autoComplete="goal_name"
               sx={{ mt: 0.2, mb: 0.2, fontSize: '1rem' }}
             />
           </Grid>
@@ -117,11 +121,11 @@ const GoalForm = ({ onClose, handleAddGoal }) => {
             <Autocomplete
               fullWidth
               freeSolo
-              options={formOptions.unit}
-              value={formData.unit}
-              onChange={(e, value) => handleDropdownChange(e, value, 'unit')}
-              onInputChange={(e, value) => handleInputChange(e, value, 'unit')}
-              renderInput={(params) => <TextField {...params} label="Unit" />}
+              options={formOptions.uom}
+              value={formData.uom}
+              onChange={(e, value) => handleDropdownChange(e, value, 'uom')}
+              onInputChange={(e, value) => handleInputChange(e, value, 'uom')}
+              renderInput={(params) => <TextField {...params} label="uom" />}
             />
           </Grid>
           <Grid item xs={6} sx={{ mt: 0.2, mb: 0.2 }}>
