@@ -2,31 +2,45 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, Button } from "@mui/material";
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import GoalsCard from '../components/GoalsCard';
-import goalsData from '../data/goals.json';
 import GoalModal from "../components/Modals/GoalModal";
 import axios from 'axios'
-
+import { v4 as uuidv4 } from 'uuid';
 
 function GoalsPage() {
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
-
+  const [updatedFields, setUpdatedFields] = useState({})
   const handleEditGoal = (goalData) => {
-    const updatedData = fullData.map(goal => {
-      if (goal.uid === goalData.uid) {
-        return { ...goal, ...goalData };
-      }
-      return goal;
-    });
-    console.log('edit goal ', updatedData);
-    setFullData(updatedData);
+    const postData = {}
+    axios.patch(`http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/`,postData)
+    .then(response => {
+      console.log(response.data)
+      const updatedData = fullData.map(goal => {
+        if (goal.uid === goalData.uid) {
+          return { ...goal, ...goalData };
+        }
+        return goal;
+      });
+      console.log('edit goal ', updatedData);
+      setFullData(updatedData);
+
+    })
+    .catch(error => console.error(error))
   };
 
   const handleAddGoal = (newGoal) => {
+    const uid = uuidv4();
     const updatedFullData = [...fullData, newGoal];
-    setFullData(updatedFullData);
-    setActiveView('pending');
+    const postData = { ...newGoal, uid};
+    delete postData.id
+    axios.post(`http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/`,postData)
+    .then(response => {
+      console.log(response.data)
+      setFullData(updatedFullData);
+      setActiveView('pending');
+    })
+    .catch(error => console.error(error))
   };
 
   const handleDeleteGoal = (deleteGoal) => {

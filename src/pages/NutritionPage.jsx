@@ -87,7 +87,8 @@ function NutritionPage() {
                     const entryDate = new Date(parseInt(entry.datetimestamp) * 1000).toISOString().split('T')[0];
                     return entryDate !== today;
                 });
-
+                
+                console.log(historicalDataWithoutToday)
                 setHistoricalData(historicalDataWithoutToday);
 
                 if (todayData) {
@@ -243,7 +244,7 @@ function NutritionPage() {
     };
 
 
-    const { start, end } = getWeekRange(new Date(selectedData.datetimestamp * 1000));
+    const { start, end } = getWeekRange(selectedData.datetimestamp ? new Date(selectedData.datetimestamp * 1000) : new Date());
     const weekDates = eachDayOfInterval({ start, end });
     let chartDays = weekDates.map(date => {
         const dayName = format(date, 'EEEE')
