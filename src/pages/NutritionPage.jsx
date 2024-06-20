@@ -295,7 +295,7 @@ function NutritionPage() {
             <Box sx={{ margin: '2rem 0', borderBottom: '2px solid black' }}>
                 <Typography fontWeight='bold'>7 Day Week Caloric Intake</Typography>
                 <Typography variant="body1">
-                    {`Week ${format(start, 'yyyy-MM-dd')} to ${format(end, 'yyyy-MM-dd')}`}
+                    {(start & end )&&`Week ${format(start, 'yyyy-MM-dd')} to ${format(end, 'yyyy-MM-dd')}`}
                 </Typography>
             </Box>
 
