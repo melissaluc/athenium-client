@@ -23,7 +23,7 @@ const style = {
 
 };
 
-function EditGoalModal({data, handleEditGoal, handleDeleteGoal }) {
+function EditGoalModal({data, handleEditGoal, handleDeleteGoal, setUpdatedFields }) {
 
   const [open, setOpen] = useState(false);
 
@@ -44,7 +44,7 @@ function EditGoalModal({data, handleEditGoal, handleDeleteGoal }) {
         aria-describedby="modal-modal-description"
       >
       <Box sx={style}>
-          <EditGoalForm onClose={handleClose} data={data} handleEditGoal={handleEditGoal} handleDeleteGoal={handleDeleteGoal}/>
+          <EditGoalForm onClose={handleClose} data={data} handleEditGoal={handleEditGoal} handleDeleteGoal={handleDeleteGoal} setUpdatedFields={setUpdatedFields}/>
       </Box>
       </Modal>
     </Box>

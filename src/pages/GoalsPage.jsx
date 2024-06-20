@@ -10,19 +10,24 @@ function GoalsPage() {
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
-  const [updatedFields, setUpdatedFields] = useState({})
+  const [updatedFields, setUpdatedFields] = useState([])
+
   const handleEditGoal = (goalData) => {
-    const postData = {}
-    axios.patch(`http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/`,postData)
+ 
+    const putData = {...goalData, uid:goalData.id, goal_name: goalData.name, uom:goalData.unit }
+    delete putData.id 
+    delete putData.name
+    delete putData.unit
+
+    axios.put(`http://localhost:5000/api/v1/goals/39b17fed-61d6-492a-b528-4507290d5423/${goalData.id}`,putData)
     .then(response => {
       console.log(response.data)
       const updatedData = fullData.map(goal => {
-        if (goal.uid === goalData.uid) {
-          return { ...goal, ...goalData };
+        if (goal.uid === putData.uid) {
+          return { ...goal, ...putData };
         }
         return goal;
       });
-      console.log('edit goal ', updatedData);
       setFullData(updatedData);
 
     })
@@ -121,6 +126,7 @@ function GoalsPage() {
               status={status}
               handleEditGoal={handleEditGoal}
               handleDeleteGoal={handleDeleteGoal}
+              setUpdatedFields={setUpdatedFields}
             />
           );
         })}
