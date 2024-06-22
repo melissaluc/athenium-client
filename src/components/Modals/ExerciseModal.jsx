@@ -24,14 +24,14 @@ const style = {
 function ExerciseModal({workout_id, handleClose, open, handleAddExercise}) {
     const [fullExercises] = useState(exercisesData)
     const [activeView, setActiveView] = useState('strength_training')
-    const [exercises,setExercises] = useState(exercisesData['strength_training'])
+    const [exercises,setExercises] = useState(exercisesData)
 
     const handleView = (category)=> {
         setActiveView(category)
     }
 
     useEffect(()=>{
-        setExercises(fullExercises[activeView])
+        setExercises(fullExercises)
 
     },[activeView])
 
@@ -65,11 +65,12 @@ function ExerciseModal({workout_id, handleClose, open, handleAddExercise}) {
                             <Box key={group} sx={{borderTop:'1px solid black', p:'1.5rem 0'}}>
                                 <Typography variant='h6'>{group.toUpperCase()}</Typography>
         
-                                {value && value.map((exercise_name)=>{ 
+                                {value && value.map((item)=>{ 
+                                    const {exerciseName, imgURL} = item
                                     return(
                                         <Box sx={{display:'flex', justifyContent:'flex-start', alignItems:'center', gap:'2rem'}}>
-                                            <Box>img</Box>
-                                            <Button onClick={()=>handleOnClickSelectExercise(({workout_id, exercise_name, group}))}>{exercise_name}</Button>
+                                            <Box><img src={imgURL} alt={exerciseName}></img></Box>
+                                            <Button onClick={()=>handleOnClickSelectExercise(({workout_id, exerciseName, group, imgURL}))}>{exerciseName}</Button>
                                         </Box>
                                         )
                                 })}

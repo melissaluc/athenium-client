@@ -1,4 +1,4 @@
-import { Box, Container, Typography, LinearProgress, Card,CardContent, CardActionArea, CardActions, Button} from "@mui/material";
+import { Box, Typography, LinearProgress} from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 
 function getProgressColour(strengthLevel, theme) {

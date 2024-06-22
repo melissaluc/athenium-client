@@ -1,4 +1,4 @@
-import { Box, Container, Typography, LinearProgress, Card,CardContent, CardActionArea, CardActions, Button} from "@mui/material"; 
+import { Box, Container, Card,CardContent, Button} from "@mui/material"; 
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import strengthLevelData from "../data/strength.json";
 import { useState } from 'react';

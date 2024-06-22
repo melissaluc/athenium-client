@@ -130,7 +130,7 @@ function WorkoutPage(){
     
 
     const handleAddExercise = (exercise) => {
-        const { workout_id, exercise_name, group } = exercise;
+        const { workout_id, exerciseName: exercise_name, group, imgURL:img_url } = exercise;
 
         const newExercise = {
             id: uuidv4(),
@@ -140,7 +140,8 @@ function WorkoutPage(){
             exercise_name,
             weight: 0,
             reps: 0,
-            sets: 0
+            sets: 0,
+            img_url
         };
 
         const updatedData = originalWorkoutData.map(workout => {

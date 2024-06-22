@@ -92,8 +92,8 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
     return (
         <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
-                <Box sx={{ width: '4rem', height: '4rem', backgroundColor: 'gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    Img
+                <Box sx={{ width: '4rem', height: '4rem', border: 'solid 1px gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {data.img_url && <img src={data.img_url}></img>}
                 </Box>
             </Grid>
             <Grid item xs={3}>
