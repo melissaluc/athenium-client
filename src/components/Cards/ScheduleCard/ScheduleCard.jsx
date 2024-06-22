@@ -1,18 +1,5 @@
-import { Button, Typography, Container, Box, Card, CardContent, CardHeader, CardActionArea, CardActions } from '@mui/material';
+import {Typography, Box, Card, CardContent, Button} from '@mui/material';
 import {useState} from 'react'
-
-import {
-    FitnessCenterOutlined,
-    DirectionsRunOutlined,
-    PoolOutlined,
-    HikingOutlined,
-    DirectionsWalkOutlined,
-    SportsMartialArtsOutlined,
-    SportsHandballOutlined,
-    SelfImprovementOutlined,
-    RestaurantOutlined,
-    BakeryDiningOutlined
-} from '@mui/icons-material'
 
 
 function getTimeDifference(unixTime) {
@@ -27,37 +14,25 @@ function getTimeDifference(unixTime) {
     }
 }
 
+function capitalizeEveryWord(str) {
 
-function getIcon(subcategory) {
-    switch (subcategory) {
-        case 'weights':
-            return <FitnessCenterOutlined />;
-        case 'mat':
-            return <SelfImprovementOutlined />;
-        case 'sports':
-            return <SportsHandballOutlined />;
-        case 'martial arts':
-            return <SportsMartialArtsOutlined />;
-        case 'running':
-            return <DirectionsRunOutlined />;
-        case 'swimming':
-            return <PoolOutlined />;
-        case 'hiking':
-            return <HikingOutlined />;
-        case 'walking':
-            return <DirectionsWalkOutlined />;
-        case 'meal':
-            return <RestaurantOutlined/>;
-        case 'snack':
-            return <BakeryDiningOutlined/>;
-        default:
-        return null;
-    }
-    }
+    let words = str.toLowerCase().split(' ');
+  
+    words = words.map(word => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+  
+    return words.join(' ');
+  }
 
-function WorkoutCard ({plannedTime,timeStr,exerciseList, workoutName, subcategory}) {
+
+
+function WorkoutCard ({plannedTime,exerciseList, workoutName,}) {
     const [expanded, setExpanded] = useState(false);
-
+    const unixTimestamp = new Date(plannedTime).getTime() / 1000
+    const timeStr = (new Date(unixTimestamp* 1000)).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+    const timeDiff = getTimeDifference(unixTimestamp)
+    console.log(timeDiff)
     const toggleExpand = () => {
         setExpanded(!expanded);
       };
@@ -74,10 +49,9 @@ function WorkoutCard ({plannedTime,timeStr,exerciseList, workoutName, subcategor
         <CardContent sx={{}}>
             <Box sx={{display:"flex", justifyContent:"space-between"}}>
                 <Typography>{timeStr}</Typography>
-                <Typography fontSize="0.7rem">Coming up in {getTimeDifference(plannedTime)}</Typography>
+                <Typography fontSize="0.7rem">{ timeDiff>0 && `Coming up in ${timeDiff}`}</Typography>
             </Box>
             <Box sx={{display:"flex", gap:"0.5rem"}}>
-                {getIcon(subcategory)}
                 <Typography>{workoutName}</Typography>
             </Box>
 
@@ -107,8 +81,12 @@ function WorkoutCard ({plannedTime,timeStr,exerciseList, workoutName, subcategor
     )}
 
 
-    function NutritionCard({ plannedTime, timeStr, macros, uom, foodList, mealName, subcategory }) {
+    function NutritionCard({ plannedTime, macros, uom, foodList, mealName}) {
         const [expanded, setExpanded] = useState(false);
+        const unixTimestamp = new Date(plannedTime).getTime() / 1000
+        const timeStr = (new Date(unixTimestamp* 1000)).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+        console.log(isNaN(timeStr))
+        const timeDiff = getTimeDifference(unixTimestamp)
     
         const toggleExpand = () => {
             setExpanded(!expanded);
@@ -125,12 +103,12 @@ function WorkoutCard ({plannedTime,timeStr,exerciseList, workoutName, subcategor
             <Card>
                 <CardContent sx={{}}>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                        <Typography>{timeStr}</Typography>
-                        <Typography fontSize="0.7rem">Coming up in {getTimeDifference(plannedTime)}</Typography>
+                        {isNaN(timeStr)? <Button>Set Time</Button>
+                        :(<Typography>{timeStr}</Typography>)}
+                        <Typography fontSize="0.7rem">{ timeDiff>0 && `Coming up in ${timeDiff}`}</Typography>
                     </Box>
                     <Box sx={{ display: "flex", gap: "0.5rem" }}>
-                        {getIcon(subcategory)}
-                        <Typography>{mealName}</Typography>
+                        <Typography>{capitalizeEveryWord(mealName)}</Typography>
                     </Box>
                     <Box>
                         <Typography fontSize="0.7rem"> Protein {macros.protein}{uom} | Carbs {macros.carbs}{uom} | Fat {macros.fat}{uom}</Typography>
@@ -162,26 +140,20 @@ function WorkoutCard ({plannedTime,timeStr,exerciseList, workoutName, subcategor
 
 
 function MiniScheduleCard ({data}) {
-    const timeStr = (new Date(data.planned_time* 1000)).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 
     return(
-        // <></>
         data.activity_category === "workout" ? (
             <WorkoutCard
-                plannedTime={data.planned_time}
-                timeStr={timeStr}
+                plannedTime={data.planned_on}
                 exerciseList={data.exercise_list}
                 workoutName={data.activity_name}
-                subcategory={data.activity_subcategory}
-            />) : data.activity_category === 'nutrition' ? (
+            />) : data.activity_category === 'meal' ? (
                 <NutritionCard
-                    plannedTime={data.planned_time}
-                    timeStr={timeStr}
+                    plannedTime={data.planned_}
                     macros={data.macros.data}
                     uom={data.macros.uom}
                     foodList={data.food_list}
                     mealName={data.activity_name}
-                    subcategory={data.activity_subcategory}
                 />) : null
     )
 }
