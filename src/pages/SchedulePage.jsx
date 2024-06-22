@@ -1,13 +1,25 @@
 import { Box, Container, Typography, Button} from "@mui/material"; 
 import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import Calendar from "../components/MeasurementForm/Calendar/Calendar"
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import scheduleData from '../data/schedule.json'
+
 import ScheduleCard from "../components/Cards/ScheduleCard/ScheduleCard";
+import axios from "axios";
 
 function SchedulePage({}){
     const [selectDate, setSelectDate] = useState(new Date())
+    const [scheduleData,setScheduleData] = useState([])
+
+    useEffect(()=>{
+        axios.get("http://localhost:5000/api/v1/schedule/39b17fed-61d6-492a-b528-4507290d5423/")
+            .then(response=>{
+                setScheduleData(response.data)
+            })
+            .catch(error=>console.error(error))
+    },[])
+
+
     const handleBackDateClick = () => {
         const newDate = new Date(selectDate.getTime() - (24 * 60 * 60 * 1000));
         setSelectDate(newDate);
@@ -53,8 +65,7 @@ function SchedulePage({}){
             <Box sx={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
                 
                 {scheduleData.map((item) => {
-    
-                return <ScheduleCard key={item.activity_id} data={item} />;
+                return <ScheduleCard key={item.uid} data={item} />;
             })}
 
         </Box>
