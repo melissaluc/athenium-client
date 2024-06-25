@@ -13,6 +13,7 @@
                 "strength":20,
                 "strength_level":"beg",
                 "next_strength_level":"nov",
+                "img_url":"",
                 "strength_boundaries":{
                     "beg":24,
                     "nov":42,
