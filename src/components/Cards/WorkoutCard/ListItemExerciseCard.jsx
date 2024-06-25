@@ -1,5 +1,9 @@
 import { Box, Typography, Grid, Button, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
+import CalculateIcon from '@mui/icons-material/Calculate';
+import DeleteIcon from '@mui/icons-material/Delete';
+import axios from "axios";
+
 
 function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
     const [formData, setFormData] = useState(data);
@@ -8,24 +12,61 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
 
     useEffect(() => {
         handleExerciseChanges(formData);
+        console.log('form data ',formData)
     }, [formData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUpdatedExercises(prev => [
-            ...prev,
-            {
-                [name]: value,
-                uid: data.id
-            }
-        ]);
-        setFormData((prev) => ({
-            ...prev,
-            uid: data.id,
-            [name]: value
-        }));
-        
+    
+        // Check if 'name' corresponds to fields that should be parsed as floats
+        if (name === 'weight' || name === 'reps' || name === 'distance' || name === 'duration') {
+            // Parse value to float, ensuring to handle cases where value is empty or non-numeric
+            const floatValue = parseFloat(value.trim()); // trim() removes leading and trailing whitespace
+    
+            // Check if the parsed float value is NaN (Not a Number)
+            const formattedValue = isNaN(floatValue) ? '' : floatValue;
+    
+            // Update state using the formatted float value
+            setUpdatedExercises(prev => [
+                ...prev,
+                {
+                    [name]: formattedValue,
+                    uid: data.id
+                }
+            ]);
+    
+            setFormData(prev => ({
+                ...prev,
+                uid: data.id,
+                [name]: formattedValue
+            }));
+        } else {
+            // For fields that shouldn't be parsed as floats, update state directly
+            setUpdatedExercises(prev => [
+                ...prev,
+                {
+                    [name]: value,
+                    uid: data.id
+                }
+            ]);
+    
+            setFormData(prev => ({
+                ...prev,
+                uid: data.id,
+                [name]: value
+            }));
+        }
     };
+    
+
+    const handleCalcStengthLevel = (data)=>{
+        axios.post('http://localhost:5000/api/v1/strength/39b17fed-61d6-492a-b528-4507290d5423/', data)
+        .then(response => {
+                // TODO: results pop up
+                console.log(response.data)
+            })
+            .catch(error=>console.error(error))
+    }
 
     const renderStrengthFields = () => (
         <>
@@ -69,6 +110,9 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
                 <Typography>Sets</Typography>
                 <Typography>{formData.sets}</Typography>
             </Grid>
+            <Grid item xs={1}>
+                <Button onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon></CalculateIcon></Button>
+            </Grid>
         </>
     );
 
@@ -86,14 +130,17 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
                 <Typography>Sets</Typography>
                 <Typography>{formData.sets || "-"}</Typography>
             </Grid>
+            <Grid item xs={1}>
+                <Button onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon></CalculateIcon></Button>
+            </Grid>
         </>
     );
 
     return (
         <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
-                <Box sx={{ width: '4rem', height: '4rem', backgroundColor: 'gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    Img
+                <Box sx={{ width: '4rem', height: '4rem', border: 'solid 1px gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {data.img_url && <img src={data.img_url}></img>}
                 </Box>
             </Grid>
             <Grid item xs={3}>
@@ -114,7 +161,7 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
                 <>
                     {formData.category === 'strength' ? renderStrengthFields() : renderCardioFields()}
                     <Grid item xs={1}>
-                        <Button onClick={() => handleClickDeleteExercise(data)}>X</Button>
+                        <Button onClick={() => handleClickDeleteExercise(data)}><DeleteIcon></DeleteIcon></Button>
                     </Grid>
                 </>
             ) : (

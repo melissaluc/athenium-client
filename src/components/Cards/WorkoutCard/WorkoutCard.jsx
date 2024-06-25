@@ -116,7 +116,7 @@ function WorkoutCard({
                                 <Button onClick={() => handleDeleteWorkout(data.workout_id)}>Delete</Button>
                             </Box>
                         ) : (
-                            <Typography>{formData.workout_name}</Typography>
+                            <Typography variant="h6">{formData.workout_name}</Typography>
                         )}
                         {editMode ? (
                             <Button type="submit">Save</Button>
@@ -124,7 +124,7 @@ function WorkoutCard({
                             <Button onClick={handleClickEdit}>Edit</Button>
                         )}
                     </Box>
-                    <Box>
+                    {/* <Box>
                         {editMode ? (
                             <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
                                 {formData.tags.map((tag) => (
@@ -141,7 +141,7 @@ function WorkoutCard({
                                 )}
                             </Box>
                         )}
-                    </Box>
+                    </Box> */}
                 </Box>
                 {expandWorkout &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: "1rem" }}>
