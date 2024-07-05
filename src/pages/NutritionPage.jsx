@@ -285,9 +285,6 @@ function NutritionPage() {
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <DrawerNavBar />
-            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <AddFoodModal selectedDate={selectedData?.datetimestamp} setSelectedData={setSelectedData} />
             </Box>

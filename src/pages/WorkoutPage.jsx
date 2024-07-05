@@ -192,10 +192,6 @@ function WorkoutPage(){
 
     return (
         <Container>
-            {/* Header + Nav */}
-            <Box sx={{display:'flex', justifyContent:'flex-end', alignItems:'center'}}>
-                <DrawerNavBar/>
-            </Box>
             <Box sx={{display:'flex', justifyContent:'center'}}>
                 <WorkoutModal action={'add'} handleAddWorkout={handleAddWorkout}/>
             </Box>

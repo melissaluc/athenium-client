@@ -14,10 +14,6 @@ function LogPage() {
 
   return (
     <Container  sx={{ display: 'flex', flexDirection:"column", justifyContent: 'center'}}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography>Log</Typography>
-        <DrawerNavBar />
-      </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Button>+ Log Item</Button>

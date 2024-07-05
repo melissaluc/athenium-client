@@ -94,10 +94,6 @@ function TrendsPage() {
 
   return (
     <Container>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-        {/* <Typography>{selectDateRange}</Typography> */}
-        <DrawerNavBar />
-      </Box>
     <Box>
         
         <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap:'0.5rem', flexWrap:'wrap', backgroundColor:theme.palette.secondary.main}}>

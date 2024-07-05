@@ -66,11 +66,7 @@ function StrengthPage() {
 
     return (
         <Container>
-            {/* Header + Nav */}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-  
-                <DrawerNavBar />
-            </Box>
+
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
                 <Button onClick={()=>{setToggleView(false)}}>Muscle Group Ranking</Button>
                 <Button onClick={()=>{setToggleView(true)}}>Exercises Ranked</Button>

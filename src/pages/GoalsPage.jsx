@@ -47,10 +47,6 @@ function GoalsPage() {
 
   return (
     <Container>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-        <DrawerNavBar />
-      </Box>
-
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '1rem 0' }}>
         <GoalModal handleAddGoal={handleAddGoal} />
       </Box>

@@ -38,11 +38,6 @@ function SchedulePage({}){
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography>Schedule</Typography>
-                <DrawerNavBar />
-            </Box>
-
 
             <Box sx={{display:'flex', flexDirection:'column'}}>
                 <Box sx={{display:'flex', justifyContent:'center'}}>

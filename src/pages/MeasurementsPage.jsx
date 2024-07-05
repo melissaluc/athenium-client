@@ -201,16 +201,6 @@ function MeasurementPage() {
                     alignItems: 'center',
                 }}
             >
-                <Box
-                    sx={{
-                        width: "100%",
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        alignItems: "center",
-                    }}
-                >
-                    <DrawerNavBar />
-                </Box>
             </Box>
             <Typography color='primary'>In Inches</Typography>
             <MeasurementForm
