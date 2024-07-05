@@ -4,7 +4,7 @@ import 'flatpickr/dist/themes/material_blue.css'; // You can choose a theme
 import { Box, Typography } from '@mui/material';
 
 
-function MyDatePicker({handleSelectDate}) {
+function MyDatePicker({handleSelectDate, handleClose}) {
   const [selectedDate, setSelectedDate] = useState(new Date()); // State to hold the selected date
   const inputRef = useRef(null);
 
