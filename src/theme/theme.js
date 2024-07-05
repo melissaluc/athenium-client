@@ -25,6 +25,44 @@ typography: {
       protein:"#ed254e",
       carbs:"#4dccbd",
       fat:"#f9dc5c"
+    },
+    measurements:{
+      neck:'#1f77b4',
+      shoulder:'#ff7f0e',
+      chest: '#2ca02c',
+      abdomen: '#d62728',
+      waist: '#9467bd',
+      hip:'#8c564b',
+      rbicep: '#e377c2',
+      lbicep: '#e377c2',
+      lupperthigh:'#bcbd22',
+      rupperthigh:'#bcbd22',
+      rthigh:'#f5d76e',
+      lthigh:'#f5d76e',
+      lcalf: '#17becf',
+      rcalf: '#17becf' 
+    },
+    body_composition:{
+      weight:'#3498db',
+      body_fat:'#e74c3c',
+      lean_muscle_mass:'#2ecc71',
+      bmi:'#9b59b6',
+      weight_diff:'#3498db',
+      body_fat_diff:'#e74c3c',
+      lean_muscle_mass_diff:'#2ecc71',
+      bmi_diff:'#9b59b6'
+    }
+    ,
+    strength:{
+      Chest:"#B30000",
+      Legs:"#004D99",
+      "Whole Body":"#008000",
+      Shoulders:"#CCCCCC",
+      Back:"#006400",
+      Biceps:"#FFA500",
+      Triceps:"#800080",
+      Core:"#FFFF00",
+      Forearms:"#8B4513"
     }
   },
   breakpoints: {

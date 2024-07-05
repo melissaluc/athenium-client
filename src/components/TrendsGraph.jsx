@@ -5,73 +5,115 @@ import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
 import { useEffect, useState } from "react";
 
 // Helper function to get macro calories
-const getMacroCalories = (macro) => {
-    switch(macro) {
-        case 'protein':
-            return 4;
-        case 'carbs':
-            return 4;
-        case 'fat':
-            return 9;
-        default:
-            return 0; 
+// const getMacroCalories = (macro) => {
+//     switch(macro) {
+//         case 'protein':
+//             return 4;
+//         case 'carbs':
+//             return 4;
+//         case 'fat':
+//             return 9;
+//         default:
+//             return 0; 
+//     }
+// }
+
+// Helper function to generate x-axis labels based on selectDateRange
+const generateXAxisLabels = (startTimestamp, endTimestamp) => {
+    const xAxisLabels = [];
+    const currentDate = new Date(startTimestamp);
+    const endDate = new Date(endTimestamp);
+
+    while (currentDate <= endDate) {
+        xAxisLabels.push(currentDate.toLocaleDateString());
+        currentDate.setDate(currentDate.getDate() + 1);
     }
+
+    return xAxisLabels;
 }
 
 // Helper function to extract data
 const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
-    const extractedData = groupData.map(entry => ({
-        timestamp: entry.timestamp,
-        value: entry[attribute]
-    }));
-
-
+    // console.log('extractData ',attribute)
     if (groupTitle === "nutrition") {
+        // For nutrition groupTitle
         if (toggleGraph === false) {
-            return extractedData
+            // When toggleGraph is false, calculate values for non-calories attributes
+            return groupData
                 .filter(entry => attribute !== "calories") 
                 .map(entry => ({
                     timestamp: entry.timestamp,
-                    value: entry.value * getMacroCalories(attribute),
-                    itemStyle:{color:theme.palette.macros[attribute]}
+                    value: entry[attribute], 
+                    itemStyle: { color: theme.palette.macros[attribute] } 
                 }));
         } else {
-            // If toggleGraph is true, return values as is and exclude "calories"
-            return extractedData
-                .filter(entry => attribute !== "calories") 
+            // When toggleGraph is true, return values as is and exclude 'calories' attribute
+            return groupData
                 .map(entry => ({
                     timestamp: entry.timestamp,
-                    value: entry.value,
-                    itemStyle:{color:theme.palette.macros[attribute]}
+                    value: entry[attribute],
+                    itemStyle: { color: theme.palette.macros[attribute] } 
                 }));
         }
-    } 
+    } else {
+        // For non-nutrition groupTitle
+        if (toggleGraph === true) {
+            // When toggleGraph is true, include only attributes ending with '_diff'
+            return groupData
+            .filter(entry => attribute.endsWith('_diff')) 
+            .map(entry => ({
+                timestamp: entry.timestamp,
+                value: entry[attribute],
+                itemStyle: {
+                    color: groupTitle === 'strength'
+                        ? theme.palette[groupTitle][entry.group]
+                        : theme.palette[groupTitle][attribute],
+                }
+            }));
+        
+        } else {
+            // When toggleGraph is false, exclude attributes ending with '_diff'
+            return groupData
+            .filter(entry => !attribute.endsWith('_diff'))
+            .map(entry => ({
+                timestamp: entry.timestamp,
+                value: entry[attribute],
+                itemStyle: {
+                    color: groupTitle === 'strength'
+                        ? (entry.group ? theme.palette[groupTitle][entry.group] : theme.palette[groupTitle][attribute])
+                        : theme.palette[groupTitle][attribute]
+                },
 
+            }));
+        }
+        
+    }
+};
 
-    return extractedData;
-}
 
 
 // Function to generate ECharts options
-const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme) => {
+const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme,xAxisData, xAxisType ) => {
+
     switch (groupTitle) {
         case "nutrition":
             return {
                 legend: {
-                    data: selectOptions.filter(option => option !== "calories"),
+                    data: attributes.filter(option => option !== "calories"),
                     show: !hideLegend
                 },
                 tooltip: {
                     trigger: 'axis'
                 },
                 xAxis: {
-                    data: groupData.map(entry => new Date(entry.timestamp * 1000).toLocaleDateString()),
+                    data: xAxisData,
                     axisLabel: {
-                        show: !hideXAxisLabels
+                        formatter: value => new Date(value).toLocaleDateString(),
+                        show: hideXAxisLabels
                     }
                 },
                 yAxis: {},
-                series: selectOptions.map(option => ({
+                series: attributes.map(option => ({
                     name: option,
                     type: 'bar',
                     stack: toggleGraph ? null : 'nutrition',
@@ -79,76 +121,139 @@ const generateOptions = (groupTitle, selectOptions, toggleGraph, groupData, hide
                 }))
             };
         case "strength":
-            return {
-                legend: {
-                    data: Object.values(selectOptions).flatMap(exercises => exercises),
-                    show: !hideLegend
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                xAxis: {
-                    type: 'time',
-                    axisLabel: {
-                        formatter: value => new Date(value).toLocaleDateString(),
-                        show: !hideXAxisLabels
-                    }
-                },
-                yAxis: {},
-                series: Object.values(groupData).flatMap(muscleGroup => muscleGroup.map(exercise => ({
-                    name: exercise.exercise,
-                    type: 'line',
-                    data: toggleGraph? exercise.data.map(entry => [entry.timestamp * 1000, entry.relative_strength]) : exercise.data.map(entry => [entry.timestamp * 1000, entry.lift])
-                })))
-            };
+
+                return {
+                    legend: {
+                        data: Object.values(attributes).flatMap(exercises => exercises),
+                        show: !hideLegend
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    xAxis: {
+                        type: xAxisType,
+                        data: xAxisData,
+                        axisLabel: {
+                            formatter: value => new Date(value).toLocaleDateString(),
+                            show: hideXAxisLabels
+                        }
+                    },
+                    yAxis: {},
+                    series: Object.entries(groupData).flatMap(([muscleGroup, exercises]) =>
+                        Object.entries(exercises).filter(([exerciseName, data]) => attributes.includes(exerciseName))
+                            .flatMap(([exerciseName, exerciseData]) =>
+                                exerciseData.map(entry => ({
+                                    name: exerciseName,
+                                    type: 'line',
+                                    data: toggleGraph ? exerciseData.map(entry => [entry.timestamp * 1000, entry.relative_strength]) : exerciseData.map(entry => [entry.timestamp * 1000, entry.lift]),
+                                    itemStyle: {
+                                        color: theme.palette[groupTitle][exerciseName]
+                                    }
+                                }))
+                            )
+                    )
+                };
+            
         default:
             return {
                 legend: {
-                    data: selectOptions,
+                    data: attributes,
                     show: !hideLegend
                 },
                 tooltip: {
                     trigger: 'axis'
                 },
                 xAxis: {
-                    data: groupData.map(entry => new Date(entry.timestamp * 1000).toLocaleDateString()),
+                    type: 'category',
+                    data: xAxisData,
                     axisLabel: {
-                        show: !hideXAxisLabels
+                        formatter: value => new Date(value).toLocaleDateString(),
+                        show: hideXAxisLabels
+                        
                     }
                 },
                 yAxis: {},
-                series: selectOptions.map(option => ({
+                series: attributes.map(option => ({
                     name: option,
-                    type: 'line',
-                    data: extractData(groupData, option, groupTitle, toggleGraph, theme)
+                    type: toggleGraph ? 'bar' :'line',
+                    data: extractData(groupData, option, groupTitle, toggleGraph, theme),
+                    lineStyle: {
+                        color: groupTitle === 'strength'
+                            ? (groupData.group ? theme.palette[groupTitle][groupData.group] : theme.palette[groupTitle][option])
+                            : theme.palette[groupTitle][option]
+                    }
                 }))
             };
     }
 }
 
-function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setToggleText}) {
+function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setToggleText, groupAttributes, dateRange}) {
     const [hideLegend, setHideLegend] = useState(true);
     const [hideXAxisLabels, setHideXAxisLabels] = useState(true);
+    const [attributes, setAttributes] = useState(groupAttributes)
+    const [xAxisType, setXAxisType] = useState('category')
     const theme = useTheme()
+
     const handleSetToggleText = (text) => {
         setToggleText(text)
     }
 
+    const generateXAxisData = (groupData, dateRange) => {
+        if (Array.isArray(groupData) && groupData.length > 0) {
+            return groupData.map(entry => new Date(entry.timestamp * 1000));
+        } else if (Object.entries(groupData).length > 0) {
+            const timestamps = [];
+            Object.values(groupData).forEach(exercises => {
+                Object.values(exercises).forEach(exerciseData => {
+                    exerciseData.forEach(entry => {
+                        timestamps.push(new Date(entry.timestamp * 1000));
+                    });
+                });
+            });
+            if(timestamps.length <1) {
+                setXAxisType('category')
+                return generateXAxisLabels(dateRange.start, dateRange.end);
+                
+            } else {
+                setXAxisType('time')
+                return timestamps;
+            }
+        } else {
+            // If groupData is empty or not provided, generate x-axis labels based on dateRange
+            return generateXAxisLabels(dateRange.start, dateRange.end);
+        }
+    };
+    
+    
+
+    useEffect(()=>{
+        console.log('attributes:', attributes);
+        if(selectOptions.length > 0){
+            setAttributes(selectOptions)   
+        } else {
+            setAttributes(groupAttributes)   
+        }
+
+    },[selectOptions, groupAttributes])
 
     useEffect(() => {
         echarts.use([SVGRenderer, CanvasRenderer]);
         const chart = echarts.init(document.getElementById(`TrendChart${groupTitle}`), null, { renderer: 'svg' });
-        chart.setOption(generateOptions(groupTitle, selectOptions, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme));
+        const xAxisData = generateXAxisData(groupData, dateRange);
+        console.log('GroupTitle: ', groupTitle)
+        console.log('xAxis: ', xAxisData)
+        chart.setOption(generateOptions(groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme, xAxisData,xAxisType));
+   
         return () => {
             chart.dispose();
         };
-    }, [groupTitle, groupData, selectOptions, toggleGraph, hideLegend, hideXAxisLabels]);
+    }, [groupTitle, groupData, attributes, toggleGraph, hideLegend, hideXAxisLabels, dateRange]);
 
     return (
         <>  
             {groupTitle === "strength" || groupTitle === "nutrition" ?
                 <Typography variant="h6">
-                    {groupTitle === "strength" ? (toggleGraph ? "Relative Strength" : "Lift in lbs") : (toggleGraph ? "Macros" : "Caloric Intake")}
+                    {groupTitle === "strength" ? (toggleGraph ? "Relative Strength" : "Lift Weight in lbs") : (toggleGraph ? "Macros" : "Caloric Intake")}
                 </Typography> :
                 null
             }
