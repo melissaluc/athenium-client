@@ -1,6 +1,5 @@
 import { Button, Typography, Container, Box, Card, CardContent } from '@mui/material';
 import CircularAvatar from "../CircularAvatar/CircularAvatar"
-import DrawerNavBar from "../NavBar/DrawerNavBar/DrawerNavBar"
 import {useState} from 'react'
 
 
@@ -38,9 +37,6 @@ function DashboardHeader ({userAvatar}) {
                 </Box>
             </Box>
         </Box>
-
-
-        <DrawerNavBar/>
 
     </Box>
 

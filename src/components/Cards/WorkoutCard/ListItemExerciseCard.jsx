@@ -19,7 +19,7 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
         const { name, value } = e.target;
     
         // Check if 'name' corresponds to fields that should be parsed as floats
-        if (name === 'weight' || name === 'reps' || name === 'distance' || name === 'duration') {
+        if (name === 'weight' || name === 'reps' || name === 'distance' || name === 'duration' || name === 'sets') {
             // Parse value to float, ensuring to handle cases where value is empty or non-numeric
             const floatValue = parseFloat(value.trim()); // trim() removes leading and trailing whitespace
     
@@ -27,13 +27,28 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
             const formattedValue = isNaN(floatValue) ? '' : floatValue;
     
             // Update state using the formatted float value
-            setUpdatedExercises(prev => [
-                ...prev,
-                {
-                    [name]: formattedValue,
-                    uid: data.id
+            setUpdatedExercises(prev => {
+                // Find the index of the updated exercise
+                const index = prev.findIndex(exercise => exercise.uid === formData.id);
+
+                let updatedExercises = [...prev];
+                if (index !== -1) {
+                    updatedExercises[index] = {
+                        ...updatedExercises[index],
+                        [name]: name === 'sets' ? parseInt(formattedValue) : formattedValue // Update the specific field
+                    };
+                } else {
+                    updatedExercises = [
+                        ...prev,
+                        {
+                            [name]: formattedValue,
+                            uid: data.id
+                        }
+                    ]
                 }
-            ]);
+        
+                return updatedExercises;
+            });
     
             setFormData(prev => ({
                 ...prev,
@@ -63,7 +78,7 @@ function ListItemExerciseCard({ data, editMode, handleClickAddExercise, handleCl
         axios.post('http://localhost:5000/api/v1/strength/39b17fed-61d6-492a-b528-4507290d5423/', data)
         .then(response => {
                 // TODO: results pop up
-                console.log(response.data)
+                console.log('results: ',response.data)
             })
             .catch(error=>console.error(error))
     }

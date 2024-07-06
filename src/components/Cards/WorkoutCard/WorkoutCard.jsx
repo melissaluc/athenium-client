@@ -78,10 +78,9 @@ function WorkoutCard({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleUpdateData(formData);
-        setOriginalData(formData); // Update original data after save
-        setEditMode(false);
         // Update exercises and workout details
+        console.log( 'addedExercises: ',addedExercises )
+        console.log( 'updatedExercises: ',updatedExercises)
         if(deletedExercises || addedExercises || updatedExercises || updateWorkoutDetails){
             const patchData = {
                 updatedWorkoutDetails: updateWorkoutDetails? updateWorkoutDetails : {},
@@ -93,7 +92,11 @@ function WorkoutCard({
             
             axios.patch(`http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423/${data.workout_id}`,patchData)
             .then(response =>{
-                console.log(response)
+                handleUpdateData(formData);
+                setOriginalData(formData);
+                
+                setEditMode(false);
+                console.log(response.data)
                 setDeletedExercises([])
                 setAddedExercises([])
                 setUpdatedExercises([])

@@ -1,5 +1,4 @@
 import { Box, Container, Typography} from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import {useState, useEffect, useRef} from "react"
 import * as echarts from 'echarts';
 // import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';

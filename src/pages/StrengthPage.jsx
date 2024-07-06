@@ -1,6 +1,4 @@
 import { Box, Container, Card,CardContent, Button} from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
-
 import { useState, useEffect } from 'react';
 import MuscleGroupStrengthCard from "../components/MuscleGroupStrengthCard";
 import ExerciseStrengthLevel from "../components/ExerciseStrengthLevel"

@@ -1,5 +1,4 @@
-import { Box, Container, Typography, Button } from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
+import { Box, Container, Button } from "@mui/material"; 
 import { useState, useEffect } from 'react';
 import DateRangePickerModal from "../components/Modals/DateRangePickerModal";
 import TrendsGroup from "../components/TrendsGroup";

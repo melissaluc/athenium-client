@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Button } from "@mui/material";
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import GoalsCard from '../components/GoalsCard';
 import goalsData from '../data/goals.json';
 import GoalModal from "../components/Modals/GoalModal";

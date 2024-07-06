@@ -5,16 +5,16 @@ function getProgressColour(strengthLevel, theme) {
     
     let colour = null;
     switch (strengthLevel) {
-        case "beg":
+        case "beginner":
             colour = theme.palette.progress.level1;
             break;
-        case "nov":
+        case "novice":
             colour = theme.palette.progress.level2;
             break;
-        case "int":
+        case "intermediate":
             colour = theme.palette.progress.level3;
             break;
-        case "adv":
+        case "advanced":
             colour = theme.palette.progress.level4;
             break;
         case "elite":
@@ -45,8 +45,8 @@ function ExerciseStrengthLevel ({
                                 
     const theme = useTheme();
     const dateFormatted = new Date(date_calculated)
-    const progressValue = parseFloat(((one_rep_max - strength_bounds[strength_level]) / (strength_bounds[strength_level]) * 100).toFixed(1));
-    const relative_strength = one_rep_max/body_weight
+    const progressValue = parseFloat((((one_rep_max - strength_bounds[strength_level]) / (strength_bounds[strength_level])) * 100).toFixed(1));
+    const relative_strength = (one_rep_max/body_weight).toFixed(2)
     return(
         <Box>
         <Box sx={{ display: 'flex', justifyContent:'space-evenly'}}>
@@ -62,11 +62,6 @@ function ExerciseStrengthLevel ({
                     <Box>
                         <Typography>Your Lift is {lift}lbs x {reps}</Typography>
                         <Typography>{relative_strength} times your body weight</Typography>
-                    </Box>
-
-                    <Box>
-                        <Typography>One rep Max</Typography>
-                        <Typography>{one_rep_max}lbs</Typography>
                     </Box>
                 </Box>
             </Box>
