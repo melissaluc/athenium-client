@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,7 +19,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-import AtheniumLogo from "../../../assets/AtheniumLogo"
+import AtheniumLogo from "../../../assets/AtheniumLogo";
 
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
@@ -38,7 +37,7 @@ export default function DrawerNavBar() {
     { text: 'Trend', path: '../trends', icon: <TimelineIcon /> },
     { text: 'Strength', path: '../strength', icon: <AssessmentIcon /> },
     { text: 'Schedule', path: '../schedule', icon: <TodayIcon /> },
-    // { text: 'Log', path: '../log', icon: <FormatListBulletedIcon /> },
+    // { text: 'Log', path: '/log', icon: <FormatListBulletedIcon /> },
     { text: 'Goals', path: '../goals', icon: <FlagIcon /> },
     { text: 'Workouts', path: '../workouts', icon: <FitnessCenterIcon /> },
     { text: 'Nutrition', path: '../nutrition', icon: <RestaurantIcon /> },
@@ -75,23 +74,26 @@ export default function DrawerNavBar() {
               <List>
                 {menuItems.map((menuItem, index) => (
                   <ListItem key={menuItem.text} disablePadding>
-                    <ListItemButton component={Link} to={menuItem.path}
-                    sx={{
-                      '&.Mui-selected': {
-                        backgroundColor: theme.palette.primary.main,
-                        color: 'white',
-                        '& .MuiListItemIcon-root': {
+                    <ListItemButton
+                      component={Link}
+                      to={menuItem.path}
+                      sx={{
+                        '&.Mui-selected': {
+                          backgroundColor: theme.palette.primary.main,
                           color: 'white',
+                          '& .MuiListItemIcon-root': {
+                            color: 'white',
+                          },
                         },
-                      },
-                      '&:hover': {
-                        backgroundColor: theme.palette.primary.main,
-                        color: 'white',
-                        '& .MuiListItemIcon-root': {
+                        '&:hover': {
+                          backgroundColor: theme.palette.primary.main,
                           color: 'white',
+                          '& .MuiListItemIcon-root': {
+                            color: 'white',
+                          },
                         },
-                      },
-                    }}>
+                      }}
+                    >
                       <ListItemIcon>
                         {menuItem.icon}
                       </ListItemIcon>
@@ -106,4 +108,4 @@ export default function DrawerNavBar() {
       ))}
     </div>
   );
-};
+}

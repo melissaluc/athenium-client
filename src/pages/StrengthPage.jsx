@@ -1,6 +1,4 @@
 import { Box, Container, Card,CardContent, Button} from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
-
 import { useState, useEffect } from 'react';
 import MuscleGroupStrengthCard from "../components/MuscleGroupStrengthCard";
 import ExerciseStrengthLevel from "../components/ExerciseStrengthLevel"
@@ -66,11 +64,7 @@ function StrengthPage() {
 
     return (
         <Container>
-            {/* Header + Nav */}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-  
-                <DrawerNavBar />
-            </Box>
+
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
                 <Button onClick={()=>{setToggleView(false)}}>Muscle Group Ranking</Button>
                 <Button onClick={()=>{setToggleView(true)}}>Exercises Ranked</Button>

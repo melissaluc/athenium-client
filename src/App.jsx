@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import './App.css'
 
 import DashboardPage from './pages/DashboardPage';
@@ -14,27 +13,34 @@ import TrendsPage from './pages/TrendsPage';
 import WorkoutPage from './pages/WorkoutPage';
 import StrengthPage from './pages/StrengthPage';
 
+import DrawerNavBar from './components/NavBar/DrawerNavBar/DrawerNavBar';
+
+import { Box } from '@mui/material';
 
 function App(){
 
     return(
-   
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<DashboardPage/>}  />
-                <Route path='/dashboard' element={<DashboardPage/>}  />
-                <Route path='/schedule' element={<SchedulePage/>}  />
-                <Route path='/results' element={<ResultsPage/>}  />
-                {/* <Route path='/log' element={<LogPage/>}  /> */}
-                <Route path='/goals' element={<GoalsPage/>}  />
-                <Route path='/measurements' element={<MeasurementPage/>}  />
-                <Route path='/nutrition' element={<NutritionPage/>}  />
-                <Route path='/onboarding' element={<OnboardingPage/>}  />
-                <Route path='/trends' element={<TrendsPage/>}  />
-                <Route path='/workouts' element={<WorkoutPage/>}  />
-                <Route path='/strength' element={<StrengthPage/>}  />
-            </Routes>
-        </BrowserRouter>
+        <div className='App'>
+            <BrowserRouter>
+                <Box className='mobile-nav-bar__wrapper' sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <DrawerNavBar />
+                </Box>
+                <Routes>
+                    <Route path='/' element={<DashboardPage/>}  />
+                    <Route path='/dashboard' element={<DashboardPage/>}  />
+                    <Route path='/schedule' element={<SchedulePage/>}  />
+                    <Route path='/results' element={<ResultsPage/>}  />
+                    {/* <Route path='/log' element={<LogPage/>}  /> */}
+                    <Route path='/goals' element={<GoalsPage/>}  />
+                    <Route path='/measurements' element={<MeasurementPage/>}  />
+                    <Route path='/nutrition' element={<NutritionPage/>}  />
+                    <Route path='/onboarding' element={<OnboardingPage/>}  />
+                    <Route path='/trends' element={<TrendsPage/>}  />
+                    <Route path='/workouts' element={<WorkoutPage/>}  />
+                    <Route path='/strength' element={<StrengthPage/>}  />
+                </Routes>
+            </BrowserRouter>
+        </div>
 
 
 

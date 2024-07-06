@@ -1,4 +1,4 @@
-import { Button, Typography, Container, Box, Card, CardContent, CardHeader, CardActionArea } from '@mui/material';
+import { Button, Typography, Container, Box } from '@mui/material';
 import BodyAvatar from '../assets/Body'
 import {useState} from 'react'
 import ParamsCard from '../components/Cards/ParamsCard/ParamsCard';

@@ -1,7 +1,6 @@
 import { Button, Typography, Container, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
-import DrawerNavBar from '../components/NavBar/DrawerNavBar/DrawerNavBar';
 import MeasurementModal from '../components/MeasurementModal';
 import axios from 'axios';
 
@@ -201,16 +200,6 @@ function MeasurementPage() {
                     alignItems: 'center',
                 }}
             >
-                <Box
-                    sx={{
-                        width: "100%",
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        alignItems: "center",
-                    }}
-                >
-                    <DrawerNavBar />
-                </Box>
             </Box>
             <Typography color='primary'>In Inches</Typography>
             <MeasurementForm

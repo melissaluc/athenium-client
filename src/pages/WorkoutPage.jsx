@@ -1,5 +1,4 @@
 import { Box, Container } from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import TuneIcon from '@mui/icons-material/Tune';
 import SortPopover from "../components/Popovers/SortPopover";
@@ -143,21 +142,25 @@ function WorkoutPage(){
             sets: 0,
             img_url
         };
+    
 
         const updatedData = originalWorkoutData.map(workout => {
             if (workout.workout_id === workout_id) {
+                // Filter out deleted exercises from workout.exercises
+                const filteredExercises = workout.exercises.filter(exercise => !deletedExercises.includes(exercise.id));
+    
                 return {
                     ...workout,
-                    exercises: [...workout.exercises, newExercise]
+                    exercises: [...filteredExercises, newExercise]
                 };
             }
             return workout;
         });
+    
 
-        setOriginalWorkoutData(updatedData);
-        setWorkoutData(updatedData);
-
-        setAddedExercises(prev => [...prev, newExercise]);
+    setOriginalWorkoutData(updatedData);
+    setWorkoutData(updatedData);
+    setAddedExercises(prev => [...prev, newExercise]);
 
     };
     
@@ -192,10 +195,6 @@ function WorkoutPage(){
 
     return (
         <Container>
-            {/* Header + Nav */}
-            <Box sx={{display:'flex', justifyContent:'flex-end', alignItems:'center'}}>
-                <DrawerNavBar/>
-            </Box>
             <Box sx={{display:'flex', justifyContent:'center'}}>
                 <WorkoutModal action={'add'} handleAddWorkout={handleAddWorkout}/>
             </Box>

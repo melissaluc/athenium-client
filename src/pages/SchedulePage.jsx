@@ -1,5 +1,4 @@
-import { Box, Container, Typography, Button} from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
+import { Box, Container, Button} from "@mui/material"; 
 import Calendar from "../components/MeasurementForm/Calendar/Calendar"
 import {useState, useEffect} from "react"
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
@@ -38,11 +37,6 @@ function SchedulePage({}){
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography>Schedule</Typography>
-                <DrawerNavBar />
-            </Box>
-
 
             <Box sx={{display:'flex', flexDirection:'column'}}>
                 <Box sx={{display:'flex', justifyContent:'center'}}>

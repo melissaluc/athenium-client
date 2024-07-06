@@ -1,5 +1,4 @@
 import { Box, Container, Typography} from "@mui/material"; 
-import DrawerNavBar from "../components/NavBar/DrawerNavBar/DrawerNavBar";
 import {useState, useEffect, useRef} from "react"
 import * as echarts from 'echarts';
 // import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
@@ -285,9 +284,6 @@ function NutritionPage() {
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <DrawerNavBar />
-            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <AddFoodModal selectedDate={selectedData?.datetimestamp} setSelectedData={setSelectedData} />
             </Box>
