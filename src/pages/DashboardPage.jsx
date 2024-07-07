@@ -1,6 +1,6 @@
 import { Button, Typography, Container, Box } from '@mui/material';
 import BodyAvatar from '../assets/Body'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import ParamsCard from '../components/Cards/ParamsCard/ParamsCard';
 import DashboardHeader from '../components/DashboardHeader/DashboardHeader';
 import dashData from "../data/dashboard.json"
@@ -9,12 +9,16 @@ import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { useNavigate } from 'react-router-dom';
 import MiniScheduleCard from '../components/Cards/ScheduleCard/ScheduleCard';
+import axios from 'axios'
+import {findClosestData} from '../utils/utils'
 
 
 function DashboardPage({}){
     const navigate = useNavigate()
     const [selectDate, setSelectDate] = useState(new Date())
-    // const [paramData, setParamData] = useState(dashData.data.params && null)
+    const [measurementData, setMeasurementData] = useState([]);
+    const [selectMeasurementData, setSelectMeasurementData] = useState({});
+
     const handleBackDateClick = () => {
         const newDate = new Date(selectDate.getTime() - (24 * 60 * 60 * 1000));
         setSelectDate(newDate);
@@ -31,6 +35,39 @@ function DashboardPage({}){
         return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
     };
 
+    useEffect(()=>{
+        const selectDateOnly = new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate());
+
+        const currentMeasurement = measurementData.filter(measurement => {
+            // Convert measurement.created_on to a Date object with only year, month, and day
+            const measurementDateOnly = new Date(measurement.created_on);
+            measurementDateOnly.setHours(0, 0, 0, 0); // Ensure we compare only the date part
+          
+            // Compare the date parts
+            return measurementDateOnly.getTime() === selectDateOnly.getTime();
+          });
+
+        if(!currentMeasurement.length) {
+            const closestMeasurement = findClosestData(selectDate, measurementData)
+            setSelectMeasurementData(closestMeasurement)
+            console.log()
+        } else {
+            console.log('currentMeasurement: ',currentMeasurement)
+            setSelectMeasurementData(currentMeasurement[0])      
+        }
+
+    },[selectDate,measurementData])
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/v1/measurements/39b17fed-61d6-492a-b528-4507290d5423')
+            .then(response => {
+                setMeasurementData(response.data);  // Make sure response.data is correctly set
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
     return (
         <Container>
             {/* Nav */}
@@ -45,7 +82,7 @@ function DashboardPage({}){
                     <ArrowBackIosNewOutlinedIcon/>
                 </Button>
                 
-                <BodyAvatar onClick={() => { navigate("../measurements") }} height="30vh"/>
+                <BodyAvatar data={selectMeasurementData} onClick={() => { navigate("../measurements") }} height="30vh"/>
 
                 <Button className="forward-date" onClick={handleForwardDateClick} disabled={isToday(selectDate)}>
                     <ArrowBackIosNewOutlinedIcon sx={{transform: 'scaleX(-1)'}}/>

@@ -57,7 +57,7 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handle
                     </Box> */}
              
 
-                    <BodyAvatar selectLabel={selectLabel} sx={{ width: '150px', height: 'auto' }} /> {/* Adjusted avatar size */}
+                    <BodyAvatar selectLabel={selectLabel} data={{...inputValues.left,...inputValues.right}} sx={{ width: '150px', height: 'auto' }} /> {/* Adjusted avatar size */}
                 </Box>
                 <MeasurementInput inputs={inputValues.left} handleInputClick={handleInputClick} handleInputChange={handleInputChange} side='left' />
             </Box>
