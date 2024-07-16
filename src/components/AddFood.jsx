@@ -225,7 +225,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
                                         <Typography>Protein: {Math.round(assignFood.nutrition.protein)} g</Typography>
                                         <Typography>Carbs: {Math.round(assignFood.nutrition.carbs)} g</Typography>
                                         <Typography>Fat: {Math.round(assignFood.nutrition.fat)} g</Typography>
-                                        <Typography>Calories: {Math.round(assignFood.nutrition.calories)} g</Typography>
+                                        <Typography>Calories: {Math.round(assignFood.nutrition.calories)} cal</Typography>
                                     </Box>
                                     <Button disabled={!quantityInput} onClick={()=>handleGroupSelection('serving.uom',assignFood.serving.uom)}>Re-calculate</Button>
                                 </Box>

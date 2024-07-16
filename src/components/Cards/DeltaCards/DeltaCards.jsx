@@ -5,15 +5,14 @@ import { Button, Typography, Container, Box, Card, CardContent, CardHeader } fro
 function DeltaCards({header, value, units}) {
     return(
         <Card sx={{
-            width:"5rem",
-            height:"5rem",
+            // padding:'1rem 0.2rem',
             border: "none",
             boxShadow: "none", 
-            marginBottom: "1rem",
             display:'flex',
             flexDirection:'column',
             justifyContent:'center',
-            alignItems:'center'
+            alignItems:'center',
+
         }}>
             <CardContent
                 sx={{
@@ -23,7 +22,16 @@ function DeltaCards({header, value, units}) {
                     alignItems:'center'
                 }}
             >
-                <Typography fontSize="0.9rem">{value}{units}</Typography>
+            <Box
+                sx={{
+                    display:'flex',
+                    gap:'0.1rem',
+                    justifyContent:'center',
+                    alignItems:'center'
+                }}>
+                <Typography fontSize="0.8rem">{value}</Typography>
+                <Typography fontSize="0.8rem">{units}</Typography>
+            </Box>
                 <Typography fontSize="0.7rem" sx={{textAlign:"center"}}>{header}</Typography>
             </CardContent>
         </Card>

@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull request to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to AWS Elastic Beanstalk
+        uses: aws-actions/aws-elastic-beanstalk-deploy@v1
+        with:
+          application-name: "Athenium"
+          environment-name: "Athenium-env" 
+          region: "us-east-2"  
+          version-label: ${{ github.sha }}  
+          package: .  
+
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deployment Complete
+        run: echo App deployed to AWS Elastic Beanstalk

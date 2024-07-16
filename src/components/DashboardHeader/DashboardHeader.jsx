@@ -3,7 +3,7 @@ import CircularAvatar from "../CircularAvatar/CircularAvatar"
 import {useState} from 'react'
 
 
-function DashboardHeader ({userAvatar}) {
+function DashboardHeader ({userAvatar, userData}) {
     const [showNavBar, setShowNavBar] = useState(false)
     return(
         <Box sx={{display:'flex', width:"100%", justifyContent:'space-between'}}>
@@ -15,9 +15,11 @@ function DashboardHeader ({userAvatar}) {
                 <Box>
                     {/* Name of User */}
                     <Typography fontSize="0.8rem">Welcome back,</Typography>
-                    <Typography>
-                        Mary Sue
+
+                    <Typography fontSize="0.8rem">
+                        {`${userData.first_name} ${userData.last_name}`}
                     </Typography>
+
                 </Box>
                 {/* User Age & Height */}
                 <Box
@@ -27,12 +29,12 @@ function DashboardHeader ({userAvatar}) {
                     }}
                 >
                     <Box>
-                        <Typography>22y</Typography>
-                        <Typography>Age</Typography>
+                        <Typography fontSize="0.8rem">{userData.age}</Typography>
+                        <Typography fontSize="0.8rem">Age</Typography>
                     </Box>
                     <Box>
-                        <Typography>5'9"</Typography>
-                        <Typography>Height</Typography>
+                        <Typography fontSize="0.8rem">{userData.height}</Typography>
+                        <Typography fontSize="0.8rem">Height</Typography>
                     </Box>
                 </Box>
             </Box>
