@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import MeasurementModal from '../components/MeasurementModal';
 import axios from 'axios';
+import {findClosestData} from '../utils/utils'
 
 function MeasurementPage() {
     const [waistHipRatio, setWaistHipRatio] = useState(null);
@@ -41,37 +42,11 @@ function MeasurementPage() {
             });
     }, []);
     
-    const findClosestData = (selectedDate) => {
-        let closestData = null;
-    
-        // Check if UNIX timestamp
-        const isValidUnixTimestamp = selectedDate > 0;
-        // Convert selectedDate to UNIX timestamp
-        const selectedTimestamp = isValidUnixTimestamp ? selectedDate : Math.trunc(new Date(selectedDate).getTime() / 1000);
-    
-        // Sort the data array by created_on in descending order
-        const sortedData = [...data].sort((a, b) => new Date(b.created_on).getTime() - new Date(a.created_on).getTime());
-    
-        console.log('Selected Timestamp:', selectedTimestamp);
-        console.log('Sorted Data:', sortedData);
-    
-        for (let i = 0; i < sortedData.length; i++) {
-            const item = sortedData[i];
-            const itemTimestamp = new Date(item.created_on).getTime() / 1000;
-            console.log('Item Timestamp:', itemTimestamp, 'Item:', item);
-            if (selectedTimestamp >= itemTimestamp) {
-                closestData = item;
-                break;
-            }
-        }
-        console.log('Closest Data:', closestData);
-        return closestData;
-    };
-    
+
     
 
     const handleSelectDate = (selectedDate) => {
-        const selectedData = findClosestData(selectedDate);
+        const selectedData = findClosestData(selectedDate, data);
         if (selectedData) {
             const newData = {
                 dateSelected: selectedDate,
@@ -118,7 +93,7 @@ function MeasurementPage() {
     const handleSubmit = (e) => {
         e.preventDefault()
         const { left, right, dateSelected } = inputValues;
-        const selectedData = findClosestData(dateSelected);
+        const selectedData = findClosestData(dateSelected, data);
 
         // const convertDateSelected = dateSelected > 0 ? new Date(dateSelected).toISOString() : dateSelected
         // const convertDateSelected = dateSelected > 0 ? dateSelected : new Date(dateSelected).getTime() / 1000

@@ -15,13 +15,13 @@ function ParamsCard({paramName, paramValue, uom}) {
             <CardContent>
                 <Box sx={{
                     display:'flex',
-                    // justifyContent:''
+                    gap:'0.1rem',
                     alignItems: "baseline",
                 }}>
-                    <Typography>
+                    <Typography fontSize={"0.9rem"}>
                     {paramValue}
                     </Typography>
-                    <Typography fontSize={"0.8rem"}>
+                    <Typography fontSize={"0.7rem"}>
                     {uom}
                     </Typography>
                 </Box>

@@ -5,17 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import theme from './theme/theme'; 
 import { ThemeProvider } from '@mui/system';
-// import AppProvider from './AppProvider';
+import {UserDataProvider} from './UserDataContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <AppProvider> */}
+    <UserDataProvider>
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
-    {/* </AppProvider> */}
+    </UserDataProvider>
   </React.StrictMode>
 );
 

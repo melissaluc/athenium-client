@@ -81,14 +81,15 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
                     gap: '0.5rem'
                 }}>
                     {groupTitle !== "strength" && groupAttributes.filter(attribute => !attribute.endsWith("_diff") && attribute !== "calories").map((metric) => (
-                        <Box key={metric} sx={{ 
-                            border: '1px solid blue', 
-                            padding: '0.2rem',
-                            backgroundColor: selectOptions.includes(metric) ? 'purple' : 'transparent',
-                            color: selectOptions.includes(metric) ? 'white' : 'initial', }}
-                            onClick={() => handleOptions(metric)}>
-                            <Button>{metric.replace(/_/g, ' ')}</Button>
-                        </Box>
+                            <Button
+                                key={metric}
+                                sx={{ 
+                                border: '1px solid blue', 
+                                padding: '0.2rem',
+                                backgroundColor: selectOptions.includes(metric) ? 'purple' : 'transparent',
+                                color: selectOptions.includes(metric) ? 'white' : 'initial', }}
+                                onClick={() => handleOptions(metric)}
+                            >{metric.replace(/_/g, ' ')}</Button>
                     ))}
 
                     {groupTitle === "strength" && Object.keys(groupAttributes).map((key) => (
@@ -99,19 +100,19 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
                             <Box>
                                 {showSubOptions &&
                                     groupAttributes[key].map((metric) => (
-                                        <Box
+                                            <Button
                                             key={metric}
                                             sx={{
                                                 border: '1px solid blue',
                                                 padding: '0.2rem',
+                                                margin:'0.5rem 0.5rem 0.5rem 0',
                                                 backgroundColor: selectOptions.includes(metric) ? 'purple' : 'transparent',
                                                 color: selectOptions.includes(metric) ? 'white' : 'initial',
                                                 cursor: 'pointer'
                                             }}
                                             onClick={() => handleOptions(metric)}
-                                        >
-                                            <Button>{metric}</Button>
-                                        </Box>
+                                            
+                                            >{metric}</Button>
                                     ))
                                 }
                             </Box>
