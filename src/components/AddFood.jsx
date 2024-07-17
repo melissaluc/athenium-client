@@ -32,6 +32,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
     const apiKey = process.env.REACT_APP_API_KEY;
     const apiID = process.env.REACT_APP_API_ID;
     const base_nutrition_api_url = process.env.REACT_APP_NUTRITION_API_BASE_URL;
+    const base_api_url = process.env.REACT_APP_API_BASE_URL;
     const [quantityInput, setQuantityInput] = useState('');
     const [assignFood, setAssignFood] = useState({
         meal: "breakfast",
