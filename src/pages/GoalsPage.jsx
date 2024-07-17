@@ -1,29 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Button } from "@mui/material";
 import GoalsCard from '../components/GoalsCard';
-import goalsData from '../data/goals.json';
 import GoalModal from "../components/Modals/GoalModal";
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 function GoalsPage() {
-  const [fullData, setFullData] = useState(goalsData.goals);
-  const [data, setData] = useState(goalsData.goals);
+  const [fullData, setFullData] = useState([]);
+  const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
-
+  const base_api_url = process.env.REACT_APP_API_BASE_URL
   const handleEditGoal = (goalData) => {
-    const updatedData = fullData.map(goal => {
-      if (goal.id === goalData.id) {
-        return { ...goal, ...goalData };
-      }
-      return goal;
-    });
-    console.log('edit goal ', updatedData);
-    setFullData(updatedData);
+ 
+    const putData = {...goalData, uid:goalData.id, goal_name: goalData.name, uom:goalData.unit }
+    delete putData.id 
+    delete putData.name
+    delete putData.unit
+
+    axios.put(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/${goalData.id}`,putData)
+    .then(response => {
+      console.log(response.data)
+      const updatedData = fullData.map(goal => {
+        if (goal.uid === putData.uid) {
+          return { ...goal, ...putData };
+        }
+        return goal;
+      });
+      setFullData(updatedData);
+
+    })
+    .catch(error => console.error(error))
   };
 
   const handleAddGoal = (newGoal) => {
+    const uid = uuidv4();
     const updatedFullData = [...fullData, newGoal];
-    setFullData(updatedFullData);
-    setActiveView('pending');
+    const postData = { ...newGoal, uid};
+    delete postData.id
+    axios.post(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/`,postData)
+    .then(response => {
+      console.log(response.data)
+      setFullData(updatedFullData);
+      setActiveView('pending');
+    })
+    .catch(error => console.error(error))
+  };
+
+  const handleDeleteGoal = (deleteGoal) => {
+    console.log(deleteGoal)
+    const updatedFullData = fullData.filter(goal => goal.uid !== deleteGoal);
+    axios.delete(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/${deleteGoal}`)
+    .then(response => {
+      console.log(response.data)
+      setFullData(updatedFullData);
+    })
+    .catch(error => console.error(error))
+    // setActiveView('pending');
   };
 
   const filterData = (filterValue) => {
@@ -38,6 +70,16 @@ function GoalsPage() {
   useEffect(() => {
     filterData(activeView);
   }, [fullData, activeView]);
+
+  useEffect(()=>{
+    axios.get(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/`)
+    .then(response => {
+      console.log(response.data)
+      setFullData(response.data)
+      setData(response.data)
+    })
+    .catch(error => console.error(error))
+  },[])
 
   const getButtonStyle = (view) => ({
     backgroundColor: activeView === view ? '#d7aecf' : 'default',
@@ -60,16 +102,16 @@ function GoalsPage() {
       
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {data.map((goal) => {
-          const { id, name, category, description, metric, unit, updated_on, start_date, target_value, current_value, start_value, status } = goal;
+          const { uid, goal_name, category, description, metric, uom, updated_on, start_date, target_value, current_value, start_value, status } = goal;
           return (
             <GoalsCard
-              key={id}
-              id={id}
-              name={name}
+              key={uid}
+              id={uid}
+              name={goal_name}
               category={category}
               description={description}
               metric={metric}
-              unit={unit}
+              unit={uom}
               updated_on={updated_on}
               start_date={start_date}
               target_value={target_value}
@@ -77,6 +119,7 @@ function GoalsPage() {
               start_value={start_value}
               status={status}
               handleEditGoal={handleEditGoal}
+              handleDeleteGoal={handleDeleteGoal}
             />
           );
         })}

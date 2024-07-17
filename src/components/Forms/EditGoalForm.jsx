@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, TextField, Typography, Grid, Autocomplete } from '@mui/material';
 
-const EditGoalForm = ({ onClose, data, handleEditGoal }) => {
+const EditGoalForm = ({ onClose, data, handleEditGoal, handleDeleteGoal, }) => {
+
   const [formData, setFormData] = useState({
     id:'',
     name: '',
@@ -35,6 +36,7 @@ const EditGoalForm = ({ onClose, data, handleEditGoal }) => {
       ...prev,
       [name]: value,
     }));
+
   };
 
   const handleInputChange = (e, value, name) => {
@@ -50,7 +52,13 @@ const EditGoalForm = ({ onClose, data, handleEditGoal }) => {
       ...prev,
       [name]: value
     }));
+
   };
+
+  const handleOnClickDeleteGoal = (goalId) => {
+    handleDeleteGoal(goalId)
+    onClose();
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +75,7 @@ const EditGoalForm = ({ onClose, data, handleEditGoal }) => {
             Edit Goal
           </Typography>
           <Button
-            onClick={onClose}
+            onClick={()=>{handleOnClickDeleteGoal(formData.id)}}
             variant="outlined"
             sx={{ ml: 1, height: '2rem' }}
           >
