@@ -63,6 +63,8 @@ function NutritionPage() {
     const caloriesBarChartRef = useRef(null);
     const caloriesDoughnutChartRef = useRef(null);
 
+    const base_api_url = process.env.REACT_APP_API_BASE_URL
+
     const [fullData, setFullData] = useState([]);
     const [historicalData, setHistoricalData] = useState([]);
     const [selectedData, setSelectedData] = useState({});
@@ -71,7 +73,7 @@ function NutritionPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/nutrition/39b17fed-61d6-492a-b528-4507290d5423/');
+                const response = await axios.get(`${base_api_url}nutrition/39b17fed-61d6-492a-b528-4507290d5423/`);
                 const data = response.data;
 
                 setFullData(data);

@@ -16,7 +16,7 @@ import { UserDataContext } from '../UserDataContext';
 function DashboardPage({}){
     const navigate = useNavigate()
     const {userData, setUserData }= useContext(UserDataContext);
-
+    const base_api_url = process.env.REACT_API_BASE_URL
     const [selectDate, setSelectDate] = useState(new Date())
     const [measurementData, setMeasurementData] = useState([]);
     const [selectMeasurementData, setSelectMeasurementData] = useState({});
@@ -66,7 +66,7 @@ function DashboardPage({}){
 
     // Measurements
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/measurements/${userData.user_id}`)
+        axios.get(`${base_api_url}measurements/${userData.user_id}`)
             .then(response => {
                 setMeasurementData(response.data); 
             })
@@ -77,7 +77,7 @@ function DashboardPage({}){
 
     // Other dashboard data
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/dashboard/${userData.user_id}`)
+        axios.get(`${base_api_url}dashboard/${userData.user_id}`)
             .then(response => {
                 setOtherData(response.data); 
             })
@@ -89,7 +89,7 @@ function DashboardPage({}){
 
     // Current Schedule
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/schedule/${userData.user_id}?planned_on=${formattedDate}`)
+        axios.get(`${base_api_url}schedule/${userData.user_id}?planned_on=${formattedDate}`)
             .then(response => {
                 setScheduleData(response.data)
             })

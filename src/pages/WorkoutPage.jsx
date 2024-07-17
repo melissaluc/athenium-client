@@ -17,7 +17,7 @@ function WorkoutPage(){
     const [addedExercises, setAddedExercises] = useState([])
     const [deletedExercises, setDeletedExercises] = useState([])
     const [updatedExercises, setUpdatedExercises] = useState([])
-
+    const base_api_url = process.env.REACT_APP_API_BASE_URL
 
     const onSort = (order, category) => {
         handleSort(order, category)
@@ -75,7 +75,7 @@ function WorkoutPage(){
             // frequency:workout.frequency,
             tags: tags ? tags : null 
         }
-        axios.post("http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423",postData)
+        axios.post(`${base_api_url}workouts/39b17fed-61d6-492a-b528-4507290d5423`,postData)
             .then(response=>{
                 console.log(response)
             })
@@ -91,7 +91,7 @@ function WorkoutPage(){
         setWorkoutData(updatedData);
     
         // DELETE request to backend
-        axios.delete(`http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423/${workout_id}`)
+        axios.delete(`${base_api_url}workouts/39b17fed-61d6-492a-b528-4507290d5423/${workout_id}`)
             .then(response => {
                 console.log(response);
                 // Handle success or further updates if needed
@@ -179,7 +179,7 @@ function WorkoutPage(){
     };
 
     const getUserWorkoutData = () => {
-        axios.get("http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423")
+        axios.get(`${base_api_url}workouts/39b17fed-61d6-492a-b528-4507290d5423`)
         .then(response =>{
             setOriginalWorkoutData(response.data)
             setWorkoutData(response.data)
