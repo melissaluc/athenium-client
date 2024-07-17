@@ -9,9 +9,9 @@ import axios from "axios";
 function SchedulePage({}){
     const [selectDate, setSelectDate] = useState(new Date())
     const [scheduleData,setScheduleData] = useState([])
-
+    const base_api_url = process.env.REACT_APP_API_BASE_URL
     useEffect(()=>{
-        axios.get("http://localhost:5000/api/v1/schedule/39b17fed-61d6-492a-b528-4507290d5423/")
+        axios.get(`${base_api_url}schedule/39b17fed-61d6-492a-b528-4507290d5423/`)
             .then(response=>{
                 setScheduleData(response.data)
             })

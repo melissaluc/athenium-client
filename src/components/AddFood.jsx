@@ -31,7 +31,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
     const [selectedFood, setSelectedFood] = useState(null);
     const apiKey = process.env.REACT_APP_API_KEY;
     const apiID = process.env.REACT_APP_API_ID;
-    const base_api_url = process.env.REACT_APP_API_BASE_URL;
+    const base_nutrition_api_url = process.env.REACT_APP_NUTRITION_API_BASE_URL;
     const [quantityInput, setQuantityInput] = useState('');
     const [assignFood, setAssignFood] = useState({
         meal: "breakfast",
@@ -132,7 +132,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
 
     const handleSearch = () => {
         const encodedFoodName = encodeURIComponent(searchFoodName);
-        axios.get(`${base_api_url}?app_id=${apiID}&app_key=${apiKey}&ingr=${encodedFoodName}`)
+        axios.get(`${base_nutrition_api_url}?app_id=${apiID}&app_key=${apiKey}&ingr=${encodedFoodName}`)
             .then(response => {
                 console.log(response.data?.hints);
                 setFoodDataList(response.data?.hints);
@@ -165,7 +165,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
             uom: assignFood.serving.uom,
         };
 
-        axios.post('http://localhost:5000/api/v1/nutrition/39b17fed-61d6-492a-b528-4507290d5423/', 
+        axios.post(`${base_api_url}nutrition/39b17fed-61d6-492a-b528-4507290d5423/`, 
         {
             datetimestamp:selectedDate ? selectedDate : new Date().toISOString().split('T')[0],
             meal_name:assignFood.meal,

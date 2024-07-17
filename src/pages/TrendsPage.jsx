@@ -25,6 +25,7 @@ const getYearRange = (date) => {
 };
 
 function TrendsPage() {
+  const base_api_url = process.env.REACT_APP_API_BASE_URL
   const theme = useTheme()
   const [selectDateRange, setSelectDateRange] = useState({});
   const [originalData,setOriginalData] = useState({});
@@ -37,7 +38,7 @@ function TrendsPage() {
 
   useEffect(()=>{
     // get year data initially
-    axios.get('http://localhost:5000/api/v1/trends/39b17fed-61d6-492a-b528-4507290d5423/')
+    axios.get(`${base_api_url}trends/39b17fed-61d6-492a-b528-4507290d5423/`)
     .then(response =>{
       console.log('api data: ',response.data)
       setData(response.data)
