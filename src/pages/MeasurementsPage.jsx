@@ -32,7 +32,7 @@ function MeasurementPage() {
     });
 
     useEffect(() => {
-        axios.get(`${base_api_url}measurements/39b17fed-61d6-492a-b528-4507290d5423`)
+        axios.get(`${base_api_url}/measurements/39b17fed-61d6-492a-b528-4507290d5423`)
             .then(response => {
                 setData(response.data);  // Make sure response.data is correctly set
                 const currentTime = new Date().getTime();
@@ -128,7 +128,7 @@ function MeasurementPage() {
         // Determine if the data for dateSelected already exists
         if (selectedData.created_on === convertDateSelected ) {
             // PATCH request to update existing data
-            axios.patch(`${base_api_url}measurements/39b17fed-61d6-492a-b528-4507290d5423`, newData)
+            axios.patch(`${base_api_url}/measurements/39b17fed-61d6-492a-b528-4507290d5423`, newData)
                 .then(res => {
                     console.log(`Data updated: \n ${JSON.stringify(inputValues)} \n ${res}`);
                     // fetchData(); // Fetch updated data after successful update
@@ -138,7 +138,7 @@ function MeasurementPage() {
                 });
         } else {
             //POST request to create new data
-            axios.post(`${base_api_url}measurements/39b17fed-61d6-492a-b528-4507290d5423`, newData)
+            axios.post(`${base_api_url}/measurements/39b17fed-61d6-492a-b528-4507290d5423`, newData)
                 .then(res => {
                     console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
                     // fetchData(); // Fetch updated data after successful creation

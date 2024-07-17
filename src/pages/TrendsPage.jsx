@@ -38,7 +38,7 @@ function TrendsPage() {
 
   useEffect(()=>{
     // get year data initially
-    axios.get(`${base_api_url}trends/39b17fed-61d6-492a-b528-4507290d5423/`)
+    axios.get(`${base_api_url}/trends/39b17fed-61d6-492a-b528-4507290d5423/`)
     .then(response =>{
       console.log('api data: ',response.data)
       setData(response.data)

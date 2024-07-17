@@ -66,7 +66,7 @@ function DashboardPage({}){
 
     // Measurements
     useEffect(() => {
-        axios.get(`${base_api_url}measurements/${userData.user_id}`)
+        axios.get(`${base_api_url}/measurements/${userData.user_id}`)
             .then(response => {
                 setMeasurementData(response.data); 
             })
@@ -77,7 +77,7 @@ function DashboardPage({}){
 
     // Other dashboard data
     useEffect(() => {
-        axios.get(`${base_api_url}dashboard/${userData.user_id}`)
+        axios.get(`${base_api_url}/dashboard/${userData.user_id}`)
             .then(response => {
                 setOtherData(response.data); 
             })
@@ -89,7 +89,7 @@ function DashboardPage({}){
 
     // Current Schedule
     useEffect(() => {
-        axios.get(`${base_api_url}schedule/${userData.user_id}?planned_on=${formattedDate}`)
+        axios.get(`${base_api_url}/schedule/${userData.user_id}?planned_on=${formattedDate}`)
             .then(response => {
                 setScheduleData(response.data)
             })

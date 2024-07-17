@@ -166,7 +166,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
             uom: assignFood.serving.uom,
         };
 
-        axios.post(`${base_api_url}nutrition/39b17fed-61d6-492a-b528-4507290d5423/`, 
+        axios.post(`${base_api_url}/nutrition/39b17fed-61d6-492a-b528-4507290d5423/`, 
         {
             datetimestamp:selectedDate ? selectedDate : new Date().toISOString().split('T')[0],
             meal_name:assignFood.meal,
