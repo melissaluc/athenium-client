@@ -16,7 +16,7 @@ import { UserDataContext } from '../UserDataContext';
 function DashboardPage({}){
     const navigate = useNavigate()
     const {userData, setUserData }= useContext(UserDataContext);
-    const base_api_url = process.env.REACT_API_BASE_URL
+    const base_api_url = process.env.REACT_APP_API_BASE_URL
     const [selectDate, setSelectDate] = useState(new Date())
     const [measurementData, setMeasurementData] = useState([]);
     const [selectMeasurementData, setSelectMeasurementData] = useState({});
