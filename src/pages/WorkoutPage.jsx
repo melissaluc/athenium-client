@@ -210,6 +210,7 @@ function WorkoutPage(){
             <Box sx={{display:'flex', flexDirection:'column', gap:"1rem"}}>
                 {workoutData.map((data)=>{
                     return <WorkoutCard 
+                            base_api_url={base_api_url}
                             key={data.workout_id} 
                             data={data} 
                             handleAddTag ={handleAddTag} 

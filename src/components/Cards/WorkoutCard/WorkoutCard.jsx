@@ -7,6 +7,7 @@ import { useTheme } from "@emotion/react";
 import axios from 'axios'
 
 function WorkoutCard({ 
+                        base_api_url,
                         data, 
                         handleAddTag, 
                         handleAddExercise, 
@@ -90,7 +91,7 @@ function WorkoutCard({
             }
             console.log(patchData)
             
-            axios.patch(`http://localhost:5000/api/v1/workouts/39b17fed-61d6-492a-b528-4507290d5423/${data.workout_id}`,patchData)
+            axios.patch(`${base_api_url}/workouts/39b17fed-61d6-492a-b528-4507290d5423/${data.workout_id}`,patchData)
             .then(response =>{
                 handleUpdateData(formData);
                 setOriginalData(formData);
@@ -156,6 +157,7 @@ function WorkoutCard({
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '1px black solid', pt: "1rem" }}>
                             {formData.exercises.length ? formData.exercises.map((exercise) => (
                                 <ListItemExerciseCard
+                                    base_api_url={base_api_url}
                                     key={exercise.id}
                                     data={exercise}
                                     editMode={editMode}
