@@ -20,7 +20,7 @@ export const UserDataProvider = ({ children }) => {
 
 
     useEffect(()=>{
-        axios.get(`${base_api_url}user/39b17fed-61d6-492a-b528-4507290d5423/`)
+        axios.get(`${base_api_url}/user/39b17fed-61d6-492a-b528-4507290d5423/`)
         .then((response)=>{
             setUserData(prev => ({
                 ...prev,
