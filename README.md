@@ -2,6 +2,8 @@
 
 Athenium is a **Women's Fitness Tracker App**  
 
+See App progress [here](https://athenium-client.onrender.com/)
+
 Link to [Athenium Server](https://github.com/melissaluc/athenium-server)
 
 Check out the progress at [Miro](https://miro.com/app/board/uXjVKPwlteQ=/?share_link_id=758078131919)
