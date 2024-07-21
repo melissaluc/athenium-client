@@ -1,31 +1,6 @@
 import { Box, Typography, LinearProgress} from "@mui/material";
 import { useTheme } from '@mui/material/styles';
-
-function getProgressColour(strengthLevel, theme) {
-    
-    let colour = null;
-    switch (strengthLevel) {
-        case "beginner":
-            colour = theme.palette.progress.level1;
-            break;
-        case "novice":
-            colour = theme.palette.progress.level2;
-            break;
-        case "intermediate":
-            colour = theme.palette.progress.level3;
-            break;
-        case "advanced":
-            colour = theme.palette.progress.level4;
-            break;
-        case "elite":
-            colour = theme.palette.progress.level5;
-            break;
-        default:
-            colour = null;
-    }
-    console.log({one_rep_max: strengthLevel, colour: colour})
-    return colour;
-}
+import {getProgressColour} from '../utils/utils'
 
 function ExerciseStrengthLevel ({
                                 date_calculated,
@@ -75,14 +50,14 @@ function ExerciseStrengthLevel ({
             }}
                 >
                 <Typography>{strength_level}</Typography>
-                <Typography sx={{position: "relative", right:'-2rem'}}>{strength_level === "elite" ? null : (progressValue > 0 ? `${one_rep_max}(${progressValue}%)` : null)}</Typography>
+                <Typography sx={{position: "relative", right:(progressValue > 80? '1.5rem':'-1.5rem')}}>{strength_level === "elite" ? null : (progressValue > 0 ? `${one_rep_max}(${progressValue}%)` : null)}</Typography>
             </Box>
             <Typography>{next_strength_level ? next_strength_level : ""}</Typography>
         </Box>
     
         <LinearProgress
             variant="determinate"
-            value={strength_level === "elite" ? 100 : progressValue < 0 ? 0 : progressValue}
+            value={strength_level === "elite" ? 100 : (progressValue < 0 ? 0 : progressValue)}
             sx={{
                 height: 10,
                 borderRadius: 5,
@@ -91,12 +66,14 @@ function ExerciseStrengthLevel ({
                     bgcolor: getProgressColour(strength_level, theme), 
                 },
             }}
-        />
+            />
         <Box sx={{display:'flex', justifyContent:'space-between'}}>
             {/* Value at current level */}
             <Typography>{strength_bounds[strength_level]}</Typography>
+
             {/* Value at next level */}
-            <Typography>{strength_level==="elite"? one_rep_max :strength_bounds[next_strength_level]}</Typography>
+            <Typography>{strength_level==="elite"? one_rep_max : strength_bounds[next_strength_level]}</Typography>
+
         </Box>
         </Box>
     </Box>

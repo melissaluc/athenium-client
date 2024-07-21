@@ -23,6 +23,57 @@ function findClosestData(selectedDate, data) {
     return closestData;
 }
 
+function getProgressColour(strengthLevel, theme) {
+    let colour = null;
+    switch (strengthLevel) {
+        case "beginner":
+            colour = theme.palette.progress.level1;
+            break;
+        case "novice":
+            colour = theme.palette.progress.level2;
+            break;
+        case "intermediate":
+            colour = theme.palette.progress.level3;
+            break;
+        case "advanced":
+            colour = theme.palette.progress.level4;
+            break;
+        case "elite":
+            colour = theme.palette.progress.level5;
+            break;
+        default:
+            colour = null;
+    }
+    // console.log({one_rep_max: strengthLevel, colour: colour})
+    return colour;
+}
 
+function getStrengthRating (strengthLevel) {
+    let rating = null
+    switch(strengthLevel) {
+        case 'beginner':
+            rating = '⭐'
+            break;
+        case 'novice':
+            rating = '⭐⭐'
+            break;
+        case 'intermediate':
+            rating = '⭐⭐⭐'
+            break;
+        case 'advanced':
+            rating = '⭐⭐⭐⭐'
+            break;
+        case 'elite':
+            rating = '⭐⭐⭐⭐'
+            break;
+        default:
+            rating = null
+            break;
+                
 
-export { findClosestData };
+    }
+    return rating
+
+}
+
+export { findClosestData, getProgressColour, getStrengthRating };
