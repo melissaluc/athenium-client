@@ -29,7 +29,6 @@ function App(){
                     <Route path='/' element={<DashboardPage/>}  />
                     <Route path='/dashboard' element={<DashboardPage/>}  />
                     <Route path='/schedule' element={<SchedulePage/>}  />
-                    <Route path='/results' element={<ResultsPage/>}  />
                     {/* <Route path='/log' element={<LogPage/>}  /> */}
                     <Route path='/goals' element={<GoalsPage/>}  />
                     <Route path='/measurements' element={<MeasurementPage/>}  />

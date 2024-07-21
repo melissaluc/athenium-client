@@ -4,7 +4,7 @@ import {useState} from 'react'
 
 
 function DashboardHeader ({userAvatar, userData}) {
-    const [showNavBar, setShowNavBar] = useState(false)
+   
     return(
         <Box sx={{display:'flex', width:"100%", justifyContent:'space-between'}}>
         <Box className='userNavBar' sx={{display:'flex', width:"100%", gap:'2rem'}}>
@@ -33,7 +33,7 @@ function DashboardHeader ({userAvatar, userData}) {
                         <Typography fontSize="0.8rem">Age</Typography>
                     </Box>
                     <Box>
-                        <Typography fontSize="0.8rem">{userData.height}</Typography>
+                        <Typography fontSize="0.8rem">{userData.height_cm}</Typography>
                         <Typography fontSize="0.8rem">Height</Typography>
                     </Box>
                 </Box>

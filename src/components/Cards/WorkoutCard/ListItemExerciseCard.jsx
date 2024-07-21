@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 
 
-function ListItemExerciseCard({ base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
+function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
     const [formData, setFormData] = useState(data);
 
 
@@ -75,7 +75,7 @@ function ListItemExerciseCard({ base_api_url, data, editMode, handleClickAddExer
     
 
     const handleCalcStengthLevel = (data)=>{
-        axios.post(`${base_api_url}/strength/39b17fed-61d6-492a-b528-4507290d5423/`, data)
+        axios.post(`${base_api_url}/strength/${userData.user_id}/`, data)
         .then(response => {
                 // TODO: results pop up
                 console.log('results: ',response.data)

@@ -1,10 +1,12 @@
 import { Box, Container, Card,CardContent, Button} from "@mui/material"; 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import MuscleGroupStrengthCard from "../components/MuscleGroupStrengthCard";
 import ExerciseStrengthLevel from "../components/ExerciseStrengthLevel"
 import axios from 'axios'
+import { UserDataContext } from '../UserDataContext';
 
 function StrengthPage() {
+    const {userData, setUserData }= useContext(UserDataContext);
     const base_api_url = process.env.REACT_APP_API_BASE_URL
     const [toggleView,setToggleView] = useState(false)
     const [strengthData, setStrengthData] = useState([])
@@ -52,7 +54,7 @@ function StrengthPage() {
 
 
     useEffect(()=>{
-        axios.get(`${base_api_url}/strength/39b17fed-61d6-492a-b528-4507290d5423/`)
+        axios.get(`${base_api_url}/strength/${userData.user_id}/`)
         .then(response => {
             setStrengthData(response.data)
              const groupScores = calcTotalWorkVolumeByGroup(response.data)

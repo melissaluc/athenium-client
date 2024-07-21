@@ -7,11 +7,12 @@ import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 import WorkoutModal from "../components/Modals/WorkoutModal"
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid';
-
-import {useState, useEffect} from 'react'
+import { UserDataContext } from '../UserDataContext';
+import {useState, useEffect, useContext} from 'react'
 
 
 function WorkoutPage(){
+    const {userData, setUserData }= useContext(UserDataContext);
     const [originalWorkoutData, setOriginalWorkoutData] = useState([]);
     const [workoutData, setWorkoutData] = useState([])
     const [addedExercises, setAddedExercises] = useState([])
@@ -75,7 +76,7 @@ function WorkoutPage(){
             // frequency:workout.frequency,
             tags: tags ? tags : null 
         }
-        axios.post(`${base_api_url}/workouts/39b17fed-61d6-492a-b528-4507290d5423`,postData)
+        axios.post(`${base_api_url}/workouts/${userData.user_id}`,postData)
             .then(response=>{
                 console.log(response)
             })
@@ -91,7 +92,7 @@ function WorkoutPage(){
         setWorkoutData(updatedData);
     
         // DELETE request to backend
-        axios.delete(`${base_api_url}/workouts/39b17fed-61d6-492a-b528-4507290d5423/${workout_id}`)
+        axios.delete(`${base_api_url}/workouts/${userData.user_id}/${workout_id}`)
             .then(response => {
                 console.log(response);
                 // Handle success or further updates if needed
@@ -179,7 +180,7 @@ function WorkoutPage(){
     };
 
     const getUserWorkoutData = () => {
-        axios.get(`${base_api_url}/workouts/39b17fed-61d6-492a-b528-4507290d5423`)
+        axios.get(`${base_api_url}/workouts/${userData.user_id}`)
         .then(response =>{
             setOriginalWorkoutData(response.data)
             setWorkoutData(response.data)
@@ -210,6 +211,7 @@ function WorkoutPage(){
             <Box sx={{display:'flex', flexDirection:'column', gap:"1rem"}}>
                 {workoutData.map((data)=>{
                     return <WorkoutCard 
+                            userData={userData}
                             base_api_url={base_api_url}
                             key={data.workout_id} 
                             data={data} 
