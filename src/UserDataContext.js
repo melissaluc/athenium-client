@@ -21,16 +21,18 @@ export const UserDataProvider = ({ children }) => {
 
 
     useEffect(()=>{
-        axios.get(`${base_api_url}/user/${username}`)
-        .then((response)=>{
-            setUserData(prev => ({
-                ...prev,
-                ...response.data
-            }))
-            setIsDataFetched(true)
-            console.log('userdata ',response.data)
-        })
-        .catch(error => console.error(error))
+        if (!isDataFetched){
+            axios.get(`${base_api_url}/user/${username}`)
+            .then((response)=>{
+                setUserData(prev => ({
+                    ...prev,
+                    ...response.data
+                }))
+                setIsDataFetched(true)
+                console.log('userdata ',response.data)
+            })
+            .catch(error => console.error(error))
+        }
     },[isDataFetched])
 
     return (
