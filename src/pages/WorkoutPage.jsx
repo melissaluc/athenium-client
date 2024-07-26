@@ -179,18 +179,13 @@ function WorkoutPage(){
         setWorkoutData(filteredData);
     };
 
-    const getUserWorkoutData = () => {
+    useEffect(()=>{
         axios.get(`${base_api_url}/workouts/${userData.user_id}`)
         .then(response =>{
             setOriginalWorkoutData(response.data)
             setWorkoutData(response.data)
         })
         .catch(error=>console.error(error))
-
-    }
-
-    useEffect(()=>{
-        getUserWorkoutData()
     },[])
     
 

@@ -36,21 +36,22 @@ function GoalProgress({
     status,
     handleEditGoal,
     handleDeleteGoal,}) {
-
+    
     const [expandWorkout, setExpandWorkout] = useState(false);
     const updateDateFormatted = new Date(updated_on * 1000);
     const startDateFormatted = new Date(start_date * 1000);
-    const progressValue = parseFloat(((Math.abs(current_value - start_value) / Math.abs(target_value - start_value)) * 100).toFixed(1));
+    // const progressValue = parseFloat(((Math.abs(current_value - start_value) / Math.abs(target_value - start_value)) * 100).toFixed(1));
+    const progressValue = parseFloat(((Math.abs(230 - start_value) / Math.abs(target_value - start_value)) * 100).toFixed(1));
 
     // Determine the actual values for displaying progress
     let displayStartValue = start_value;
     let displayTargetValue = target_value;
 
     // Adjust start and target values if target < start (for weight loss scenarios)
-    if (target_value < start_value) {
-        displayStartValue = target_value; 
-        displayTargetValue = start_value; 
-    }
+    // if (target_value < start_value) {
+    //     displayStartValue = target_value; 
+    //     displayTargetValue = start_value; 
+    // }
 
     return (
         <Card>
