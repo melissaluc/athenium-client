@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
-
+import ResultsModal from "../../Modals/ResultsModal";
 
 function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
-    const [formData, setFormData] = useState(data);
-
+    const [formData, setFormData] = useState({...data, age: userData.age, body_weight: userData.weight});
+    const [open, setOpen] = useState(false)
+    const [results, setResults] = useState(null)
+    const [error, setError] = useState(null);
 
 
     useEffect(() => {
@@ -75,12 +77,18 @@ function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleCl
     
 
     const handleCalcStengthLevel = (data)=>{
+        setOpen(true)
+        setError(null);
         axios.post(`${base_api_url}/strength/${userData.user_id}/`, data)
         .then(response => {
-                // TODO: results pop up
-                console.log('results: ',response.data)
+                console.log('results: ',response.data[0])
+                setResults(response.data[0])
+                setError(null);
             })
-            .catch(error=>console.error(error))
+            .catch(error=>{
+                console.error(error)
+                setError(error)
+            })
     }
 
     const renderStrengthFields = () => (
@@ -152,6 +160,8 @@ function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleCl
     );
 
     return (
+        <>
+        <ResultsModal open={open} handleClose={setOpen} results={results} error={error}/>
         <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
                 <Box sx={{ width: '4rem', height: '4rem', border: 'solid 1px gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -183,6 +193,7 @@ function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleCl
                 formData.category === 'strength' ? renderStrengthDisplay() : renderCardioDisplay()
             )}
         </Grid>
+        </>
     );
 }
 
