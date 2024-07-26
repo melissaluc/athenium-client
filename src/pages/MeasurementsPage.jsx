@@ -179,7 +179,7 @@ function MeasurementPage() {
                 }}
             >
             </Box>
-            <Typography color='primary'>In Inches</Typography>
+            <Typography color='primary'>{userData.uom && `In ${userData.uom.girth_measurements.uom}`}</Typography>
             <MeasurementForm
                 handleInputChange={handleInputChange}
                 inputValues={inputValues}

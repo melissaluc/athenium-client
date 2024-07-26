@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
 
 import DashboardPage from './pages/DashboardPage';
@@ -26,7 +26,7 @@ function App(){
                     <DrawerNavBar />
                 </Box>
                 <Routes>
-                    <Route path='/' element={<DashboardPage/>}  />
+                    <Route path='/' element={<Navigate to='/dashboard' />}  />
                     <Route path='/dashboard' element={<DashboardPage/>}  />
                     <Route path='/schedule' element={<SchedulePage/>}  />
                     {/* <Route path='/log' element={<LogPage/>}  /> */}
