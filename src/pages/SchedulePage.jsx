@@ -17,7 +17,7 @@ function SchedulePage({}){
                 setScheduleData(response.data)
             })
             .catch(error=>console.error(error))
-    },[])
+    },[userData])
 
 
     const handleBackDateClick = () => {

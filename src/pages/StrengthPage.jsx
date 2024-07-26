@@ -61,7 +61,7 @@ function StrengthPage() {
              setGroupScores(groupScores)
         })
         .catch(error=>console.error(error))
-    },[])
+    },[userData])
     
 
     return (

@@ -186,7 +186,7 @@ function WorkoutPage(){
             setWorkoutData(response.data)
         })
         .catch(error=>console.error(error))
-    },[])
+    },[userData])
     
 
     return (

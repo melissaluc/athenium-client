@@ -125,7 +125,7 @@ function NutritionPage() {
         };
 
         fetchData();
-    }, []);
+    }, [userData]);
 
     useEffect(() => {
         if (caloriesBarChartRef.current && caloriesDoughnutChartRef.current) {

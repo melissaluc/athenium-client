@@ -81,7 +81,7 @@ function GoalsPage() {
       setData(response.data)
     })
     .catch(error => console.error(error))
-  },[])
+  },[userData])
 
   const getButtonStyle = (view) => ({
     backgroundColor: activeView === view ? '#d7aecf' : 'default',

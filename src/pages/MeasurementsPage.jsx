@@ -43,7 +43,7 @@ function MeasurementPage() {
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+    }, [userData]);
     
 
     

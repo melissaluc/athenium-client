@@ -48,7 +48,7 @@ function TrendsPage() {
 
     })
     .catch(error=>console.error(error))
-  },[])
+  },[userData])
 
   function getLast6MonthsRange(currentDate) {
     // Calculate the end date as today
