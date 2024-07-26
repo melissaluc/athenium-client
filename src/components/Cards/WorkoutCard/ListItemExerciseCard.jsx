@@ -6,7 +6,7 @@ import axios from "axios";
 import ResultsModal from "../../Modals/ResultsModal";
 
 function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
-    const [formData, setFormData] = useState({...data, age: userData.age, body_weight: userData.weight});
+    const [formData, setFormData] = useState({...data, age: userData.age, body_weight: userData.weight, body_mass_uom: userData.uom.body_mass.uom , lift_uom:userData.uom.lift_weight.uom});
     const [open, setOpen] = useState(false)
     const [results, setResults] = useState(null)
     const [error, setError] = useState(null);

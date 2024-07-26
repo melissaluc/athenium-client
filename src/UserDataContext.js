@@ -15,7 +15,7 @@ export const UserDataProvider = ({ children }) => {
         last_name:null,
         age: null,
         weight:null,
-        height_cm:`5'9"`
+        height_cm:null,
     });
 
 
