@@ -16,7 +16,7 @@ function StrengthResults ({handleClose, results}) {
             <Typography>{getStrengthRating(strength_level)}</Typography>
             <Typography>Your estimated one-rep-max is {one_rep_max}lb</Typography>
             <Typography>You are stronger than {relative_strength_demographic}% of lifters your age weighing {body_weight}lb</Typography>
-            <Typography>Your lift is {lift/body_weight} times your body weight</Typography>
+            <Typography>Your lift is {(lift/body_weight).toFixed(2)} times your body weight</Typography>
 
             <TableContainer>
                 <Table>

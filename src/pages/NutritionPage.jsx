@@ -1,5 +1,5 @@
 import { Box, Container, Typography} from "@mui/material"; 
-import {useState, useEffect, useRef} from "react"
+import {useState, useEffect, useRef, useContext} from "react"
 import * as echarts from 'echarts';
 // import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
 import MealList from "../components/MealList";
@@ -8,6 +8,8 @@ import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
 import { useTheme } from "@emotion/react";
 import AddFoodModal from "../components/Modals/AddFoodModal";
 import axios from "axios";
+import { UserDataContext } from '../UserDataContext';
+
 
 const getOrdinalSuffix = (day) => {
     if (day > 3 && day < 21) return 'th'; // special case for 11th-13th
@@ -64,7 +66,7 @@ function NutritionPage() {
     const caloriesDoughnutChartRef = useRef(null);
 
     const base_api_url = process.env.REACT_APP_API_BASE_URL
-
+    const {userData, setUserData }= useContext(UserDataContext);
     const [fullData, setFullData] = useState([]);
     const [historicalData, setHistoricalData] = useState([]);
     const [selectedData, setSelectedData] = useState({});
@@ -73,7 +75,7 @@ function NutritionPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${base_api_url}/nutrition/39b17fed-61d6-492a-b528-4507290d5423/`);
+                const response = await axios.get(`${base_api_url}/nutrition/${userData.user_id}/`);
                 const data = response.data;
 
                 setFullData(data);

@@ -5,8 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import ResultsModal from "../../Modals/ResultsModal";
 
-function ListItemExerciseCard({ base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
-    const [formData, setFormData] = useState(data);
+function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
+    const [formData, setFormData] = useState({...data, age: userData.age, body_weight: userData.weight, body_mass_uom: userData.uom.body_mass.uom , lift_uom:userData.uom.lift_weight.uom});
     const [open, setOpen] = useState(false)
     const [results, setResults] = useState(null)
     const [error, setError] = useState(null);
@@ -79,7 +79,7 @@ function ListItemExerciseCard({ base_api_url, data, editMode, handleClickAddExer
     const handleCalcStengthLevel = (data)=>{
         setOpen(true)
         setError(null);
-        axios.post(`${base_api_url}/strength/39b17fed-61d6-492a-b528-4507290d5423/`, data)
+        axios.post(`${base_api_url}/strength/${userData.user_id}/`, data)
         .then(response => {
                 console.log('results: ',response.data[0])
                 setResults(response.data[0])

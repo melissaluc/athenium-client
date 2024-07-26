@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Box, Container, Button } from "@mui/material";
 import GoalsCard from '../components/GoalsCard';
 import GoalModal from "../components/Modals/GoalModal";
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid';
+import { UserDataContext } from '../UserDataContext';
 
 function GoalsPage() {
+  const {userData, setUserData }= useContext(UserDataContext);
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [activeView, setActiveView] = useState('in progress');
@@ -17,7 +19,7 @@ function GoalsPage() {
     delete putData.name
     delete putData.unit
 
-    axios.put(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/${goalData.id}`,putData)
+    axios.put(`${base_api_url}/goals/${userData.user_id}/${goalData.id}`,putData)
     .then(response => {
       console.log(response.data)
       const updatedData = fullData.map(goal => {
@@ -37,7 +39,7 @@ function GoalsPage() {
     const updatedFullData = [...fullData, newGoal];
     const postData = { ...newGoal, uid};
     delete postData.id
-    axios.post(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/`,postData)
+    axios.post(`${base_api_url}/goals/${userData.user_id}/`,postData)
     .then(response => {
       console.log(response.data)
       setFullData(updatedFullData);
@@ -49,7 +51,7 @@ function GoalsPage() {
   const handleDeleteGoal = (deleteGoal) => {
     console.log(deleteGoal)
     const updatedFullData = fullData.filter(goal => goal.uid !== deleteGoal);
-    axios.delete(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/${deleteGoal}`)
+    axios.delete(`${base_api_url}/goals/${userData.user_id}/${deleteGoal}`)
     .then(response => {
       console.log(response.data)
       setFullData(updatedFullData);
@@ -72,7 +74,7 @@ function GoalsPage() {
   }, [fullData, activeView]);
 
   useEffect(()=>{
-    axios.get(`${base_api_url}/goals/39b17fed-61d6-492a-b528-4507290d5423/`)
+    axios.get(`${base_api_url}/goals/${userData.user_id}/`)
     .then(response => {
       console.log(response.data)
       setFullData(response.data)

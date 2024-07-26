@@ -8,24 +8,25 @@ export const UserDataContext = createContext();
 // Custom provider component to manage state
 export const UserDataProvider = ({ children }) => {
     const base_api_url = process.env.REACT_APP_API_BASE_URL
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState('admin')
     const [userData, setUserData] = useState({
         user_id: null,
         first_name:null,
         last_name:null,
         age: null,
         weight:null,
-        height:`5'9"`
+        height_cm:null,
     });
 
 
     useEffect(()=>{
-        axios.get(`${base_api_url}/user/39b17fed-61d6-492a-b528-4507290d5423/`)
+        axios.get(`${base_api_url}/user/${username}`)
         .then((response)=>{
             setUserData(prev => ({
                 ...prev,
                 ...response.data
             }))
+            console.log('userdata ',response.data)
         })
         .catch(error => console.error(error))
     },[])

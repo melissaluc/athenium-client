@@ -1,10 +1,11 @@
 import { Box, Container, Button } from "@mui/material"; 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import DateRangePickerModal from "../components/Modals/DateRangePickerModal";
 import TrendsGroup from "../components/TrendsGroup";
 import { useTheme } from "@emotion/react";
 import { startOfWeek, endOfWeek, startOfMonth,endOfMonth, startOfYear, endOfYear, format } from 'date-fns';
 import axios from 'axios'
+import { UserDataContext } from '../UserDataContext';
 
 const getWeekRange = (date) => {
   const start = startOfWeek(date, { weekStartsOn: 0 }); // Sun
@@ -25,6 +26,7 @@ const getYearRange = (date) => {
 };
 
 function TrendsPage() {
+  const {userData, setUserData }= useContext(UserDataContext);
   const base_api_url = process.env.REACT_APP_API_BASE_URL
   const theme = useTheme()
   const [selectDateRange, setSelectDateRange] = useState({});
@@ -38,7 +40,7 @@ function TrendsPage() {
 
   useEffect(()=>{
     // get year data initially
-    axios.get(`${base_api_url}/trends/39b17fed-61d6-492a-b528-4507290d5423/`)
+    axios.get(`${base_api_url}/trends/${userData.user_id}/`)
     .then(response =>{
       console.log('api data: ',response.data)
       setData(response.data)
