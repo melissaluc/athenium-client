@@ -22,7 +22,8 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import AtheniumLogo from "../../../assets/AtheniumLogo";
 
 import { useTheme } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 export default function DrawerNavBar() {
   const [state, setState] = React.useState({
@@ -30,7 +31,7 @@ export default function DrawerNavBar() {
   });
 
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const menuItems = [
     { text: 'Settings', path: '../settings', icon: <SettingsIcon /> },
     { text: 'Dashboard', path: '../dashboard', icon: <DashboardIcon /> },
@@ -41,9 +42,13 @@ export default function DrawerNavBar() {
     { text: 'Goals', path: '../goals', icon: <FlagIcon /> },
     { text: 'Workouts', path: '../workouts', icon: <FitnessCenterIcon /> },
     { text: 'Nutrition', path: '../nutrition', icon: <RestaurantIcon /> },
-    { text: 'Measurements', path: '../measurements', icon: <SquareFootIcon /> }
+    { text: 'Measurements', path: '../measurements', icon: <SquareFootIcon /> },
   ];
-
+  const handleLogout = () => {
+    // Clear the token from local storage
+    localStorage.removeItem('authToken');
+    navigate('/login');
+  };
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -66,14 +71,21 @@ export default function DrawerNavBar() {
               <AtheniumLogo width='200px'/>
             </Box>
             <Box
-              sx={{ width: '250px' }}
+              sx={{ 
+                width: '250px', 
+                display: 'flex', 
+                flexDirection:'column',
+                justifyContent:'space-between',
+                flex: 1, 
+              }}
               role="presentation"
               onClick={toggleDrawer(anchor, false)}
               onKeyDown={toggleDrawer(anchor, false)}
             >
               <List>
                 {menuItems.map((menuItem, index) => (
-                  <ListItem key={menuItem.text} disablePadding>
+                  <ListItem key={menuItem.text} disablePadding
+                  >
                     <ListItemButton
                       component={Link}
                       to={menuItem.path}
@@ -102,6 +114,21 @@ export default function DrawerNavBar() {
                   </ListItem>
                 ))}
               </List>
+              <Box sx={{ padding: '1rem' }}>
+                <Button
+                  onClick={handleLogout}
+                  sx={{
+                    width: '100%',
+                    backgroundColor: theme.palette.error.main,
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: theme.palette.error.dark,
+                    },
+                  }}
+                >
+                  Logout
+                </Button>
+              </Box>
             </Box>
           </Drawer>
         </React.Fragment>
