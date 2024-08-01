@@ -4,7 +4,7 @@ import DateRangePickerModal from "../components/Modals/DateRangePickerModal";
 import TrendsGroup from "../components/TrendsGroup";
 import { useTheme } from "@emotion/react";
 import { startOfWeek, endOfWeek, startOfMonth,endOfMonth, startOfYear, endOfYear, format } from 'date-fns';
-import axios from 'axios'
+import axiosInstance from "../utils/axiosConfig";
 import { UserDataContext } from '../UserDataContext';
 
 const getWeekRange = (date) => {
@@ -27,7 +27,6 @@ const getYearRange = (date) => {
 
 function TrendsPage() {
   const {userData, setUserData }= useContext(UserDataContext);
-  const base_api_url = process.env.REACT_APP_API_BASE_URL
   const theme = useTheme()
   const [selectDateRange, setSelectDateRange] = useState({});
   const [originalData,setOriginalData] = useState({});
@@ -40,7 +39,7 @@ function TrendsPage() {
 
   useEffect(()=>{
     // get year data initially
-    axios.get(`${base_api_url}/trends/${userData.user_id}/`)
+    axiosInstance.get(`/trends`)
     .then(response =>{
       console.log('api data: ',response.data)
       setData(response.data)
