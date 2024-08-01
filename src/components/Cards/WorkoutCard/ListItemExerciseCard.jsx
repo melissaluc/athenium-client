@@ -2,10 +2,10 @@ import { Box, Typography, Grid, Button, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from "axios";
+import axiosInstance from '../../../utils/axiosConfig'
 import ResultsModal from "../../Modals/ResultsModal";
 
-function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
+function ListItemExerciseCard({ userData, data, editMode, handleClickAddExercise, handleClickDeleteExercise, handleExerciseChanges, setUpdatedExercises }) {
     const [formData, setFormData] = useState({...data, age: userData.age, body_weight: userData.weight, body_mass_uom: userData.uom.body_mass.uom , lift_uom:userData.uom.lift_weight.uom});
     const [open, setOpen] = useState(false)
     const [results, setResults] = useState(null)
@@ -79,7 +79,7 @@ function ListItemExerciseCard({ userData, base_api_url, data, editMode, handleCl
     const handleCalcStengthLevel = (data)=>{
         setOpen(true)
         setError(null);
-        axios.post(`${base_api_url}/strength/${userData.user_id}/`, data)
+        axiosInstance.post(`/strength`, data)
         .then(response => {
                 console.log('results: ',response.data[0])
                 setResults(response.data[0])

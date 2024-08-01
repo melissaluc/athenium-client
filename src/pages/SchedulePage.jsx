@@ -4,15 +4,15 @@ import {useState, useEffect, useContext} from "react"
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { UserDataContext } from '../UserDataContext';
 import ScheduleCard from "../components/Cards/ScheduleCard/ScheduleCard";
-import axios from "axios";
+import axiosInstance from "../utils/axiosConfig";
 
 function SchedulePage({}){
     const {userData, setUserData }= useContext(UserDataContext);
     const [selectDate, setSelectDate] = useState(new Date())
     const [scheduleData,setScheduleData] = useState([])
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
+
     useEffect(()=>{
-        axios.get(`${base_api_url}/schedule/${userData.user_id}/`)
+        axiosInstance.get(`/schedule`)
             .then(response=>{
                 setScheduleData(response.data)
             })

@@ -2,14 +2,13 @@ import { Button, Typography, Container, Box } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import MeasurementModal from '../components/MeasurementModal';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
 import { UserDataContext } from '../UserDataContext';
 
 function MeasurementPage() {
     const {userData, setUserData }= useContext(UserDataContext);
     const [waistHipRatio, setWaistHipRatio] = useState(null);
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
     const [data, setData] = useState([]);
     const [inputValues, setInputValues] = useState({
         dateSelected: new Date().setHours(0, 0, 0, 0) / 1000,
@@ -34,7 +33,7 @@ function MeasurementPage() {
     });
 
     useEffect(() => {
-        axios.get(`${base_api_url}/measurements/${userData.user_id}`)
+        axiosInstance.get(`/measurements`)
             .then(response => {
                 setData(response.data);  // Make sure response.data is correctly set
                 const currentTime = new Date().getTime();
@@ -130,7 +129,7 @@ function MeasurementPage() {
         // Determine if the data for dateSelected already exists
         if (selectedData.created_on === convertDateSelected ) {
             // PATCH request to update existing data
-            axios.patch(`${base_api_url}/measurements/${userData.user_id}`, newData)
+            axiosInstance.patch(`/measurements`, newData)
                 .then(res => {
                     console.log(`Data updated: \n ${JSON.stringify(inputValues)} \n ${res}`);
                     // fetchData(); // Fetch updated data after successful update
@@ -140,7 +139,7 @@ function MeasurementPage() {
                 });
         } else {
             //POST request to create new data
-            axios.post(`${base_api_url}/measurements/${userData.user_id}`, newData)
+            axiosInstance.post(`/measurements`, newData)
                 .then(res => {
                     console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
                     // fetchData(); // Fetch updated data after successful creation
