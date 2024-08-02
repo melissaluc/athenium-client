@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Button, TextField } from "@mui/material";
+import { Box, Typography, Grid, IconButton, Button ,TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -134,7 +134,7 @@ function ListItemExerciseCard({ userData, data, editMode, handleClickAddExercise
                 <Typography>{formData.sets}</Typography>
             </Grid>
             <Grid item xs={1}>
-                <Button onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon></CalculateIcon></Button>
+                <IconButton color="primary" onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon/></IconButton>
             </Grid>
         </>
     );
@@ -154,7 +154,7 @@ function ListItemExerciseCard({ userData, data, editMode, handleClickAddExercise
                 <Typography>{formData.sets || "-"}</Typography>
             </Grid>
             <Grid item xs={1}>
-                <Button onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon></CalculateIcon></Button>
+                <IconButton onClick={() => handleCalcStengthLevel(formData)}><CalculateIcon/></IconButton>
             </Grid>
         </>
     );
