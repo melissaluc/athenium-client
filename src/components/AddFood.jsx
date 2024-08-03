@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Button, TextField, IconButton, InputBase, FormControl, FormGroup } from "@mui/material"; 
 import SearchIcon from '@mui/icons-material/Search';
-import axios from 'axios';
+import axios from 'axios'
+import axiosInstance from "../utils/axiosConfig";
 import { useState, useEffect } from 'react';
 
 
@@ -12,6 +13,7 @@ function convertGramsToOtherUnits(grams) {
     const gramsToFluidOuncesWater = 0.03527396;
     const gramsToTeaspoonsSugar = 0.24;
     const gramsToTablespoonsFlour = 0.067628;
+    const gramsToCup = 0.004;
 
     return {
         mg: grams * gramsToMilligrams,
@@ -20,6 +22,7 @@ function convertGramsToOtherUnits(grams) {
         oz: grams * gramsToFluidOuncesWater,
         tsp: grams * gramsToTeaspoonsSugar,
         tbsp: grams * gramsToTablespoonsFlour,
+        cup: grams * gramsToCup,
     };
 }
 
@@ -32,7 +35,6 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
     const apiKey = process.env.REACT_APP_API_KEY;
     const apiID = process.env.REACT_APP_API_ID;
     const base_nutrition_api_url = process.env.REACT_APP_NUTRITION_API_BASE_URL;
-    const base_api_url = process.env.REACT_APP_API_BASE_URL;
     const [quantityInput, setQuantityInput] = useState('');
     const [assignFood, setAssignFood] = useState({
         meal: "breakfast",
@@ -166,7 +168,7 @@ function AddFood({selectedDate, setSelectedData, handleClose}) {
             uom: assignFood.serving.uom,
         };
 
-        axios.post(`${base_api_url}/nutrition/39b17fed-61d6-492a-b528-4507290d5423/`, 
+        axiosInstance.post(`/nutrition`, 
         {
             datetimestamp:selectedDate ? selectedDate : new Date().toISOString().split('T')[0],
             meal_name:assignFood.meal,

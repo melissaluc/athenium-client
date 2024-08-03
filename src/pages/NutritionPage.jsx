@@ -7,9 +7,14 @@ import { startOfWeek, endOfWeek, format, eachDayOfInterval, isWithinInterval} fr
 import WeeklyNutritionSummary from "../components/WeeklyNutritionSummary";
 import { useTheme } from "@emotion/react";
 import AddFoodModal from "../components/Modals/AddFoodModal";
-import axios from "axios";
-import { UserDataContext } from '../UserDataContext';
+import axiosInstance from "../utils/axiosConfig";
 
+function getLocalDate() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000; 
+    const localDate = new Date(now.getTime() - offset).toISOString().split('T')[0];
+    return localDate;
+}
 
 const getOrdinalSuffix = (day) => {
     if (day > 3 && day < 21) return 'th'; // special case for 11th-13th
@@ -64,38 +69,107 @@ function NutritionPage() {
     const theme = useTheme();
     const caloriesBarChartRef = useRef(null);
     const caloriesDoughnutChartRef = useRef(null);
-
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
-    const {userData, setUserData }= useContext(UserDataContext);
     const [fullData, setFullData] = useState([]);
     const [historicalData, setHistoricalData] = useState([]);
+    // data to be rendered by charts
     const [selectedData, setSelectedData] = useState({});
+    const [todayMacros, setTodayMacros] = useState({
+        totalProtein: 0,
+        totalCarbs: 0,
+        totalFat: 0,
+        totalCalories: 0
+    })
+    const [barChartDataSeries, setBarChartDataSeries] = useState([])
+    // data below the charts
     const [groupedData, setGroupedData] = useState({});
+
+
+    const { start, end } = getWeekRange(selectedData.datetimestamp ? new Date(selectedData.datetimestamp * 1000) : new Date());
+    const weekDates = eachDayOfInterval({ start, end });
+    let chartDays = weekDates.map(date => {
+        const dayName = format(date, 'EEEE')
+        return dayName
+            });
+
+
+    useEffect(() => {
+        
+        if (selectedData && selectedData.meals) {
+            const newMacros = {
+                totalProtein: 0,
+                totalCarbs: 0,
+                totalFat: 0,
+                totalCalories: 0
+            };
+
+            Object.values(selectedData.meals).forEach(meal => {
+                meal.forEach(foodItem => {
+                    newMacros.totalProtein += foodItem.protein || 0;
+                    newMacros.totalCarbs += foodItem.carbs || 0;
+                    newMacros.totalFat += foodItem.fat || 0;
+                    newMacros.totalCalories += foodItem.calories || (foodItem.protein * 4 + foodItem.carbs * 4 + foodItem.fat * 9) || 0;
+                });
+            });
+
+            setTodayMacros(newMacros)
+        }
+
+    
+        if (fullData && fullData.length > 0) {
+            let newBarChartDataSeries = [];
+            const filteredData = fullData.filter(entry => {
+                const entryDate = new Date(entry.datetimestamp * 1000);
+                return isWithinInterval(entryDate, { start, end });
+            });
+    
+            newBarChartDataSeries = weekDates.map(date => {
+                const entry = filteredData.find(data => format(new Date(parseInt(data.datetimestamp)* 1000), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
+                return {
+                    value: [
+                        entry?.totals?.macros_cal?.protein || 0,
+                        entry?.totals?.macros_cal?.carbs || 0,
+                        entry?.totals?.macros_cal?.fat || 0,
+                    ]
+                };
+            })
+            setBarChartDataSeries(newBarChartDataSeries)
+            
+            
+        }
+    },[])
+    
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${base_api_url}/nutrition/${userData.user_id}/`);
+                const response = await axiosInstance.get(`/nutrition`);
                 const data = response.data;
 
                 setFullData(data);
 
-                const today = new Date().toISOString().split('T')[0];
-                const todayData = data.find(entry => {
+                const today = getLocalDate()
+                console.log('today: ', today)
+
+                const todayData = data.filter(entry => {
                     const entryDate = new Date(parseInt(entry.datetimestamp) * 1000).toISOString().split('T')[0];
+                    console.log('entryDate: ', entryDate)
                     return entryDate === today;
                 });
-
+                console.log('todayData', todayData)
                 const historicalDataWithoutToday = data.filter(entry => {
                     const entryDate = new Date(parseInt(entry.datetimestamp) * 1000).toISOString().split('T')[0];
+                    console.log('entryDate: ', entryDate)
                     return entryDate !== today;
                 });
                 
-                console.log(historicalDataWithoutToday)
+                console.log('historical', historicalDataWithoutToday)
+                console.log('today', todayData)
                 setHistoricalData(historicalDataWithoutToday);
 
                 if (todayData) {
                     setSelectedData(todayData);
+                    console.log('selectedData set ', selectedData)
                 } else {
                     setSelectedData({
                         datetimestamp: Math.floor(new Date().setHours(0, 0, 0, 0) / 1000),
@@ -125,7 +199,7 @@ function NutritionPage() {
         };
 
         fetchData();
-    }, [userData]);
+    }, []);
 
     useEffect(() => {
         if (caloriesBarChartRef.current && caloriesDoughnutChartRef.current) {
@@ -237,55 +311,8 @@ function NutritionPage() {
                 caloriesDoughnutChart.dispose();
             };
         }
-    }, [fullData, historicalData, selectedData, theme.palette.macros]);
+    }, [fullData, historicalData, selectedData, todayMacros, barChartDataSeries, chartDays, theme.palette.macros]);
 
-    const todayMacros = {
-        totalProtein: 0,
-        totalCarbs: 0,
-        totalFat: 0,
-        totalCalories: 0
-    };
-
-
-    const { start, end } = getWeekRange(selectedData.datetimestamp ? new Date(selectedData.datetimestamp * 1000) : new Date());
-    const weekDates = eachDayOfInterval({ start, end });
-    let chartDays = weekDates.map(date => {
-        const dayName = format(date, 'EEEE')
-        return dayName
-            });
-
-    let barChartDataSeries = [];
-
-    if (selectedData && selectedData.meals) {
-        Object.values(selectedData.meals).forEach(meal => {
-            meal.forEach(foodItem => {
-                todayMacros.totalProtein += foodItem.protein || 0;
-                todayMacros.totalCarbs += foodItem.carbs || 0;
-                todayMacros.totalFat += foodItem.fat || 0;
-                todayMacros.totalCalories += foodItem.calories || (foodItem.protein * 4 + foodItem.carbs * 4 + foodItem.fat * 9) || 0;
-            });
-        });
-    }
-
-    if (fullData && fullData.length > 0) {
-
-        const filteredData = fullData.filter(entry => {
-            const entryDate = new Date(entry.datetimestamp * 1000);
-            return isWithinInterval(entryDate, { start, end });
-        });
-        barChartDataSeries = weekDates.map(date => {
-            const entry = filteredData.find(data => format(new Date(parseInt(data.datetimestamp)* 1000), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
-            return {
-                value: [
-                    entry?.totals?.macros_cal?.protein || 0,
-                    entry?.totals?.macros_cal?.carbs || 0,
-                    entry?.totals?.macros_cal?.fat || 0,
-                ]
-            };
-        })
-        
-        
-    }
 
     return (
         <Container>

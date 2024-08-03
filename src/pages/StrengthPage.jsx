@@ -1,89 +1,106 @@
-import { Box, Container, Card,CardContent, Button} from "@mui/material"; 
+import { Box, Container, Card,CardContent, Button, Typography} from "@mui/material"; 
 import { useState, useEffect, useContext } from 'react';
 import MuscleGroupStrengthCard from "../components/MuscleGroupStrengthCard";
 import ExerciseStrengthLevel from "../components/ExerciseStrengthLevel"
-import axios from 'axios'
-import { UserDataContext } from '../UserDataContext';
+import axiosInstance from "../utils/axiosConfig";
 
 function StrengthPage() {
-    const {userData, setUserData }= useContext(UserDataContext);
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
     const [toggleView,setToggleView] = useState(false)
     const [strengthData, setStrengthData] = useState([])
-    const [groupScores, setGroupScores] = useState({})
+    const [sortedExercises, setSortedExercises] = useState([]);
 
-    // const calculateTotalScoreByGroup = (data) => {
-    //     const totalScores = {};
-    
-    //     // Iterate over each muscle group
-    //     Object.keys(data).forEach((group) => {
-    //         let groupTotal = 0;
-    
- 
-    //         data[group].forEach((exercise) => {
-    //             groupTotal += exercise.score || 0; 
-    //         });
-    //         totalScores[group] = groupTotal;
-    //     });
-    
-    //     return totalScores;
-    // };
 
-    const calcTotalWorkVolumeByGroup = (data) => {
-        const totalWorkVolume = {};
-    
-        // Iterate over each muscle group
+    const calcNormalizedScore = (data) => {
+
+        const groupScore = {};
+
+        let maxCountGroupExercises = 0;
+
         Object.keys(data).forEach((group) => {
-            let groupTotal = 0;
+            const exercises = data[group];
+            const numGroupExercises = exercises.length;
     
- 
-            data[group].forEach((exercise) => {
-                groupTotal += exercise.work_volume || 0; 
+            if (numGroupExercises > maxCountGroupExercises) {
+                maxCountGroupExercises = numGroupExercises;
+            }
+
+            let groupTotal = 0;
+            exercises.forEach((exercise) => {
+                groupTotal += exercise.score || 0;
             });
-            totalWorkVolume[group] = groupTotal;
+    
+            groupScore[group] = groupTotal / numGroupExercises;
+        });
+    
+        // Normalize the scores based on the number of exercises
+        const normalizedScores = {};
+        Object.keys(groupScore).forEach((group) => {
+            const normalizationFactor = data[group].length/maxCountGroupExercises;
+            normalizedScores[group] = (groupScore[group] * normalizationFactor).toFixed(2);
         });
 
-        const sortedEntries = Object.entries(totalWorkVolume).sort((a, b) => b[1] - a[1]);
 
-        // Convert the sorted entries back to an object
-        const sortedTotalWorkVolume = Object.fromEntries(sortedEntries);
-    
-        return sortedTotalWorkVolume;
-    
+        return normalizedScores 
     };
+
+    const sortExercisesByStrengthLevel = (data) => {
+        // Flatten the exercises and sort them by strength_level
+        const exercisesArray = Object.values(data).flat();
+        return exercisesArray.sort((a, b) => b.score - a.score);
+    };
+
+    const handleClickMuscleGroupRanked = () => {
+        // Normalize the scores actual/maxscore 
+        setToggleView(false)
+        
+    }
+    
+    const handleClickExercisesRanked = () => {
+        // Sort exercises by strengthLevel
+        setToggleView(true)
+    }
 
 
     useEffect(()=>{
-        axios.get(`${base_api_url}/strength/${userData.user_id}/`)
+        axiosInstance.get(`/strength`)
         .then(response => {
-            setStrengthData(response.data)
-             const groupScores = calcTotalWorkVolumeByGroup(response.data)
-             setGroupScores(groupScores)
+            const data = response.data
+            const groupScores = calcNormalizedScore(data)
+            const sortExercises = sortExercisesByStrengthLevel(data)
+
+            const sortedGroups = Object.entries(groupScores)
+                .sort((a, b) => b[1] - a[1])
+                .map(([group, score]) => ({
+                    group,
+                    score,
+                    exercises: data[group],
+                }));
+
+            setStrengthData(sortedGroups);
+            setSortedExercises(sortExercises)
+
         })
         .catch(error=>console.error(error))
-    },[userData])
+    },[])
     
 
     return (
         <Container>
 
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
-                <Button onClick={()=>{setToggleView(false)}}>Muscle Group Ranking</Button>
-                <Button onClick={()=>{setToggleView(true)}}>Exercises Ranked</Button>
+                <Button onClick={handleClickMuscleGroupRanked}>Muscle Group Ranking</Button>
+                <Button onClick={handleClickExercisesRanked}>Exercises Ranked</Button>
             </Box>
          
             {!toggleView ? (
                 <Box sx={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-                    {Object.entries(strengthData).map(([key, value])=>{
-                    
-                    return <MuscleGroupStrengthCard key={key} muscleGroup={key} exercises={value} groupScore={groupScores[key]}/>
-                
+                    {strengthData.map((group)=>{
+                        return <MuscleGroupStrengthCard key={group.group} muscleGroup={group.group} exercises={group.exercises} groupScore={group.score}/>
                     })}
                 </Box>
                 ) : (
                 <Box sx={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-                    {Object.values(strengthData)
-                    .flat()
+                    {sortedExercises
                     .map((exercise) => {
                         const {
                             date_calculated,

@@ -8,7 +8,7 @@ import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { useNavigate } from 'react-router-dom';
 import MiniScheduleCard from '../components/Cards/ScheduleCard/ScheduleCard';
-import axios from 'axios'
+import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
 import { UserDataContext } from '../UserDataContext';
 
@@ -16,7 +16,6 @@ import { UserDataContext } from '../UserDataContext';
 function DashboardPage({}){
     const navigate = useNavigate()
     const {userData, setUserData }= useContext(UserDataContext);
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
     const [selectDate, setSelectDate] = useState(new Date())
     const [measurementData, setMeasurementData] = useState([]);
     const [selectMeasurementData, setSelectMeasurementData] = useState({});
@@ -66,7 +65,7 @@ function DashboardPage({}){
 
     // Measurements
     useEffect(() => {
-        axios.get(`${base_api_url}/measurements/${userData.user_id}`)
+        axiosInstance.get(`/measurements`)
             .then(response => {
                 setMeasurementData(response.data); 
             })
@@ -77,7 +76,7 @@ function DashboardPage({}){
 
     // Other dashboard data
     useEffect(() => {
-        axios.get(`${base_api_url}/dashboard/${userData.user_id}`)
+        axiosInstance.get(`/dashboard`)
             .then(response => {
                 setOtherData(response.data); 
             })
@@ -89,7 +88,7 @@ function DashboardPage({}){
 
     // Current Schedule
     useEffect(() => {
-        axios.get(`${base_api_url}/schedule/${userData.user_id}?planned_on=${formattedDate}`)
+        axiosInstance.get(`/schedule?planned_on=${formattedDate}`)
             .then(response => {
                 setScheduleData(response.data)
             })

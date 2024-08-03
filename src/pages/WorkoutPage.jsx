@@ -5,7 +5,7 @@ import SortPopover from "../components/Popovers/SortPopover";
 import FilterPopover from "../components/Popovers/FilterPopover"
 import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 import WorkoutModal from "../components/Modals/WorkoutModal"
-import axios from 'axios'
+import axiosInstance from "../utils/axiosConfig"
 import { v4 as uuidv4 } from 'uuid';
 import { UserDataContext } from '../UserDataContext';
 import {useState, useEffect, useContext} from 'react'
@@ -18,8 +18,8 @@ function WorkoutPage(){
     const [addedExercises, setAddedExercises] = useState([])
     const [deletedExercises, setDeletedExercises] = useState([])
     const [updatedExercises, setUpdatedExercises] = useState([])
-    const base_api_url = process.env.REACT_APP_API_BASE_URL
 
+    
     const onSort = (order, category) => {
         handleSort(order, category)
     }
@@ -76,7 +76,7 @@ function WorkoutPage(){
             // frequency:workout.frequency,
             tags: tags ? tags : null 
         }
-        axios.post(`${base_api_url}/workouts/${userData.user_id}`,postData)
+        axiosInstance.post(`/workouts`,postData)
             .then(response=>{
                 console.log(response)
             })
@@ -92,7 +92,7 @@ function WorkoutPage(){
         setWorkoutData(updatedData);
     
         // DELETE request to backend
-        axios.delete(`${base_api_url}/workouts/${userData.user_id}/${workout_id}`)
+        axiosInstance.delete(`/workouts/${workout_id}`)
             .then(response => {
                 console.log(response);
                 // Handle success or further updates if needed
@@ -180,7 +180,7 @@ function WorkoutPage(){
     };
 
     useEffect(()=>{
-        axios.get(`${base_api_url}/workouts/${userData.user_id}`)
+        axiosInstance.get(`/workouts`)
         .then(response =>{
             setOriginalWorkoutData(response.data)
             setWorkoutData(response.data)
@@ -207,7 +207,6 @@ function WorkoutPage(){
                 {workoutData.map((data)=>{
                     return <WorkoutCard 
                             userData={userData}
-                            base_api_url={base_api_url}
                             key={data.workout_id} 
                             data={data} 
                             handleAddTag ={handleAddTag} 

@@ -4,12 +4,11 @@ import ExerciseModal from "../../Modals/ExerciseModal";
 import ListItemExerciseCard from "./ListItemExerciseCard";
 import { useEffect, useState} from "react";
 import { useTheme } from "@emotion/react";
-import axios from 'axios'
+import axiosInstance from "../../../utils/axiosConfig"
 
 
 function WorkoutCard({ 
                         userData,
-                        base_api_url,
                         data, 
                         handleAddTag, 
                         handleAddExercise, 
@@ -92,7 +91,7 @@ function WorkoutCard({
             }
             console.log(patchData)
             
-            axios.patch(`${base_api_url}/workouts/${userData.user_id}/${data.workout_id}`,patchData)
+            axiosInstance.patch(`/workouts/${data.workout_id}`,patchData)
             .then(response =>{
                 handleUpdateData(formData);
                 setOriginalData(formData);
@@ -159,7 +158,6 @@ function WorkoutCard({
                             {formData.exercises.length ? formData.exercises.map((exercise) => (
                                 <ListItemExerciseCard
                                     userData={userData}
-                                    base_api_url={base_api_url}
                                     key={exercise.id}
                                     data={exercise}
                                     editMode={editMode}
