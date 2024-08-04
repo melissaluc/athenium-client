@@ -29,9 +29,8 @@ function LoginForm({errorMessage, handleLoginSuccess }){
     };
 
     return(
-        <Box>
+        <form onSubmit={handleSubmit}>
             <FormControl 
-                onSubmit={handleSubmit} 
                 fullWidth 
                 sx={{display:'flex', flexDirection:'column', gap:'0.8rem', alignItems:'center'}}>
                 <TextField
@@ -115,7 +114,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                     marginTop:'1rem', 
                     width:"100%"}}
                 >Login</Button>
-        </Box>
+        </form>
 
     )
 }
