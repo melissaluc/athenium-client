@@ -34,6 +34,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                 fullWidth 
                 sx={{display:'flex', flexDirection:'column', gap:'0.8rem', alignItems:'center'}}>
                 <TextField
+                    autoComplete="username"
                     id="username"
                     name="username"
                     placeholder='Username'
@@ -63,6 +64,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                     }}
                     />
                 <TextField
+                    autoComplete="current-password"
                     id="password"
                     name="password"
                     placeholder='Password'
