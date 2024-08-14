@@ -2,9 +2,9 @@
 import { Box, TextField,FormControl, InputAdornment, Link, Button } from "@mui/material"
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LockIcon from '@mui/icons-material/Lock';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import {useTheme} from "@mui/material";
 import {useState} from 'react'
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
@@ -29,12 +29,12 @@ function LoginForm({errorMessage, handleLoginSuccess }){
     };
 
     return(
-        <Box>
+        <form onSubmit={handleSubmit}>
             <FormControl 
-                onSubmit={handleSubmit} 
                 fullWidth 
                 sx={{display:'flex', flexDirection:'column', gap:'0.8rem', alignItems:'center'}}>
                 <TextField
+                    autoComplete="username"
                     id="username"
                     name="username"
                     placeholder='Username'
@@ -64,6 +64,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                     }}
                     />
                 <TextField
+                    autoComplete="current-password"
                     id="password"
                     name="password"
                     placeholder='Password'
@@ -115,7 +116,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                     marginTop:'1rem', 
                     width:"100%"}}
                 >Login</Button>
-        </Box>
+        </form>
 
     )
 }

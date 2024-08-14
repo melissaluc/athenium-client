@@ -76,4 +76,31 @@ function getStrengthRating (strengthLevel) {
 
 }
 
-export { findClosestData, getProgressColour, getStrengthRating };
+function calculateAge(birthDate) {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDifference = today.getMonth() - birthDateObj.getMonth();
+    
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+
+
+const convertCmToFtIn = (cm) => {
+    const totalInches = cm / 2.54;
+    const feet = Math.floor(totalInches / 12);
+    const inches = Math.round(totalInches % 12);
+    return { feet, inches };
+};
+
+
+const convertFtInToCm = (feet, inches) => {
+    return (feet * 30.48) + (inches * 2.54);
+};
+
+
+export { findClosestData, getProgressColour, getStrengthRating, calculateAge, convertCmToFtIn, convertFtInToCm };

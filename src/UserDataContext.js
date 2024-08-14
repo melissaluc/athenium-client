@@ -9,17 +9,16 @@ export const UserDataContext = createContext();
 export const UserDataProvider = ({ children }) => {
 
     const [isDataFetched, setIsDataFetched] = useState(false);
-    const [userData, setUserData] = useState({
-        first_name:null,
-        last_name:null,
-        age: null,
-        weight:null,
-        height_cm:null,
-    });
+    const [userData, setUserData] = useState({});
+    const [hasToken, setHasToken] = useState(false);
 
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        setHasToken(!!token);
+    }, []);
 
     useEffect(()=>{
-        if (!isDataFetched){
+        if (hasToken && !isDataFetched){
 
             axiosInstance.get(`/user`)
             .then((response)=>{
@@ -33,10 +32,22 @@ export const UserDataProvider = ({ children }) => {
             .catch(error => console.error(error))
 
         }
-    },[isDataFetched])
+    },[isDataFetched, hasToken])
+
+    const updateUserData = async (callback) => {
+        if (hasToken) {
+            try {
+                const response = await axiosInstance.get('/user');
+                setUserData(response.data);
+                callback && callback();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    };
 
     return (
-        <UserDataContext.Provider value={{ userData, setUserData }}>
+        <UserDataContext.Provider value={{ userData, setUserData, setIsDataFetched, updateUserData }}>
             {children}
         </UserDataContext.Provider>
     );
