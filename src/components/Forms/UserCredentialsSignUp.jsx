@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 function UserCredentialsSignUp({ 
     theme, 
@@ -22,6 +23,7 @@ function UserCredentialsSignUp({
         confirm_password: ''
     });
 
+    const navigate = useNavigate()
        const validatePasswords = () => {
         const errors = {};
         if (userCredentials.password !== userCredentials.confirm_password) {
@@ -250,6 +252,7 @@ function UserCredentialsSignUp({
                     scope="profile email"
                 />
             </Box>
+            <Button onClick={()=>navigate('/login')}>Return to Login</Button>
         </Box>
     );
 }
