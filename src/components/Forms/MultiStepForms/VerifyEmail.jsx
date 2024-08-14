@@ -10,18 +10,33 @@ function VerifyEmail ({googleOauth, email_address}) {
     const handleChange = (e) => {
         setVerificationCode(e.target.value)
     }
-    const handleSubmit = (e) => {
-        setShowSuccess(true)
-        e.preventDefault()
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/verify-email`,{verification_code:verificationCode, email_address})
-        .then(response=>{
-            if(response.data.success){
-                // Render success page
-                setShowSuccess(true)
+
+    const handleVerificationRequest = async (verificationCode, emailAddress, setSuccess = false) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/verify-email`, {
+                verification_code: verificationCode,
+                email_address: emailAddress
+            });
+
+            if (response.data.success) {
+                if (setSuccess) {
+                    setShowSuccess(true);
+                }
             }
-        })
-        .catch(error=>console.log(error))
-    }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+    // Handle submit and resend code
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleVerificationRequest(verificationCode, email_address, true);
+    };
+
+    const handleResendCode = () => {
+        handleVerificationRequest(verificationCode, email_address);
+    };
 
     useEffect(()=>{
         if(googleOauth){
@@ -36,7 +51,7 @@ function VerifyEmail ({googleOauth, email_address}) {
                     Verify Email
                     Check your email for verification code
                     <TextField onChange={handleChange} value={verificationCode} name='verification_code' id='verification_code'/>
-                    <Button onClick={handleSubmit}>Resend</Button>
+                    <Button onClick={handleResendCode}>Resend</Button>
                     <Button disabled={false} onClick={handleSubmit}>Submit</Button>
                 </> :
                 <>

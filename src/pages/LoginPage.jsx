@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { Box, Container, Typography, Divider } from '@mui/material';
+import { Box, Container, Typography, Divider, Button } from '@mui/material';
 import AtheniumLogo from '../assets/AtheniumLogo';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -81,13 +81,12 @@ function LoginPage() {
                 </Box>
             </Root>
             <Box>
-                <Typography
+                <Button
                     onClick={() => navigate('/signup')}
-                    variant="body2"
                     sx={{ cursor: 'pointer', textDecoration: 'none' }}
                 >
                     Sign Up
-                </Typography>
+                </Button>
             </Box>
         </Container>
     );

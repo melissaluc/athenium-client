@@ -86,16 +86,16 @@ function DashboardPage({}){
     }, [userData]);
 
 
-    // Current Schedule
-    useEffect(() => {
-        axiosInstance.get(`/schedule?planned_on=${formattedDate}`)
-            .then(response => {
-                setScheduleData(response.data)
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, [userData]);
+    // // Current Schedule
+    // useEffect(() => {
+    //     axiosInstance.get(`/schedule?planned_on=${formattedDate}`)
+    //         .then(response => {
+    //             setScheduleData(response.data)
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //         });
+    // }, [userData]);
 
     return (
         <Container sx={{}}>
