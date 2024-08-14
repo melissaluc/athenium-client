@@ -1,12 +1,13 @@
 import Calendar from './Calendar/Calendar';
 import MeasurementInput from './MeasurementInput';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button, Typography, Container, Box, TextField } from '@mui/material';
 import BodyAvatar from '../../assets/Body';
+import { UserDataContext } from '../../UserDataContext';
 
 function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handleSelectDate }) {
     const [selectLabel, setSelectLabel] = useState(false);
-
+    const {userData} = useContext(UserDataContext)
 
     const handleInputClick = (label) => {
         console.log(label);
@@ -15,7 +16,8 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handle
 
     return (
         <Container>
-            <Calendar handleSelectDate={handleSelectDate} />
+            {userData.weight &&
+            <Calendar handleSelectDate={handleSelectDate} />}
             <Box
                 sx={{
                     display: 'flex',

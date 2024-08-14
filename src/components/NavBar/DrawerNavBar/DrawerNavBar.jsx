@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
+import { googleLogout } from '@react-oauth/google';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -20,12 +20,13 @@ import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AtheniumLogo from "../../../assets/AtheniumLogo";
-
+import {UserDataContext} from '../../../UserDataContext'
 import { useTheme } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 export default function DrawerNavBar() {
+  const {userData, setUserData, setIsDataFetched} = React.useContext(UserDataContext)
   const [state, setState] = React.useState({
     right: false,
   });
@@ -44,8 +45,20 @@ export default function DrawerNavBar() {
     { text: 'Nutrition', path: '../nutrition', icon: <RestaurantIcon /> },
     { text: 'Measurements', path: '../measurements', icon: <SquareFootIcon /> },
   ];
+
+
+  const googleLogOut = () => {
+    googleLogout();
+    // Clear out UserData
+  };
   const handleLogout = () => {
-    // Clear the token from local storage
+    try{
+      googleLogOut()
+    } catch(error) {
+      console.log(error)
+    }
+    setUserData({})
+    setIsDataFetched(false)
     localStorage.removeItem('authToken');
     navigate('/login');
   };
