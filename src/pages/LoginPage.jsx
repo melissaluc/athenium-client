@@ -27,9 +27,11 @@ function LoginPage() {
                 headers: { 'Content-Type': 'application/json' },
             });
 
+            console.log('login Success: ',res.data.success)
             if (res.data.success) {
                 localStorage.setItem('authToken', res.data.token);
-                updateUserData(() => {
+                console.log('login Success: ',Object.keys(userData))
+                await updateUserData(() => {
                   if (Object.keys(userData).length > 0) {
                       navigate('/dashboard');
                   }
@@ -51,7 +53,7 @@ function LoginPage() {
             if (res.data.success) {
                 console.log(`Login success: ${res.data.success}`)
                 localStorage.setItem('authToken', res.data.token);
-                updateUserData(() => {
+                await updateUserData(() => {
                   if (Object.keys(userData).length > 0) {
                       navigate('/dashboard');
                   }
