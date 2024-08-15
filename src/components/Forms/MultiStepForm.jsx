@@ -36,7 +36,7 @@ function selectView (step, formData, handleParentFormChange) {
 }
 
 
-const MultiStepForm = ({userCredentials, setIsComplete}) => {
+const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
     const theme = useTheme()
 
     const steps = ['personal_Info','current_stats', 'bmr_bmi', 'body_fat','lean_muscle_mass'];
@@ -110,6 +110,7 @@ const MultiStepForm = ({userCredentials, setIsComplete}) => {
         .then((response)=>{
             console.log(response)
             if(response.data.success){
+                setUserData(prev => ({ ...prev, ...formData }))
                 setIsComplete(true)
             }
         })

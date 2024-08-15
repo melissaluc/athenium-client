@@ -11,7 +11,7 @@ const OnboardingPage = () => {
     const theme = useTheme();
     const [userCredentials, setUserCredentials] = useState(null);
     const [isComplete, setIsComplete] = useState(false)
-
+    const [userData, setUserData] = useState({})
 
     const Root = styled('div')(({ theme }) => ({
         width: '100%',
@@ -43,8 +43,8 @@ const OnboardingPage = () => {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <AtheniumLogo width={"100%"} />
                     {userCredentials ? ( !isComplete?
-                        <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} />
-                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userCredentials.email_address}/>
+                        <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>
+                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userCredentials.email_address} userData={userData}/>
                     ) : (
                         <UserCredentialsSignUp
                             handleUserCredentials={handleUserCredentials}

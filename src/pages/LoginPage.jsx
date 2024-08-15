@@ -23,7 +23,7 @@ function LoginPage() {
 
     const handleLoginSuccess = async (response) => {
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/login`, response, {
+            const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, response, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
