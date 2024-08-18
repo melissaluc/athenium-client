@@ -6,10 +6,12 @@ import {useTheme} from "@mui/material";
 import {useState} from 'react'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from "react-router-dom";
 
 
-function LoginForm({errorMessage, handleLoginSuccess }){
+function LoginForm({errorMessage, handleLoginSuccess, setForgotPassword}){
     const theme = useTheme()
+    const navigate = useNavigate()
     const [visibility, setVisibility] = useState(false)
     const [formData, setFormData] = useState({
         username:'',
@@ -27,6 +29,11 @@ function LoginForm({errorMessage, handleLoginSuccess }){
         e.preventDefault();
         handleLoginSuccess(formData);
     };
+
+    const handleForgotPassword = () => {
+        navigate('/forgot-password')
+    };
+
 
     return(
         <form onSubmit={handleSubmit}>
@@ -103,6 +110,7 @@ function LoginForm({errorMessage, handleLoginSuccess }){
                         href="#"
                         variant="body2"
                         sx={{ cursor: 'pointer', textDecoration: 'none' }}
+                        onClick={handleForgotPassword}
                         >
                         Forgot Password?
                         </Link>
