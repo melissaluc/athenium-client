@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { Box, Container, Typography, Divider, Button } from '@mui/material';
 import AtheniumLogo from '../assets/AtheniumLogo';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import LoginForm from '../components/Forms/LoginForm';
 import { styled } from '@mui/material/styles';
 import { GoogleLogin } from '@react-oauth/google';
 import { UserDataContext } from '../UserDataContext';
+
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -58,12 +59,19 @@ function LoginPage() {
                       navigate('/dashboard');
                   }
               });
-                console.log(`USerData set? : ${Object.entries(userData).length > 0}`)
+                console.log(`UserData set? : ${Object.entries(userData).length > 0}`)
             }
         } catch (error) {
             console.error('Google login error:', error);
         }
     };
+
+    useEffect(()=>{
+        if (Object.keys(userData).length > 0) {
+            navigate('/dashboard');
+        }
+    },[userData])
+
 
     const errorMessage = (error) => {
         console.log(error);
@@ -71,24 +79,26 @@ function LoginPage() {
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <AtheniumLogo width={"100%"} />
-                    <Typography variant='h4' sx={{ margin: '2rem', cursor: 'default', userSelect: 'none' }}>LOGIN</Typography>
-                    <LoginForm errorMessage={errorMessage} handleLoginSuccess={handleLoginSuccess} />
-                    <Divider sx={{ width: '90%', marginY: 2, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or Login with</Divider>
-                </Box>
-                <Box sx={{ width: "20vw", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={errorMessage} useOneTap />
-                </Box>
-            </Root>
             <Box>
-                <Button
-                    onClick={() => navigate('/signup')}
-                    sx={{ cursor: 'pointer', textDecoration: 'none' }}
-                >
-                    Sign Up
-                </Button>
+                <AtheniumLogo width={"100%"} />
+            </Box>
+                <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Typography variant='h4' sx={{ margin: '2rem', cursor: 'default', userSelect: 'none' }}>Login</Typography>
+                        <LoginForm errorMessage={errorMessage} handleLoginSuccess={handleLoginSuccess}/>
+                    </Box>
+                    <Divider sx={{ width: '90%', marginY: 2, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or Login with</Divider>
+                    <Box sx={{ width: "20vw", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={errorMessage} useOneTap />
+                    </Box>
+                    <Button
+                        onClick={() => navigate('/signup')}
+                        sx={{ cursor: 'pointer', textDecoration: 'none' }}
+                    >
+                        Sign Up
+                    </Button>
+                </Root>
+            <Box>
             </Box>
         </Container>
     );

@@ -10,9 +10,11 @@ import TrendsPage from './pages/TrendsPage';
 import WorkoutPage from './pages/WorkoutPage';
 import StrengthPage from './pages/StrengthPage';
 import LoginPage from './pages/LoginPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import { UserDataContext } from './UserDataContext';
 import DrawerNavBar from './components/NavBar/DrawerNavBar/DrawerNavBar';
 import { Box } from '@mui/material';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 function AppRoutes() {
     const { userData } = useContext(UserDataContext);
@@ -53,6 +55,8 @@ function AppRoutes() {
         <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<OnboardingPage />} />
+            <Route path="/reset-password/:token/:email_address" element={<ResetPasswordPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
     );
