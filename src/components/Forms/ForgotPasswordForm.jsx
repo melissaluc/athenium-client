@@ -4,6 +4,8 @@ import { useTheme } from '@mui/material/styles';
 import MailIcon from '@mui/icons-material/Mail';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PasswordIcon from '@mui/icons-material/Password';
+import LinkIcon from '@mui/icons-material/Link';
 
 function ForgotPasswordForm({}) {
     const navigate = useNavigate();
@@ -35,20 +37,28 @@ function ForgotPasswordForm({}) {
 
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'space-between'}}>
             <form onSubmit={handleSubmit}>
                 {
                     success ? (
-                        <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h3">Reset Link Sent to Your Email</Typography>
-                            <Typography>You can close this page and follow the link provided in the email.</Typography>
-                            <Typography>If you haven't received the link, click below to resend.</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin:'5% 0%', paddingTop:'10%'}}>
+                                <LinkIcon sx={{ fontSize: '10vh', color:theme.palette.primary.main}}/>
+                                <Typography variant="h4" textAlign='center'>Reset Link Sent to Your Email</Typography>
+                            </Box>
+                            <Box sx={{padding:'5% 0%', width:'80%'}}>
+                                <Typography paddingBottom='1rem' textAlign='left'>You can close this page and follow the link provided in the email.</Typography>
+                                <Typography textAlign='left'>If you haven't received the link, click below to resend.</Typography>
+                            </Box>
                         </Box>
                     ) : (
                         <FormControl 
                             fullWidth 
                             sx={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', alignItems: 'center' }}>
-                            <Typography variant='h4' sx={{ margin: '2rem', cursor: 'default', userSelect: 'none' }}>Forgot Password?</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin:'5% 0%', paddingTop:'10%'}}>
+                                <Typography variant='h4' sx={{ margin: '0.8rem', cursor: 'default', userSelect: 'none', textAlign:'center' }}>Forgot Password?</Typography>
+                                <PasswordIcon sx={{ fontSize: '10vh' }}/>
+                            </Box>
                             <TextField
                                 autoComplete="email"
                                 id="email_address"
@@ -60,7 +70,6 @@ function ForgotPasswordForm({}) {
                                 onChange={handleChange}
                                 sx={{
                                     width: '100%',
-                                    backgroundColor: 'lightblue',
                                     borderRadius: 2,
                                     '& .MuiInputBase-input': {
                                         borderRadius: 2,
@@ -90,7 +99,11 @@ function ForgotPasswordForm({}) {
                 </Button>
             </form>
             <Button 
-                sx={{ marginTop: '1rem' }}
+                sx={{ 
+                    position: 'fixed', 
+                    bottom: '10vh',
+                    margin: '1rem' 
+                }}
                 onClick={() => navigate('/login')}>
                 Return to Login
             </Button>

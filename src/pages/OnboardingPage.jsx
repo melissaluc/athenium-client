@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import AtheniumLogo from '../assets/AtheniumLogo';
@@ -39,19 +39,21 @@ const OnboardingPage = () => {
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
+            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '5% 0%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <AtheniumLogo width={"100%"} />
                     {userCredentials ? ( !isComplete?
                         <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>
                         : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userCredentials.email_address} userData={userData}/>
                     ) : (
-                        <UserCredentialsSignUp
-                            handleUserCredentials={handleUserCredentials}
-                            theme={theme}
-                            handleSuccess={handleSuccess}
-                            handleError={handleError}
-                        />
+                        <>
+                            <AtheniumLogo width={"100%"} />
+                            <Typography textAlign='center' color={theme.palette.primary.main} variant='h6'>Start Your Journey</Typography>
+                            <UserCredentialsSignUp
+                                handleUserCredentials={handleUserCredentials}
+                                handleSuccess={handleSuccess}
+                                handleError={handleError}
+                            />
+                        </>
                     )}
                 </Box>
             </Root>

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Container, Typography, Button } from '@mui/material';
+import { Box, Container, Typography, Button, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import AtheniumLogo from '../assets/AtheniumLogo';
 import ResetPasswordForm from '../components/Forms/ResetPasswordForm';
+import PasswordIcon from '@mui/icons-material/Password';
+
+
+
 
 const ResetPasswordPage = () => {
     const theme = useTheme();
@@ -48,22 +51,33 @@ const ResetPasswordPage = () => {
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <AtheniumLogo width={"100%"} />
                     {isComplete ? (
                         <>
-                            <Typography variant="h5">Password changed successfully!</Typography>
-                            <Typography variant="body1">Returning to login in {countdown} seconds...</Typography>
-                            <Button variant="contained" sx={{ marginTop: '1rem' }} onClick={() => navigate('/login')}>
-                                Return to Login Now
+                            <Typography variant="h4" color='black' textAlign='center'>Password changed!</Typography>
+                            <PasswordIcon sx={{ fontSize: '10vh', color:theme.palette.primary.main}}/> 
+                            <Typography variant="body1">Redirecting to login in {countdown} seconds...</Typography>
+                            <Divider sx={{ width: '80%', marginY: 1, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or click below to return to login</Divider>
+                            <Button 
+                                sx={{ 
+                                    position: 'fixed', 
+                                    bottom: '10vh',
+                                    margin: '1rem' 
+                                }}
+                                onClick={() => navigate('/login')}>
+                                Return to Login
                             </Button>
                         </>
                     ) : (
-                        <ResetPasswordForm
-                            theme={theme}
-                            handleResetComplete={handleResetComplete}
-                            token={token}
-                            email_address={email_address}
-                        />
+                        <>
+                            <Typography variant='h4' textAlign='center' color='black'>Create a New Password</Typography>
+                            <PasswordIcon sx={{ fontSize: '10vh', color:theme.palette.secondary.light}}/> 
+                            <ResetPasswordForm
+                                theme={theme}
+                                handleResetComplete={handleResetComplete}
+                                token={token}
+                                email_address={email_address}
+                            />
+                        </>
                     )}
                 </Box>
             </Root>

@@ -4,15 +4,35 @@ import { createTheme } from '@mui/material/styles';
 
 
 const theme = createTheme({
-typography: {
-    fontFamily: 'Poppins,  sans-serif',
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif', // Default font for body text
+    h1: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Specific font for headers if needed
     },
+    h2: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Specific font for headers if needed
+    },
+    h3: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Specific font for headers if needed
+    },
+    h4: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Silkscreen font for h4 variant
+    },
+    h5: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Silkscreen font for h4 variant
+    },
+    h6: {
+      fontFamily: 'Silkscreen, Arial, sans-serif', // Silkscreen font for h4 variant
+    },
+    // You can specify more variants as needed
+  },
   palette: {
     primary: {
-      main: '#776dde',
+      main: '#9B6EDE',
     },
     secondary: {
       main: '#F3F0FB',
+      light:'#D8D8D8'
     },
     progress: {
       level1: '#F4D35E', // Yellow
@@ -86,6 +106,13 @@ typography: {
           unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
         }
       `,
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Silkscreen, Arial, sans-serif', // Apply Silkscreen to buttons
+        },
+      },
     },
   },
 });
