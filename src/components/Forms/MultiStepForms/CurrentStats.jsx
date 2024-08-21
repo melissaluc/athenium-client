@@ -1,36 +1,59 @@
 
-import { Box, TextField, Typography,  FormControlLabel, useTheme, Autocomplete, FormGroup } from '@mui/material';
-import { useState, useEffect } from 'react';
-import Switch from '@mui/material/Switch';
-import {convertCmToFtIn, convertFtInToCm} from "../../../utils/utils";
+import { Box,TextField, FormLabel, useTheme, Autocomplete, FormGroup } from '@mui/material';
+import { useState, useEffect} from 'react';
+import CustomInput from '../InputFields/CustomInput'
+import HeightInput from '../InputFields/HeightInput'
 
-function CurrentStats ({data, handleParentFormChange}) {
+
+
+function  CurrentStats ({data, handleParentFormChange}) {
     const theme = useTheme()
-    const [heightFt, setHeightFt] = useState({ft:'', in:''})
-    const [toggleUOM, setToggleUOM] = useState(data.uom.height === 'ft');
-    const {current_body_weight, height_cm, uom} = data
+    const {current_body_weight, gender,height_cm, uom} = data
     const [formData, setFormData] = useState({
         current_body_weight:current_body_weight || '', 
         height_cm: height_cm || '',
+        gender:gender || '',
         uom: uom || {
-            body_mass:'lb',
+            body_mass:'kg',
             height:'cm',
         }
     })
 
-    
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    useEffect(()=>{
+        console.log('currentDStats ',data)
+    },[])
+
+    const handleChange = (e, fieldName, inputValue) => {
+        console.log(fieldName,"|", inputValue)
+        const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
+
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: value
+            [name]: fieldName==='current_body_weight'?  parseFloat(value) : value
         }));
-        handleParentFormChange({ ...formData, [name]: value });
+        handleParentFormChange({ ...formData, [name]: fieldName==='current_body_weight'?  parseFloat(value) : value });
     };
 
+    const handleHeightUOMChange = (newUOM) => {
+        setFormData({
+            ...formData,
+            uom: {
+                ...formData.uom,
+                ...newUOM
+            },
+        });
+        handleParentFormChange({
+            ...formData,
+            uom: {
+                ...formData.uom,
+                ...newUOM
+            },
+        });
+    }
 
 
-    const handleMassUOMChange = (event, value) => {
+
+    const handleMassUOMChange = (e, value) => {
         setFormData({
             ...formData,
             uom: {
@@ -47,140 +70,50 @@ function CurrentStats ({data, handleParentFormChange}) {
         });
     };
 
-    const handleSwitchChange = (event) => {
-        const newUOM = event.target.checked ? {height: 'ft' } : { height: 'cm' };
+ 
+    const handleGenderChange = (e, value) => {
         setFormData({
             ...formData,
-            uom: {
-                ...formData.uom,
-                ...newUOM
-            },
+            gender: value || ''
         });
-        handleParentFormChange({
-            ...formData,
-            uom: {
-                ...formData.uom,
-                ...newUOM
-            },
-        });
-        setToggleUOM(event.target.checked);
+        handleParentFormChange({gender: value || ''})
     };
-    
 
-    useEffect(() => {
-        if (formData.height_cm !== '' & toggleUOM) {
-            try{
-                const { feet, inches } = convertCmToFtIn(formData.height_cm)
-                setHeightFt({
-                 ...heightFt,
-                 ft:feet, 
-                 in:inches
-             })
-
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        if(heightFt.ft!== '' | heightFt.in!== '' & !toggleUOM ){
-            const cm = convertFtInToCm(heightFt.ft,heightFt.in)
-            setFormData({
-                ...formData,
-                height_cm: Math.round(cm)
-            })
-        }   
-    }, [toggleUOM]);
 
 
     return (
-        <form>
-            <Box sx={{display:'flex', flexDirection:'column', gap:'1rem', alignItems:'center', justifyContent:'center'}}>
-                <FormGroup sx={{display:'flex', flexDirection:'row', gap:'1rem'}}>
-                    <TextField
-                                id="current_body_weight"
-                                autoComplete="current_body_weight"
-                                name="current_body_weight"
-                                placeholder='Body Weight'
-                                value={formData.current_body_weight}
-                                variant="outlined"
-                                required
-                                onChange={handleChange}
-                                sx={{
-                                    width: '6rem',
-                                    backgroundColor: 'lightblue',
-                                    borderRadius: 2,
-                                    '& .MuiInputBase-input': {
-                                        borderRadius: 2,
-                                    },
-                                    '& .MuiInputBase-root': {
-                                        '&:hover fieldset': {
-                                            borderColor: `${theme.palette.primary.main}`,
-                                        },
-                                    },
-                                }}
-                            />
-                    
+        <Box sx={{width:'60vw', display:'flex', flexDirection:'column', alignItems:'center'}}>
+
+            <form>
+                <FormGroup sx={{margin:'2vh 0'}}>
+                    <FormLabel        
+                    sx={{
+                        color: '#3D3D3D', // Set the default color
+                        '&.MuiFormLabel-root': {
+                            color: '#3D3D3D', // Set the default color
+                        },
+                        '&.Mui-focused': {
+                            color: '#3D3D3D', // Maintain color on focus
+                        },
+                    }}>GENDER</FormLabel>
                     <Autocomplete
-                        disablePortal
-                        id="body-mass-uom"
-                        options={['lb','kg']}
-                        value={formData.uom.body_mass}
-                        onChange={handleMassUOMChange}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                id="body-mass-uom"
-                                name="body-mass-uom"
-                                placeholder='UOM'
-                                value={formData.uom.body_mass}
-                                variant="outlined"
-                                required
-                                sx={{
-                                    width: '40%',
-                                    backgroundColor: 'lightblue',
-                                    borderRadius: 2,
-                                    '& .MuiInputBase-input': {
-                                        borderRadius: 2,
-                                    },
-                                    '& .MuiInputBase-root': {
-                                        '&:hover fieldset': {
-                                            borderColor: `${theme.palette.primary.main}`,
-                                        },
-                                    },
-                                }}
-                            />
-                        )}
-                    />
-
-                </FormGroup>
-
-                <FormGroup sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>        
-                    <FormControlLabel
-                        value="top"
-                        control={
-                            <Switch
-                            checked={toggleUOM}
-                            onChange={handleSwitchChange}
-                            inputProps={{ 'aria-label': 'height unit switch' }}
-                            />
-                        }
-                        label={formData.uom.height === 'cm' ? 'metric' : 'imperial'}
-                        labelPlacement="top"
-                        />           
-                </FormGroup>
-                <FormGroup sx={{display:'flex', flexDirection:'row', gap:'0.8rem',alignItems:'center', justifyContent:'center'}}>
-                    { formData.uom.height ==='cm' ? 
-                        <TextField
-                                    id="height"
-                                    autoComplete="height"
-                                    name="height_cm"
-                                    placeholder='Height'
-                                    value={formData.height_cm}
+                            disablePortal
+                            id="gender-autocomplete"
+                            options={['Male','Female']}
+                            value={formData.gender}
+                            onChange={handleGenderChange}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    id="gender"
+                                    name="gender"
+                                    placeholder='Gender'
+                                    value={formData.gender}
                                     variant="outlined"
                                     required
-                                    onChange={handleChange}
                                     sx={{
-                                        width: '6rem',
-                                        backgroundColor: 'lightblue',
+                                        p:'4px',
+                                        width: '60vw',
                                         borderRadius: 2,
                                         '& .MuiInputBase-input': {
                                             borderRadius: 2,
@@ -192,63 +125,42 @@ function CurrentStats ({data, handleParentFormChange}) {
                                         },
                                     }}
                                 />
-
-                    :
-                        <>
-                            <TextField
-                                        id="ft"
-                                        autoComplete="ft"
-                                        name="ft"
-                                        value={heightFt.ft}
-                                        variant="outlined"
-                                        required
-                                        onChange={handleChange}
-                                        sx={{
-                                            width: '15%',
-                                            backgroundColor: 'lightblue',
-                                            borderRadius: 2,
-                                            '& .MuiInputBase-input': {
-                                                borderRadius: 2,
-                                            },
-                                            '& .MuiInputBase-root': {
-                                                '&:hover fieldset': {
-                                                    borderColor: `${theme.palette.primary.main}`,
-                                                },
-                                            },
-                                        }}
-                                    />
-                            <Typography>ft</Typography>
-                            <TextField
-                                        id="in"
-                                        autoComplete="in"
-                                        name="in"
-                                        value={heightFt.in}
-                                        variant="outlined"
-                                        required
-                                        onChange={handleChange}
-                                        sx={{
-                                            width: '15%',
-                                            backgroundColor: 'lightblue',
-                                            borderRadius: 2,
-                                            '& .MuiInputBase-input': {
-                                                borderRadius: 2,
-                                            },
-                                            '& .MuiInputBase-root': {
-                                                '&:hover fieldset': {
-                                                    borderColor: `${theme.palette.primary.main}`,
-                                                },
-                                            },
-                                        }}
-                                        />
-
-                            <Typography>in</Typography>
-                        </>
-                    }
+                            )}
+                        />
                 </FormGroup>
-        
-          
-            </Box>
-        </form>
+                <CustomInput 
+                    fieldName={'current_body_weight'}
+                    addStyle={{marginBottom:'2vh'}}
+                    id={'body-mass'}
+                    label={'Current Body Weight'} 
+                    placeholderText={'Body Weight'} 
+                    options={['kg','lb']} 
+                    defaultValue={formData.uom.body_mass}
+                    inputValue={formData.current_body_weight}
+                    onChangeSelect={handleMassUOMChange}
+                    onChange={handleChange}
+                    />
+                <HeightInput 
+                    addStyle={{marginBottom:'2vh'}}
+                    id={'height'}
+                    placeholderText={''} 
+                    options={[
+                        {
+                            label:'cm',
+                            value:'metric'
+                        },
+                        {
+                            label:['ft','in'],
+                            value:'imperial'
+                        }
+                        ]} 
+                    defaultValue={formData.height_cm} 
+                    defaultLabel={data.uom.height} 
+                    onChange={handleChange}
+                    onChangeToggle={handleHeightUOMChange}
+                    />
+            </form>
+        </Box>
     )
 }
 
