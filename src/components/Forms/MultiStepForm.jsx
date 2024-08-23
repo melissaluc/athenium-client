@@ -111,7 +111,6 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         handleBackdropOpen()
-        console.log('Form data submitted:', formData);
         axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/signup`,{action:'submit', userData: formData})
         .then((response)=>{
             console.log(response.data.success)

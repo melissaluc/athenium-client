@@ -28,6 +28,7 @@ function FfmiRangeChart({ userValue, gender }) {
 
   useEffect(() => {
     const chartDom = chartRef.current;
+    if (!chartDom) return;
     const myChart = echarts.init(chartDom, null, {
       width: 400,
       height: 100
@@ -85,8 +86,14 @@ function FfmiRangeChart({ userValue, gender }) {
       ]
     };
 
+    // Set the chart options
     myChart.setOption(option);
-  }, [userValue, gender, theme.palette.primary.main]);
+
+    // Dispose of the chart instance on component unmount
+    return () => {
+      myChart.dispose();
+    };
+  }, [userValue]);
 
   return (
     <Box
