@@ -28,16 +28,11 @@ function LoginPage() {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            console.log('login Success: ',res.data.success)
             if (res.data.success) {
                 localStorage.setItem('authToken', res.data.token);
-                console.log('login Success: ',Object.keys(userData))
-                await updateUserData(() => {
-                  if (Object.keys(userData).length > 0) {
-                      navigate('/dashboard');
-                  }
-              });
+                await updateUserData(); 
             }
+
         } catch (error) {
             console.error('Login error:', error);
         }
@@ -50,16 +45,10 @@ function LoginPage() {
             }, {
                 headers: { 'Content-Type': 'application/json' },
             });
-
+            console.log(res)
             if (res.data.success) {
-                console.log(`Login success: ${res.data.success}`)
                 localStorage.setItem('authToken', res.data.token);
-                await updateUserData(() => {
-                  if (Object.keys(userData).length > 0) {
-                      navigate('/dashboard');
-                  }
-              });
-                console.log(`UserData set? : ${Object.entries(userData).length > 0}`)
+                await updateUserData();
             }
         } catch (error) {
             console.error('Google login error:', error);

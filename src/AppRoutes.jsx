@@ -16,22 +16,22 @@ import DrawerNavBar from './components/NavBar/DrawerNavBar/DrawerNavBar';
 import { Box } from '@mui/material';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 // import LandingPage from './pages/LandingPage'
-
+import PageLoadingProgress from './components/Loading/Progress/PageLoadingProgress';
 
 function AppRoutes() {
-    const { userData } = useContext(UserDataContext);
+    const { userData , loading} = useContext(UserDataContext);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const authToken = localStorage.getItem('authToken');
         const isLoggedIn = Object.entries(userData).length > 0 || !!authToken;
-        // console.log('Object.entries(userData).length > 0: ', Object.entries(userData).length > 0)
-        // console.log('Is Logged in? ',isLoggedIn)
-        // console.log('userData? ',userData)
         setIsAuthenticated(isLoggedIn);
-        // console.log('Is authenticated? ',isAuthenticated)
     }, [userData]);
 
+    if (loading) {
+        return <PageLoadingProgress />; 
+    }
+    // Private routes
     if (isAuthenticated) {
         return (
             <>
@@ -53,7 +53,7 @@ function AppRoutes() {
             </>
         );
     }
-
+    // Public Routes
     return (
         <Routes>
             <Route path='/login' element={<LoginPage />} />
