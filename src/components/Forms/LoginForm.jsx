@@ -106,8 +106,7 @@ function LoginForm({errorMessage, handleLoginSuccess, setForgotPassword}){
                     }}
                 />
                         <Link
-                        // alignSelf='flex-end'
-                        href="#"
+                        alignSelf='flex-end'
                         variant="body2"
                         sx={{ cursor: 'pointer', textDecoration: 'none' }}
                         onClick={handleForgotPassword}

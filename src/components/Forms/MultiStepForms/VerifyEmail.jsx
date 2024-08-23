@@ -1,4 +1,4 @@
-import { TextField, Button, Typography, Box } from "@mui/material";
+import { TextField, Button, Typography, Box, Divider } from "@mui/material";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -56,8 +56,8 @@ function VerifyEmail({ googleOauth, email_address, userData }) {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
             {!showSuccess && !googleOauth ? (
                 <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h6">Verify Email</Typography>
-                    <Typography>Check your email for the verification code</Typography>
+                    <Typography textAlign='center' variant='h4' color='black' paddingBottom='2vh'>Verify Email</Typography>
+                    <Typography>We sent a verification code to your email : {email_address}</Typography>
                     <TextField
                         onChange={handleChange}
                         value={verificationCode}
@@ -66,30 +66,34 @@ function VerifyEmail({ googleOauth, email_address, userData }) {
                         label="Verification Code"
                         variant="outlined"
                         margin="normal"
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleResendCode}
-                        sx={{ mt: 2 }}
-                    >
-                        Resend Code
-                    </Button>
+                        width='100%'
+                        />
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSubmit}
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 2, width:'100%' }}
                     >
-                        Submit
+                        Verify
+                    </Button>
+                     <Divider sx={{ width: '90%', marginY: '1rem', cursor: 'default', userSelect: 'none' }} orientation="horizontal">Didn't receive the code?</Divider>
+                     <Typography>Click below to resend the code to the email you used to sign up.</Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleResendCode}
+                        sx={{ mt: 2, width:'100%' }}
+                    >
+                        Resend Code
                     </Button>
                 </Box>
             ) : (
                 <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h6">Success!</Typography>
+                    <Typography textAlign='center' variant='h4' color='black' paddingBottom='2vh'>Success!</Typography>
                     <Button
                         variant="contained"
                         color="primary"
+                        sx={{ mt: 2, width:'100%' }}
                         onClick={() => navigate('/login')}
                     >
                         Return to Log In

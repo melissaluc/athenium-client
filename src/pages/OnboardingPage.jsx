@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import AtheniumLogo from '../assets/AtheniumLogo';
@@ -18,7 +18,7 @@ const OnboardingPage = () => {
         ...theme.typography.body2,
         color: theme.palette.text.secondary,
         '& > :not(style) ~ :not(style)': {
-            marginTop: theme.spacing(2),
+            marginTop: theme.spacing(1),
         },
     }));
 
@@ -37,21 +37,27 @@ const OnboardingPage = () => {
         // Handle Google login error
     };
 
+    // useEffect(()=>{
+    //     console.log('MultiStepForm: ',formData)
+    // },[formData])
+
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  maxWidth:'100vw', maxHeight:'100vh', padding:'0 2vh'}}>
+            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70%", alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <AtheniumLogo width={"100%"} />
                     {userCredentials ? ( !isComplete?
                         <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>
-                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userCredentials.email_address} userData={userData}/>
+                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userData.email_address} userData={userData}/>
                     ) : (
-                        <UserCredentialsSignUp
-                            handleUserCredentials={handleUserCredentials}
-                            theme={theme}
-                            handleSuccess={handleSuccess}
-                            handleError={handleError}
-                        />
+                        <>
+                            <AtheniumLogo width={"100%"} />
+                            <Typography textAlign='center' color={theme.palette.primary.main} variant='h6'>Start Your Journey</Typography>
+                            <UserCredentialsSignUp
+                                handleUserCredentials={handleUserCredentials}
+                                handleSuccess={handleSuccess}
+                                handleError={handleError}
+                            />
+                        </>
                     )}
                 </Box>
             </Root>

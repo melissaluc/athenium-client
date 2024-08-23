@@ -1,84 +1,122 @@
-import { FormGroup, TextField, Typography, useTheme } from '@mui/material';
+import { FormGroup,  Typography, Chip, Box } from '@mui/material';
 import { useState, useEffect } from 'react';
+import CustomInput from '../InputFields/CustomInput';
+import { calculateAge } from "../../../utils/utils";
+import FfmiRangeChart from "../../Charts/FfmiRangeChart";
+
+
+const getFfmiChip = (ffmi, gender) => {
+  
+    const ffmiRanges = gender === 'male'
+        ? {
+            'Low': { min: 0, max: 18, color: '#9c2929' },
+            'Average': { min: 18, max: 22, color: '#e2bb50'  },
+            'Above Average': { min: 22, max: 25, color: '#07df00'},
+            'High': { min: 25, max: 30, color: '#00edf5' },
+            'Very High': { min: 30, max: 35, color: '#1b1386' },
+            'Exceptional': { min: 35, max: 50, color: '#a00078'  }
+        }
+        : {
+            'Low': { min: 0, max: 16, color: '#9c2929' },
+            'Average': { min: 16, max: 20, color: '#e2bb50'  },
+            'Above Average': { min: 20, max: 23, color: '#07df00'},
+            'High': { min: 23, max: 28, color: '#00edf5' },
+            'Very High': { min: 28, max: 33, color: '#1b1386' },
+            'Exceptional': { min: 33, max: 50, color: '#a00078'  }
+        };
+
+    for (const [label, range] of Object.entries(ffmiRanges)) {
+        if (ffmi >= range.min && ffmi < range.max) {
+            return { label, color: range.color };
+        }
+    }
+
+    // Default case if FFMI does not fit into any range
+    return { label: "Unknown", color: "rgba(0, 0, 0, 0.08)" };
+};
 
 function LeanMuscleMass({ data, handleParentFormChange }) {
-    const theme = useTheme();
-    const { lean_muscle_mass, body_fat_percentage, current_body_weight, uom } = data;
-
+    const { lean_muscle_mass, body_fat_percentage, current_body_weight, height_cm, uom, gender, dob, ffmi} = data;
     const [formData, setFormData] = useState({
-        lean_muscle_mass: lean_muscle_mass || '',  // Initialize with existing value or empty
-        uom: {
-            body_mass: uom.body_mass,
-            height: uom.height,
-        }
+        lean_muscle_mass: lean_muscle_mass || '',
+        ffmi: ffmi || null
     });
+    
 
-    const [userModified, setUserModified] = useState(false); // Track if user has modified the input
+    const age = calculateAge(dob);
+    const { label, color } = getFfmiChip(formData.ffmi, gender);
 
     useEffect(() => {
-        if (!userModified && formData.lean_muscle_mass === '' && current_body_weight && body_fat_percentage) {
+  
             const bodyFatDecimal = body_fat_percentage / 100;
             const bodyFatMass = current_body_weight * bodyFatDecimal;
             const calculatedLeanMuscleMass = current_body_weight - bodyFatMass;
+            const weightInKg = uom.body_mass === 'kg' ? calculatedLeanMuscleMass : calculatedLeanMuscleMass * 0.453592;
+            const heightInM = height_cm / 100;
+            const calculatedFFMI = weightInKg / (heightInM * heightInM);
+            
+            console.log('formData ',formData)
 
             setFormData(prevFormData => ({
                 ...prevFormData,
-                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2)  // Set to 2 decimal places
+                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2),
+                ffmi: calculatedFFMI.toFixed(2)
             }));
+    
+            handleParentFormChange(prevFormData => ({
+                ...prevFormData,
+                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2),
+                ffmi: calculatedFFMI.toFixed(2)
+            }));
+            
+    
+    }, [formData.lean_muscle_mass]);
+    
 
-            handleParentFormChange({
-                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2)  // Sync with parent
-            });
-        }
-    }, [body_fat_percentage, current_body_weight, handleParentFormChange, userModified]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        const numericValue = parseFloat(value) || ''; // Ensure value is numeric or empty
-
+    const handleChange = (e, fieldName, inputValue, ) => {
+        const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
+    
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: numericValue
+            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value
         }));
-
-        handleParentFormChange({
-            [name]: numericValue
-        });
-
-        setUserModified(true); // Indicate that the user has modified the input
+        handleParentFormChange({ ...formData, [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value });
     };
 
     return (
-        <form>
-            <FormGroup sx={{display:'flex', flexDirection:'row', gap:'1rem'}}>
-                <TextField
-                    id="lean_muscle_mass"
-                    autoComplete="lean_muscle_mass"
-                    name="lean_muscle_mass"
-                    placeholder=''
-                    value={formData.lean_muscle_mass}
-                    variant="outlined"
-                    required
-                    onChange={handleChange}
-                    sx={{
-                        width: '4rem',
-                        backgroundColor: 'lightblue',
-                        borderRadius: 2,
-                        '& .MuiInputBase-input': {
-                            borderRadius: 2,
-                        },
-                        '& .MuiInputBase-root': {
-                            '&:hover fieldset': {
-                                borderColor: `${theme.palette.primary.main}`,
-                            },
-                        },
-                    }}
-                />
-                <Typography>
-                    {uom.body_mass}
-                </Typography>
-            </FormGroup>
-        </form>
+        <Box>
+            <Box>
+            </Box>
+            <form>
+                <FormGroup sx={{display:'flex', flexDirection:'column', }}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>ESTIMATED FAT FREE MASS (FFM)</Typography>
+                    <Typography variant="subtitle1" style={{}}>If you know your FFM manually input the correct value below.</Typography>
+                    <CustomInput 
+                            fieldName={'lean_muscle_mass'}
+                            options={null}
+                            addStyle={{marginBottom:'2vh'}}
+                            id={'body-mass'}
+                            placeholderText={'Enter your FFM'} 
+                            defaultValue={uom.body_mass}
+                            inputValue={formData.lean_muscle_mass}
+                            onChange={handleChange}
+                            />
+                </FormGroup>
+            </form>
+            <Box display="flex" flexDirection="column" alignItems="center" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%'>
+                <Box display="flex" alignItems="center">
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold', marginRight: '8px'}}>
+                        YOUR FFMI IS WITHIN THE
+                    </Typography>
+                    <Chip label={label} style={{fontFamily:'silkscreen',  backgroundColor:color, fontWeight: 'bold', marginRight: '8px' }} />
+                    <Typography variant="body" style={{ fontWeight: 'bold' }}>
+                        RANGE
+                    </Typography>
+                </Box>
+                <FfmiRangeChart userValue={formData.ffmi} gender={gender} />
+            </Box>
+        </Box>
     );
 }
 

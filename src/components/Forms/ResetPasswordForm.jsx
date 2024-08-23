@@ -162,9 +162,12 @@ function ResetPasswordForm({
                 </Button>
             </form>
             <Button 
-                sx={{ marginTop: '1rem' }}
-                onClick={() => navigate('/login')}
-            >
+                sx={{ 
+                    position: 'fixed', 
+                    bottom: '10vh',
+                    margin: '1rem' 
+                }}
+                onClick={() => navigate('/login')}>
                 Return to Login
             </Button>
         </Box>

@@ -7,13 +7,14 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 function UserCredentialsSignUp({ 
-    theme, 
     handleSuccess, 
     handleError, 
     handleUserCredentials 
 }) {
+    const theme = useTheme();
     const [visibility, setVisibility] = useState(false);
     const [formErrors, setFormErrors] = useState({});
     const [userCredentials, setUserCredentials] = useState({
@@ -132,7 +133,6 @@ function UserCredentialsSignUp({
                         onChange={handleChange}
                         sx={{
                             width: '100%',
-                            backgroundColor: 'lightblue',
                             borderRadius: 2,
                             '& .MuiInputBase-input': {
                                 borderRadius: 2,
@@ -156,7 +156,6 @@ function UserCredentialsSignUp({
                         onChange={handleChange}
                         sx={{
                             width: '100%',
-                            backgroundColor: 'lightblue',
                             borderRadius: 2,
                             '& .MuiInputBase-input': {
                                 borderRadius: 2,
@@ -242,8 +241,8 @@ function UserCredentialsSignUp({
                         width:"100%"}}
                     >Next</Button>
             </form>
-            <Divider sx={{ width: '90%', marginY: '2rem', cursor: 'default', userSelect: 'none' }} orientation="horizontal">Or Sign Up With</Divider>
-            <Box sx={{ width: "20vw", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Divider sx={{ width: '90%', marginY: '1rem', cursor: 'default', userSelect: 'none' }} orientation="horizontal">Or Sign Up With</Divider>
+            <Box sx={{ width: "20vw", display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom:'30%'}}>
                 <GoogleLogin
                     text="continue_with"
                     onSuccess={handleGoogleSignUp}
@@ -253,6 +252,7 @@ function UserCredentialsSignUp({
                 />
             </Box>
             <Button onClick={()=>navigate('/login')}>Return to Login</Button>
+            
         </Box>
     );
 }

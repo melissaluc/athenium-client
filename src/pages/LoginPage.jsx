@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { Box, Container, Typography, Divider, Button } from '@mui/material';
 import AtheniumLogo from '../assets/AtheniumLogo';
 import axios from 'axios';
@@ -78,25 +78,38 @@ function LoginPage() {
     };
 
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop:'10%' }}>
+            <Box> 
                 <AtheniumLogo width={"100%"} />
             </Box>
-                <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Typography variant='h4' sx={{ margin: '2rem', cursor: 'default', userSelect: 'none' }}>Login</Typography>
+                <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '5% 0%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom:'0.8rem' }}>
                         <LoginForm errorMessage={errorMessage} handleLoginSuccess={handleLoginSuccess}/>
                     </Box>
-                    <Divider sx={{ width: '90%', marginY: 2, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or Login with</Divider>
+                    <Divider sx={{ width: '80%', marginY: 1, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or Login with</Divider>
                     <Box sx={{ width: "20vw", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={errorMessage} useOneTap />
                     </Box>
-                    <Button
-                        onClick={() => navigate('/signup')}
-                        sx={{ cursor: 'pointer', textDecoration: 'none' }}
+                    <Box
+                        sx={{ 
+                            position: 'fixed', 
+                            bottom: '2vh',
+                            margin: '1rem' 
+                        }}
                     >
-                        Sign Up
-                    </Button>
+                        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'}} >
+                            <Typography variant='body'>Don't have an account?</Typography>
+                            <Button
+                                onClick={() => navigate('/signup')}
+                                sx={{ 
+                                    cursor: 'pointer', 
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                Sign Up
+                            </Button>
+                        </Box>
+                    </Box>
                 </Root>
             <Box>
             </Box>

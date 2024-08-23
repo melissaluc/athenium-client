@@ -8,9 +8,6 @@ function ForgotPasswordPage() {
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box>
-                <AtheniumLogo width={"100%"} />
-            </Box>
             <ForgotPasswordForm />
         </Container>
     );

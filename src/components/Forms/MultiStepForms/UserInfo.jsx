@@ -1,7 +1,8 @@
-import { Box, Button, TextField, InputAdornment, Typography, Stepper, StepButton,MobileStepper, Step, StepLabel, FormControl, InputLabel, Select, MenuItem, useTheme, Autocomplete } from '@mui/material';
+import { Box,  TextField, InputAdornment, useTheme, Autocomplete } from '@mui/material';
 import { useState, useEffect } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LanguageIcon from '@mui/icons-material/Language';
 import TodayIcon from '@mui/icons-material/Today';
 import axios from 'axios'
 import DatePicker from 'react-datepicker';
@@ -33,7 +34,7 @@ function UserInfo ({data, handleParentFormChange}) {
         handleParentFormChange(formData)
     };
 
-    const handleCountryChange = (event, value) => {
+    const handleCountryChange = (e, value) => {
         setFormData({
             ...formData,
             country: value || ''
@@ -95,8 +96,7 @@ function UserInfo ({data, handleParentFormChange}) {
                             required
                             onChange={handleChange}
                             sx={{
-                                width: '100%',
-                                backgroundColor: 'lightblue',
+                                width: '100%',  
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -120,7 +120,6 @@ function UserInfo ({data, handleParentFormChange}) {
                             onChange={handleChange}
                             sx={{
                                 width: '100%',
-                                backgroundColor: 'lightblue',
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -151,7 +150,6 @@ function UserInfo ({data, handleParentFormChange}) {
                             onChange={handleChange}
                             sx={{
                                 width: '100%',
-                                backgroundColor: 'lightblue',
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -179,8 +177,7 @@ function UserInfo ({data, handleParentFormChange}) {
                             required
                             onChange={handleChange}
                             sx={{
-                                width: '100%',
-                                backgroundColor: 'lightblue',
+                                width: '100%', 
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -201,8 +198,7 @@ function UserInfo ({data, handleParentFormChange}) {
                             required
                             onChange={handleChange}
                             sx={{
-                                width: '100%',
-                                backgroundColor: 'lightblue',
+                                width: '100%', 
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -224,7 +220,6 @@ function UserInfo ({data, handleParentFormChange}) {
                             onChange={handleChange}
                             sx={{
                                 width: '100%',
-                                backgroundColor: 'lightblue',
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -249,7 +244,7 @@ function UserInfo ({data, handleParentFormChange}) {
                             required
                             sx={{
                                 width: '100%',
-                                backgroundColor: 'lightblue',
+                                
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
@@ -275,6 +270,7 @@ function UserInfo ({data, handleParentFormChange}) {
                     id="country-autocomplete"
                     options={countries}
                     value={formData.country}
+                    popupIcon={<LanguageIcon />}
                     onChange={handleCountryChange}
                     renderInput={(params) => (
                         <TextField
@@ -287,7 +283,6 @@ function UserInfo ({data, handleParentFormChange}) {
                             required
                             sx={{
                                 width: '100%',
-                                backgroundColor: 'lightblue',
                                 borderRadius: 2,
                                 '& .MuiInputBase-input': {
                                     borderRadius: 2,
