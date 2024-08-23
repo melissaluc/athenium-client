@@ -5,7 +5,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import axios from 'axios'
 import UserInfo from './MultiStepForms/UserInfo';
 import CurrentStats from './MultiStepForms/CurrentStats';
-import ResultBmrBmi from './MultiStepForms/ResultBmrBmi';
+import ResultsBmrBmi from './MultiStepForms/ResultsBmrBmi';
 import BodyFat from './MultiStepForms/BodyFat';
 import LeanMuscleMass from './MultiStepForms/LeanMuscleMass'
 
@@ -22,7 +22,7 @@ function selectView (step, formData, handleParentFormChange) {
             return <CurrentStats data={data} handleParentFormChange={handleParentFormChange}/>
         case 'bmr_bmi':
             data =  {current_body_weight, height_cm, uom, dob, gender}
-            return <ResultBmrBmi data={data} handleParentFormChange={handleParentFormChange}/>
+            return <ResultsBmrBmi data={data} handleParentFormChange={handleParentFormChange}/>
         case 'body_fat':
             data =  {body_fat_percentage, body_fat_view, height_cm,uom,newMeasurements,gender}
             return <BodyFat data={data} handleParentFormChange={handleParentFormChange}/>

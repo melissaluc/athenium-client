@@ -1,5 +1,5 @@
-import { Typography, Box, Container, Chip, Divider } from "@mui/material";
-import { calculateAge, convertCmToFtIn, convertFtInToCm } from "../../../utils/utils";
+import { Typography, Box, Chip, Divider } from "@mui/material";
+import { calculateAge, convertCmToFtIn} from "../../../utils/utils";
 import { useEffect } from "react";
 import BmiRangeChart from "../../Charts/BmiRangeChart";
 
@@ -57,10 +57,11 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
     );
 
     useEffect(() => {
-        handleParentFormChange({
+        handleParentFormChange(prev =>({
+            ...prev,
             bmi,
             bmr
-        });
+        }));
     }, []);
 
     return (
