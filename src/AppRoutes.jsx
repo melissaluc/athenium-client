@@ -15,7 +15,7 @@ import { UserDataContext } from './UserDataContext';
 import DrawerNavBar from './components/NavBar/DrawerNavBar/DrawerNavBar';
 import { Box } from '@mui/material';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import LandingPage from './pages/LandingPage'
+// import LandingPage from './pages/LandingPage'
 
 
 function AppRoutes() {
@@ -39,7 +39,7 @@ function AppRoutes() {
                     <DrawerNavBar />
                 </Box>
                 <Routes>
-                    <Route path='/' element={<LandingPage/>} />
+                    {/* <Route path='/' element={<LandingPage/>} /> */}
                     <Route path='/dashboard' element={<DashboardPage />} />
                     <Route path='/schedule' element={<SchedulePage />} />
                     <Route path='/goals' element={<GoalsPage />} />
@@ -60,7 +60,7 @@ function AppRoutes() {
             <Route path='/signup' element={<OnboardingPage />} />
             <Route path="/reset-password/:token/:email_address" element={<ResetPasswordPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path='/' element={<LandingPage/>} />
+            {/* <Route path='/' element={<LandingPage/>} /> */}
             <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
     );
