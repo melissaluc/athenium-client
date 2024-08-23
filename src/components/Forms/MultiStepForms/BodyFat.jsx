@@ -119,7 +119,7 @@ function BodyFat({ data, handleParentFormChange }) {
                                         }
                                     }}>
                                     <CardContent>
-                                        
+                                        <img src={GirthMeasurementsImg} alt="Visual Reference" style={{ width: '100%', height: 'auto' }} />
                                         <Typography variant="subtitle6" style={{ fontWeight: 'bold' }}>Girth Measurements</Typography>
                                     </CardContent>
                                 </Card>
