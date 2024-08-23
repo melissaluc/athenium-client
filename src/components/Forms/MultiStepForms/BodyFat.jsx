@@ -1,116 +1,25 @@
-import { Card, CardContent, Button, Typography, Image, Container, Box, FormGroup, TextField , Switch, FormControlLabel, Divider, Link} from "@mui/material";
-import { useEffect, useState } from "react";
-import MeasurementForm from "../../MeasurementForm/MeasurementForm";
-import { useTheme } from "@mui/system";
-import CustomInput from "../InputFields/CustomInput";
+import { Card, CardContent, Button, Typography, Box,Divider, Link} from "@mui/material";
+import {useState } from "react";
 import VisualReferenceImg from '../../../assets/visual-reference-bodies.svg'
 import GirthMeasurementsImg from '../../../assets/girth-measurements.svg'
+import GirthMeasurements from './BodyFatForms/GirthMeasurement'
+import VisualReference from './BodyFatForms/VisualReference'
+import ManualInput from './BodyFatForms/ManualInput'
 
-
-function getMethodView(selectMethod, handleMethodClick, theme, handleChange, formData, setFormData, inputValues, handleInputChange, handleMeasurementCalculation, handleSwitchChange, toggleUOM, calculateByGirth, isMeasurementFormValid ) {
-    const bodyFatRanges = ["12-14", "15-17", "18-20", "21-23", "24-26", "27-29", "30-35", "36-40", "50+"];
-
-    const handleSelectBodyFat = (range) => {
-        if (range !== "50<=") {
-            const [start, end] = range.split("-").map(Number);
-            const selectedBodyFat = start + (end - start) / 2;
-            setFormData({
-                ...formData,
-                body_fat_percentage: selectedBodyFat,
-                body_fat_range: [start, end]
-            });
-        } else {
-            setFormData({
-                ...formData,
-                body_fat_percentage: 50,
-                body_fat_range: [50, Infinity]
-            });
-        }
-    };
-
+function getMethodView(selectMethod,formData, handleChange) {
 
     switch (selectMethod) {
-        case 'manual':
+        case 'manual_input':
             return (
-                // <form>
-                //     <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '0.5rem', justifyContent: 'center' }}>
-                //         <TextField
-                //             id="body_fat_percentage"
-                //             autoComplete="body_fat_percentage"
-                //             name="body_fat_percentage"
-                //             placeholder='Body Fat%'
-                //             value={formData.body_fat_percentage}
-                //             variant="outlined"
-                //             required
-                //             onChange={handleChange}
-                //             sx={{
-                //                 width: '6rem',
-                //                 backgroundColor: 'lightblue',
-                //                 borderRadius: 2,
-                //                 '& .MuiInputBase-input': {
-                //                     borderRadius: 2,
-                //                 },
-                //                 '& .MuiInputBase-root': {
-                //                     '&:hover fieldset': {
-                //                         borderColor: `${theme.palette.primary.main}`,
-                //                     },
-                //                 },
-                //             }}
-                //         />
-                //         <Typography>%</Typography>
-                //     </FormGroup>
-                // </form>
+                <ManualInput  data={formData} handleChange={handleChange}/>
             );
         case 'visual_reference':
             return (
-                // <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
-                //     {bodyFatRanges.map((bodyfat) => {
-                //         return(
-                //             <Card
-                //                 key={bodyfat}
-                //                 onClick={() => handleSelectBodyFat(bodyfat)}
-                //                 sx={{ cursor: 'pointer' }}
-                //             >
-                //                 <CardContent>
-                //                     <Typography>
-                //                         {bodyfat}%
-                //                     </Typography>
-                //                 </CardContent>
-                //             </Card>
-                //         )
-                //     })}
-                // </Box>
+                <VisualReference data={formData} handleChange={handleChange} />
             );
-        case 'measurements':
+        case 'girth_measurements':
             return (
-                // <form>
-                //     <FormGroup sx={{display:'flex', flexDirection:'column', justifyContent:'center',alignItems:'center'}}>        
-                //         <FormControlLabel
-                //             value="top"
-                //             control={
-                //                 <Switch
-                //                 checked={toggleUOM}
-                //                 onChange={handleSwitchChange}
-                //                 inputProps={{ 'aria-label': 'height unit switch' }}
-                //                 />
-                //             }
-                //             label={formData.uom.girth_measurements === 'cm' ? 'metric' : 'imperial'}
-                //             labelPlacement="top"
-                //             />           
-                //         {calculateByGirth && <Typography>{formData.body_fat_percentage}%</Typography>}
-                //     </FormGroup>
-                //     <FormGroup sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                //         <MeasurementForm inputValues={inputValues} handleInputChange={handleInputChange} />
-                //         <Button
-                //             disabled={!isMeasurementFormValid()}
-                //             onClick={handleMeasurementCalculation}
-                //             variant="contained"
-                //         >
-                //             Calculate
-                //         </Button>
-                //     </FormGroup>
-
-                // </form>
+                <GirthMeasurements data={formData} handleChange={handleChange}/>
             );
         default:
             return null;
@@ -121,29 +30,33 @@ function getMethodView(selectMethod, handleMethodClick, theme, handleChange, for
 
 
 function BodyFat({ data, handleParentFormChange }) {
-    const theme = useTheme();
-    const { body_fat_percentage, body_fat_view, current_body_weight, height_cm,uom,newMeasurements} = data;
+;
+    const { body_fat_percentage, body_fat_view, height_cm,uom,newMeasurements,gender} = data;
     const [selectMethod, setSelectMethod] = useState(body_fat_view);
-    const [toggleUOM, setToggleUOM] = useState(uom.girth_measurements === 'in');
-    const [calculateByGirth, setCalculateByGirth] = useState(false)
-    const methods = ['manual', 'visual_reference', 'measurements'];
+
+    const methods = ['manual_input', 'visual_reference', 'girth_measurements'];
     const [formData, setFormData] = useState({
         body_fat_percentage: body_fat_percentage || '',
+        height_cm:height_cm || '',
+        newMeasurements:newMeasurements,
+        gender:gender || '',
         uom:{
             height: uom.height || 'cm',
             girth_measurements: uom.height === 'ft' ? 'in' : (uom.girth_measurements || 'cm'),
         }
     });
 
-    const handleChange = (e, fieldName, inputValue) => {
-        console.log(fieldName,"|", inputValue)
+    const handleChange = (e, fieldName, inputValue, ) => {
         const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: fieldName==='current_body_weight'?  parseFloat(value) : value
+            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value
         }));
-        handleParentFormChange({ ...formData, [name]: fieldName==='current_body_weight'?  parseFloat(value) : value });
+        handleParentFormChange(prevFormData => (
+            { ...prevFormData, 
+            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value 
+        }));
     };
 
         // Handle method selection
@@ -156,20 +69,7 @@ function BodyFat({ data, handleParentFormChange }) {
         <>
             {!selectMethod ? 
                 (<>  
-                    <Box>
-                        <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>MANUAL INPUT</Typography>
-                        <CustomInput 
-                                fieldName={'body_fat_percentage'}
-                                inputLabel={'BF'}
-                                options={null}
-                                addStyle={{marginBottom:'2vh'}}
-                                id={'body-mass'}
-                                placeholderText={'Enter your Body Fat %'} 
-                                defaultValue={'%'}
-                                inputValue={formData.body_fat_percentage}
-                                onChange={handleChange}
-                                />
-                    </Box>
+                    <ManualInput  data={formData} handleChange={handleChange}/>
                     <Divider sx={{ width: '80%', marginY: 1, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or</Divider>
                     <Box>
                         <Box>
@@ -203,7 +103,7 @@ function BodyFat({ data, handleParentFormChange }) {
                                     </CardContent>
                                 </Card>
                             </Button>
-                            <Button onClick={()=>handleMethodClick('measurements')}
+                            <Button onClick={()=>handleMethodClick('girth_measurements')}
                                 sx={{ 
                                     p: 0,
                                     width: '40vw',
@@ -219,7 +119,7 @@ function BodyFat({ data, handleParentFormChange }) {
                                         }
                                     }}>
                                     <CardContent>
-                                        <img src={GirthMeasurementsImg} alt="Girth Measurements" style={{ width: '100%', height: 'auto' }} />
+                                        
                                         <Typography variant="subtitle6" style={{ fontWeight: 'bold' }}>Girth Measurements</Typography>
                                     </CardContent>
                                 </Card>
@@ -228,24 +128,43 @@ function BodyFat({ data, handleParentFormChange }) {
 
                     </Box>
                 </>) : (
-                <>
-                    <Box sx={{ display: 'flex', gap: '1rem', marginBottom: '1rem', justifyContent: 'center', flexWrap:'wrap' }}>
+                <Box  sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                    <Box sx={{ display: 'flex', gap: '1rem', marginBottom: '1rem', justifyContent: 'center',flexWrap:'wrap' }}>
                         {methods.map((method) => (
                             <Button
                                 key={method}
-                                variant='outlined'
+                                variant={selectMethod === method  ? 'contained' : 'outlined'}
                                 onClick={() => handleMethodClick(method)}
-                                sx={{ cursor: 'pointer' }}
                             >
                                 {method.replace("_", " ")}
                             </Button>
                         ))}
                     </Box>
                     {selectMethod && 
+                        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                            <Typography variant="body1" sx={{ flexShrink: 0}}>
+                                {
+                                selectMethod.replace("_", " ").split(' ')
+                                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(' ')
+                                }
+                            </Typography>
+                            <Divider
+                                sx={{ flexGrow: 1, marginLeft: 1 }}  // Adjust marginLeft to add space between text and divider
+                                orientation="horizontal"
+                                component="div"
+                                role="presentation"
+                                aria-hidden="true"
+                            />
+                        </Box>
+                    }
+                    {selectMethod && 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '0.5rem', justifyContent: 'center' }}>
-                        {getMethodView(selectMethod,handleMethodClick , theme, handleChange, formData, setFormData, inputValues, handleInputChange, handleMeasurementCalculation, handleSwitchChange, toggleUOM, calculateByGirth, isMeasurementFormValid )}
+                        {
+                         getMethodView(selectMethod,formData, handleChange)
+                         }
                     </Box>}
-                </>
+                </Box>
                 )
 
             }

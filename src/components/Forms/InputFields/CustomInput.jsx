@@ -3,65 +3,85 @@ import { MenuItem, Divider, InputBase, Paper, TextField, FormControl, FormLabel 
 import { useTheme } from '@mui/material/styles';
 
 function CustomizedInput({ id, inputValue, placeholderText, options, defaultValue, onChangeSelect, onChange, label, fieldName, inputLabel, addStyle }) {
-    const [selectValue, setSelectValue] = useState(defaultValue);
-    const [formFieldValue, setFormFieldValue] = useState(inputValue || '')
-    const theme = useTheme()
+    const [selectValue, setSelectValue] = useState(defaultValue || ''); // Initialize with defaultValue or empty string
+    const [formFieldValue, setFormFieldValue] = useState(inputValue || ''); // Initialize with inputValue or empty string
+    const theme = useTheme();
+
+    // Synchronize formFieldValue with inputValue prop changes
+    useEffect(() => {
+        setFormFieldValue(inputValue || '');
+    }, [inputValue]);
+
+    // Synchronize selectValue with defaultValue prop changes
+    useEffect(() => {
+        setSelectValue(defaultValue || '');
+    }, [defaultValue]);
 
     // Handle selection change
     const handleSelectChange = (e) => {
         const newValue = e.target.value;
-        setSelectValue(newValue);        
-        onChangeSelect(e, newValue); 
+        setSelectValue(newValue);
+        if (onChangeSelect) {
+            onChangeSelect(e, newValue);
+        }
     };
 
-
-    const handleInputChange = (e)=> {
-        const inputFieldName = e.target.name
-        const inputValue = e.target.value
-        setFormFieldValue(e.target.value)
-        onChange(null, inputFieldName, inputValue)
-    }
+    // Handle input change
+    const handleInputChange = (e) => {
+        const inputFieldName = e.target.name;
+        const inputValue = e.target.value;
+        setFormFieldValue(inputValue);
+        if (onChange) {
+            onChange(e, inputFieldName, inputValue);
+        }
+    };
 
     return (
         <FormControl fullWidth sx={addStyle}>
             {label && 
                 <FormLabel
-                sx={{
-                    color: '#3D3D3D', // Set the default color
-                    '&.MuiFormLabel-root': {
-                        color: '#3D3D3D', // Set the default color
-                    },
-                    '&.Mui-focused': {
-                        color: '#3D3D3D', // Maintain color on focus
-                    },
-                }}
-            >
-                {label.toUpperCase()}</FormLabel>}
+                    sx={{
+                        color: '#3D3D3D',
+                        '&.MuiFormLabel-root': {
+                            color: '#3D3D3D',
+                        },
+                        '&.Mui-focused': {
+                            color: '#3D3D3D',
+                        },
+                    }}
+                >
+                    {label.toUpperCase()}
+                </FormLabel>
+            }
             <Paper
                 component="form"
                 sx={{
                     p: '2px 2px',
                     display: 'flex', 
                     alignItems: 'center',
-                    width: '60vw',
-                    boxShadow: 'none', // Remove the shadow
-                    border: '1px solid', // Add a border
-                    borderColor: '#D9D9DE', // Adjust border color (optional)
-                    borderRadius: 1 // Optional: Adjust border radius if needed
+                    width: '100%',
+                    boxShadow: 'none',
+                    border: '1px solid',
+                    borderColor: '#D9D9DE',
+                    borderRadius: 1
                 }}
             >
-                {inputLabel && <FormLabel
-                                sx={{
-                                    color: '#3D3D3D', // Set the default color
-                                    padding:'0% 2%',
-                                    '&.MuiFormLabel-root': {
-                                        color: '#3D3D3D', // Set the default color
-                                    },
-                                    '&.Mui-focused': {
-                                        color: '#3D3D3D', // Maintain color on focus
-                                    },
-                                }}
-                >{inputLabel.toUpperCase()}</FormLabel>}
+                {inputLabel && 
+                    <FormLabel
+                        sx={{
+                            color: '#3D3D3D',
+                            padding:'0% 2%',
+                            '&.MuiFormLabel-root': {
+                                color: '#3D3D3D',
+                            },
+                            '&.Mui-focused': {
+                                color: '#3D3D3D',
+                            },
+                        }}
+                    >
+                        {inputLabel.toUpperCase()}
+                    </FormLabel>
+                }
                 <InputBase
                     onChange={handleInputChange}
                     name={fieldName}
@@ -74,19 +94,19 @@ function CustomizedInput({ id, inputValue, placeholderText, options, defaultValu
                 <TextField
                     id={id}
                     name={fieldName}
-                    select={options? true : false}
+                    select={!!options}
                     color={theme.palette.primary.main}
                     value={selectValue}
                     onChange={handleSelectChange}
                     variant="standard"
                     InputProps={{
-                        disableUnderline: true, // Remove the underline
+                        disableUnderline: true,
                     }}
                     sx={{
                         width:'20%',
                         padding: '1rem',
                         '& .MuiSelect-icon': {
-                            display: 'none', // Hide the dropdown arrow
+                            display: 'none',
                         },
                         '& .MuiInputBase-input': {
                             color: theme.palette.primary.main, 
@@ -103,7 +123,5 @@ function CustomizedInput({ id, inputValue, placeholderText, options, defaultValu
         </FormControl>
     );
 }
-
-
 
 export default CustomizedInput;

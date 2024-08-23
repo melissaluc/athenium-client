@@ -19,12 +19,7 @@ function  CurrentStats ({data, handleParentFormChange}) {
         }
     })
 
-    useEffect(()=>{
-        console.log('currentDStats ',data)
-    },[])
-
     const handleChange = (e, fieldName, inputValue) => {
-        console.log(fieldName,"|", inputValue)
         const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
 
         setFormData(prevFormData => ({

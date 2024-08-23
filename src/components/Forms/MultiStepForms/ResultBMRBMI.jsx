@@ -61,7 +61,7 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
             bmi,
             bmr
         });
-    }, [bmi, bmr, handleParentFormChange]);
+    }, []);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '3vh', alignItems: 'center' }}>

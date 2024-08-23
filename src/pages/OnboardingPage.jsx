@@ -37,13 +37,17 @@ const OnboardingPage = () => {
         // Handle Google login error
     };
 
+    // useEffect(()=>{
+    //     console.log('MultiStepForm: ',formData)
+    // },[formData])
+
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  maxWidth:'100vw', maxHeight:'100vh', padding:'0 2vh'}}>
             <Root sx={{ display: 'flex', flexDirection: 'column', width: "70%", alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {userCredentials ? ( !isComplete?
                         <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>
-                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userCredentials.email_address} userData={userData}/>
+                        : <VerifyEmail googleOauth={userCredentials.google_id ? true : false} email_address={userData.email_address} userData={userData}/>
                     ) : (
                         <>
                             <AtheniumLogo width={"100%"} />
