@@ -1,2 +1,15 @@
-### Athenium Fitness Tracker App
-Check out the wireframe at [Miro](https://miro.com/app/board/uXjVKPwlteQ=/?share_link_id=758078131919)
+# Athenium Fitness Tracker App
+
+## Purpose
+- Build a fitness tracker app integrating StrengthLevel.com
+   
+## Project Status
+- Under development
+
+## Features
+
+
+## Technologies Used
+- ReactJs
+- Material UI
+- ECharts
