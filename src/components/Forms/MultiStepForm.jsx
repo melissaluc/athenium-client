@@ -65,7 +65,7 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
         first_name: userCredentials.first_name || '',
         last_name:userCredentials.last_name || '',
         country: userCredentials.country || '',
-        google_id: userCredentials.google_id || null,
+        google_id: userCredentials.google_id || false,
         // Current Stats
         current_body_weight:'',
         height_cm:'',

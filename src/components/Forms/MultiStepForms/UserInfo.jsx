@@ -17,7 +17,7 @@ function UserInfo ({data, handleParentFormChange}) {
     
     const [formData, setFormData] = useState({
         username:username || null, 
-        google_id: google_id || null, 
+        google_id: google_id || false, 
         password: password || null,
         confirm_password: confirm_password || null, 
         email_address: email_address || '', 
@@ -28,11 +28,12 @@ function UserInfo ({data, handleParentFormChange}) {
     })
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
+        const { name, value } = e.target;
+        setFormData(prevData => {
+            const newData = { ...prevData, [name]: value };
+            handleParentFormChange(newData);
+            return newData;
         });
-        handleParentFormChange(formData)
     };
 
     const handleCountryChange = (e, value) => {

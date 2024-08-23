@@ -28,15 +28,11 @@ function LoginPage() {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            console.log('login Success: ',res.data.success)
             if (res.data.success) {
                 localStorage.setItem('authToken', res.data.token);
-                console.log('login Success: ',Object.keys(userData))
                 await updateUserData(() => {
-                  if (Object.keys(userData).length > 0) {
-                      navigate('/dashboard');
-                  }
-              });
+                    navigate('/dashboard');
+                });
             }
         } catch (error) {
             console.error('Login error:', error);
