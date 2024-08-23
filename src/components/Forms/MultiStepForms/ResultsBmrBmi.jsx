@@ -57,11 +57,12 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
     );
 
     useEffect(() => {
-        handleParentFormChange(prev =>({
-            ...prev,
-            bmi,
-            bmr
-        }));
+        handleParentFormChange(
+            {
+                bmi,
+                bmr
+            }
+        );
     }, []);
 
     return (
@@ -143,7 +144,7 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
                         YOUR BMI IS WITHIN THE
                     </Typography>
                     <Chip label={label} style={{fontFamily:'silkscreen',  backgroundColor:color, fontWeight: 'bold', marginRight: '8px' }} />
-                    <Typography variant="body" style={{ fontWeight: 'bold' }}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                         RANGE
                     </Typography>
                 </Box>

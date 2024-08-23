@@ -63,10 +63,10 @@ function VerifyEmail({ googleOauth, email_address, userData }) {
                         value={verificationCode}
                         name='verification_code'
                         id='verification_code'
-                        label="Verification Code"
+                        placeholder="Enter Code"
                         variant="outlined"
                         margin="normal"
-                        width='100%'
+                        fullWidth
                         />
                     <Button
                         variant="contained"

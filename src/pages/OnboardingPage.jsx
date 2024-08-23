@@ -18,10 +18,9 @@ const OnboardingPage = () => {
         ...theme.typography.body2,
         color: theme.palette.text.secondary,
         '& > :not(style) ~ :not(style)': {
-            marginTop: theme.spacing(1),
+            marginTop: theme.spacing(2),
         },
     }));
-
     
     const handleUserCredentials = (userCredFormData) => {
         setUserCredentials(userCredFormData)
@@ -43,7 +42,7 @@ const OnboardingPage = () => {
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  maxWidth:'100vw', maxHeight:'100vh', padding:'0 2vh'}}>
-            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70%", alignItems: 'center' }}>
+            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {userCredentials ? ( !isComplete?
                         <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>

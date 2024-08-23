@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography,MobileStepper} from '@mui/material';
+import { Box, Button, Typography,MobileStepper,Backdrop,CircularProgress} from '@mui/material';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import axios from 'axios'
@@ -11,7 +11,7 @@ import LeanMuscleMass from './MultiStepForms/LeanMuscleMass'
 
 
 function selectView (step, formData, handleParentFormChange) {
-    const {username, password, confirm_password, email_address, dob, first_name, last_name, country, google_id, current_body_weight, gender,height_cm, bmr, bmi, body_fat_percentage, body_fat_view, newMeasurements, lean_muscle_mass, ffmi, uom} = formData
+    const {username, password, confirm_password, email_address, dob, first_name, last_name, country, google_id, current_body_weight, gender,height_cm, bmr, bmi, body_fat_percentage, body_fat_view, body_fat_range, newMeasurements, lean_muscle_mass, ffmi, uom} = formData
     let data = {}
     switch(step){
         case 'personal_Info':
@@ -24,7 +24,7 @@ function selectView (step, formData, handleParentFormChange) {
             data =  {current_body_weight, height_cm, uom, dob, gender}
             return <ResultsBmrBmi data={data} handleParentFormChange={handleParentFormChange}/>
         case 'body_fat':
-            data =  {body_fat_percentage, body_fat_view, height_cm,uom,newMeasurements,gender}
+            data =  {body_fat_percentage, body_fat_view, body_fat_range, height_cm,uom,newMeasurements,gender}
             return <BodyFat data={data} handleParentFormChange={handleParentFormChange}/>
         case 'lean_muscle_mass': 
             data =  {lean_muscle_mass, body_fat_percentage, current_body_weight, height_cm, uom, gender, dob, ffmi}
@@ -36,7 +36,14 @@ function selectView (step, formData, handleParentFormChange) {
 
 
 const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
-
+    const [backDropOpen, setbackDropOpen] = useState(false);
+    const handleBackdropClose = () => {
+        setbackDropOpen(false);
+    };
+    const handleBackdropOpen = () => {
+        setbackDropOpen(true);
+    };
+  
     const steps = ['personal_Info','current_stats', 'bmr_bmi', 'body_fat','lean_muscle_mass'];
     const stepTitle = {
         'personal_Info':'Personal Information',
@@ -70,6 +77,7 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
         // Determine Body Fat: method 1) user manual input | method 2) using visual reference | method 3) calculate based on measurements | method 4) from muscle mass
         body_fat_percentage:'',
         body_fat_view:null,
+        body_fat_range:null,
         newMeasurements:{},
         lean_muscle_mass:'',
         // Set user preferred units
@@ -102,29 +110,38 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        handleBackdropOpen()
         console.log('Form data submitted:', formData);
         axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/signup`,{action:'submit', userData: formData})
         .then((response)=>{
-            console.log(response)
+            console.log(response.data.success)
             if(response.data.success){
+                handleBackdropClose()
                 setUserData(prev => ({ ...prev, ...formData }))
                 setIsComplete(true)
             }
         })
         .catch(error=>{
             console.error(error)
+            handleBackdropClose()
         })
     };
 
     useEffect(()=>{
-        console.log('UOM: ',formData.uom)
+        console.log('Multi: ',formData)
     },[formData])
 
     return(
         <Box sx={{ width: '100%', height:'100vh', mx: 'auto', mt: 0 , display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between'}}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={backDropOpen}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Typography textAlign='center' variant='h4' color='black' paddingBottom='2vh'>{stepTitle[steps[activeStep]]}</Typography>
             <Box sx={{ maxWidth: '100%', p: 2 , display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
-                {selectView (steps[activeStep], formData, handleChange)}
+                {selectView(steps[activeStep], formData, handleChange)}
             </Box>
             <MobileStepper
             variant="progress"

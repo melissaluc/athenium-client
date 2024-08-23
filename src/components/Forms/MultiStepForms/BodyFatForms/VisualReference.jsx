@@ -21,6 +21,7 @@ import MBF8to10 from '../../../../assets/bodyfatref/male/8-10.png'
 
 
 function VisualReference({data, handleChange}) {
+    const [selectBF, setSelectBF] = useState(data.body_fat_range)
     let bodyFatRanges 
     if(data.gender==='Female'){
         bodyFatRanges = [
@@ -52,6 +53,7 @@ function VisualReference({data, handleChange}) {
 
 
     const handleSelectBodyFat = (range) => {
+        setSelectBF(range)
         let newBodyFat;
         if (range !== "50+") {
             const [start, end] = range.split("-").map(Number);
@@ -59,8 +61,8 @@ function VisualReference({data, handleChange}) {
         } else {
             newBodyFat = 50;
         }
-
         handleChange(null, 'body_fat_percentage', newBodyFat);
+        handleChange(null, 'body_fat_range', range);
 
     };
 
@@ -84,7 +86,9 @@ function VisualReference({data, handleChange}) {
                                         <Card 
                                             key={bodyfat.range}
                                             onClick={() => handleSelectBodyFat(bodyfat.range)}
-                                            sx={{ cursor: 'pointer'}}
+                                            sx={{ cursor: 'pointer',
+                                                border:selectBF === bodyfat.range ? '4px solid #9b6eded6': 'none'
+                                            }}
                                         >
                                             <CardContent sx={{display:'flex',flexDirection:'column', alignItems:'center' }}>
                                                 <img src={bodyfat.img} alt={`${data.gender}-body-fat-${bodyfat.range}`} style={{ width: '100px', height: 'auto' }} />

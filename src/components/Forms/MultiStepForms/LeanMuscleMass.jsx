@@ -44,44 +44,54 @@ function LeanMuscleMass({ data, handleParentFormChange }) {
     
 
     const age = calculateAge(dob);
-    const { label, color } = getFfmiChip(formData.ffmi, gender);
 
-    useEffect(() => {
-  
+
+   const calculateValues = () => {
+        if (body_fat_percentage && current_body_weight && height_cm) {
             const bodyFatDecimal = body_fat_percentage / 100;
             const bodyFatMass = current_body_weight * bodyFatDecimal;
             const calculatedLeanMuscleMass = current_body_weight - bodyFatMass;
             const weightInKg = uom.body_mass === 'kg' ? calculatedLeanMuscleMass : calculatedLeanMuscleMass * 0.453592;
             const heightInM = height_cm / 100;
             const calculatedFFMI = weightInKg / (heightInM * heightInM);
-            
-            console.log('formData ',formData)
 
+            return {
+                lean_muscle_mass: parseFloat(calculatedLeanMuscleMass).toFixed(2),
+                ffmi: parseFloat(calculatedFFMI).toFixed(2)
+            };
+        }
+        return {};
+    };
+
+    const { label, color } = getFfmiChip(formData.ffmi, gender);
+
+    useEffect(() => {
+        const updatedValues = calculateValues();
+        if (Object.keys(updatedValues).length > 0) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2),
-                ffmi: calculatedFFMI.toFixed(2)
+                ...updatedValues
             }));
-    
-            handleParentFormChange(prevFormData => ({
-                ...prevFormData,
-                lean_muscle_mass: calculatedLeanMuscleMass.toFixed(2),
-                ffmi: calculatedFFMI.toFixed(2)
-            }));
-            
-    
-    }, [formData.lean_muscle_mass]);
-    
+            handleParentFormChange(updatedValues);
+        }
+    }, [body_fat_percentage, current_body_weight, height_cm, uom.body_mass]);
 
+    const handleChange = (e, fieldName, inputValue) => {
+        const { name, value } = e ? e.target : { name: fieldName, value: inputValue };
 
-    const handleChange = (e, fieldName, inputValue, ) => {
-        const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
-    
+        const updatedValue = ['ffmi', 'lean_muscle_mass'].includes(name)
+            ? parseFloat(value)
+            : value;
+
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value
+            [name]: updatedValue
         }));
-        handleParentFormChange({ ...formData, [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value });
+
+        handleParentFormChange({
+            ...formData,
+            [name]: updatedValue
+        });
     };
 
     return (
@@ -110,7 +120,7 @@ function LeanMuscleMass({ data, handleParentFormChange }) {
                         YOUR FFMI IS WITHIN THE
                     </Typography>
                     <Chip label={label} style={{fontFamily:'silkscreen',  backgroundColor:color, fontWeight: 'bold', marginRight: '8px' }} />
-                    <Typography variant="body" style={{ fontWeight: 'bold' }}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                         RANGE
                     </Typography>
                 </Box>

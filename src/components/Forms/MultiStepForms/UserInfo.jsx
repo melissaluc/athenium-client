@@ -17,6 +17,7 @@ function UserInfo ({data, handleParentFormChange}) {
     
     const [formData, setFormData] = useState({
         username:username || null, 
+        google_id: google_id || null, 
         password: password || null,
         confirm_password: confirm_password || null, 
         email_address: email_address || '', 

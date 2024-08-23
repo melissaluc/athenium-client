@@ -31,7 +31,7 @@ function getMethodView(selectMethod,formData, handleChange) {
 
 function BodyFat({ data, handleParentFormChange }) {
 ;
-    const { body_fat_percentage, body_fat_view, height_cm,uom,newMeasurements,gender} = data;
+    const { body_fat_percentage, body_fat_view, body_fat_range, height_cm,uom,newMeasurements,gender} = data;
     const [selectMethod, setSelectMethod] = useState(body_fat_view);
 
     const methods = ['manual_input', 'visual_reference', 'girth_measurements'];
@@ -39,6 +39,7 @@ function BodyFat({ data, handleParentFormChange }) {
         body_fat_percentage: body_fat_percentage || '',
         height_cm:height_cm || '',
         newMeasurements:newMeasurements,
+        body_fat_range:body_fat_range || null,
         gender:gender || '',
         uom:{
             height: uom.height || 'cm',
@@ -46,19 +47,22 @@ function BodyFat({ data, handleParentFormChange }) {
         }
     });
 
-    const handleChange = (e, fieldName, inputValue, ) => {
-        const { name, value } = e ? e.target : {name: fieldName, value: inputValue}
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value
-        }));
-        handleParentFormChange(prevFormData => (
-            { ...prevFormData, 
-            [name]: fieldName==='body_fat_percentage'?  parseFloat(value) : value 
-        }));
+    const handleChange = (e, fieldName, inputValue) => {
+        const { name, value } = e ? e.target : { name: fieldName, value: inputValue };
+    
+        // Ensure numeric fields are handled correctly
+        const updatedValue = ['body_fat_percentage', 'height_cm'].includes(name) ? parseFloat(value) : value;
+    
+        setFormData(prevFormData => {
+            const newFormData = { ...prevFormData, [name]: updatedValue };
+    
+            // Call handleParentFormChange with the updated field
+            handleParentFormChange({ [name]: updatedValue });
+    
+            return newFormData;
+        });
     };
-
+    
         // Handle method selection
     const handleMethodClick = (method) => {
         setSelectMethod(method);
