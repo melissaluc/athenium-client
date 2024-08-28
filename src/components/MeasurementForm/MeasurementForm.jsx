@@ -3,7 +3,7 @@ import MeasurementInput from './MeasurementInput';
 import { useState, useContext } from 'react';
 import { Button, Typography, Container, Box, TextField } from '@mui/material';
 import BodyAvatar from '../../assets/Body';
-import { UserDataContext } from '../../UserDataContext';
+import { UserDataContext } from '../../Contexts/UserDataContext';
 
 function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handleSelectDate }) {
     const [selectLabel, setSelectLabel] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MenuItem, Divider, InputBase, Paper, TextField, FormControl, FormLabel } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-function CustomInput({ id, inputValue, placeholderText, options, defaultValue, onChangeSelect, onChange, label, fieldName, inputLabel, addStyle, inputBase=true }) {
+function OptionsInput({ id, inputValue, placeholderText, options, defaultValue, onChangeSelect, onChange, label, fieldName, inputLabel, addStyle, inputBase=true }) {
     const [selectValue, setSelectValue] = useState(defaultValue || ''); // Initialize with defaultValue or empty string
     const [formFieldValue, setFormFieldValue] = useState(inputValue || ''); // Initialize with inputValue or empty string
     const theme = useTheme();
@@ -130,4 +130,4 @@ function CustomInput({ id, inputValue, placeholderText, options, defaultValue, o
     );
 }
 
-export default CustomInput;
+export default OptionsInput;

@@ -7,6 +7,8 @@ import TodayIcon from '@mui/icons-material/Today';
 import axios from 'axios'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import EmailIcon from '@mui/icons-material/Email';
 
 function UserInfo ({data, handleParentFormChange}) {
 
@@ -97,6 +99,13 @@ function UserInfo ({data, handleParentFormChange}) {
                             variant="outlined"
                             required
                             onChange={handleChange}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                       <PersonOutlineIcon/>
+                                    </InputAdornment>
+                                ),
+                            }}
                             sx={{
                                 width: '100%',  
                                 borderRadius: 2,
@@ -178,6 +187,13 @@ function UserInfo ({data, handleParentFormChange}) {
                             variant="outlined"
                             required
                             onChange={handleChange}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <EmailIcon /> 
+                                    </InputAdornment>
+                                ),
+                            }}
                             sx={{
                                 width: '100%', 
                                 borderRadius: 2,

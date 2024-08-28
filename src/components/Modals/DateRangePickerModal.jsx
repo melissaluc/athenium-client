@@ -1,9 +1,8 @@
 // src/components/AddGoalModal.jsx
 import { useState} from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
+import {Box, IconButton, Modal} from '@mui/material';
 
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import DateRangePicker from '../DatePickers/DateRangePicker';
 
 
@@ -37,7 +36,7 @@ function DateRangePickerModal({handleSelectDate}) {
 
   return (
     <Box>
-      <Button onClick={handleOpen}>Select Date Range</Button>
+      <IconButton color='primary' onClick={handleOpen}><DateRangeIcon/></IconButton>
       <Modal
         open={open}
         onClose={handleClose}

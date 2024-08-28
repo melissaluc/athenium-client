@@ -1,7 +1,12 @@
-import { Box, Button } from "@mui/material"; 
+import { Box, Button, IconButton, Chip, Stack, Typography } from "@mui/material"; 
 import { useEffect, useState } from "react";
 import TrendsGraph from "./TrendsGraph";
 import { useTheme } from "@emotion/react";
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 
 function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
     const theme = useTheme();
@@ -65,60 +70,55 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: `2px solid ${theme.palette.primary.main}` }}>
-                <Button fontWeight='bold' onClick={() => setShowOptions(prev => !prev)}>
-                    {groupTitle.replace(/_/g, " ").toUpperCase()}
+                <Button fontWeight='bold' spacing='10rem' onClick={() => setShowOptions(prev => !prev)}>
+                    <Typography >{groupTitle.replace(/_/g, " ").toUpperCase()}</Typography>
+                    {!showOptions ? <ExpandMoreIcon/> : <ExpandLessIcon/>}
                 </Button>
                 {groupTitle !== "measurements" && (
-                    <Button onClick={() => setToggleGraph(prev => !prev)}>Toggle</Button>
+                    <IconButton color={toggleGraph? 'primary' : 'default'} onClick={() => setToggleGraph(prev => !prev)}> {toggleGraph? <ToggleOnIcon /> : <ToggleOffIcon /> }</IconButton>
                 )}
             </Box>
 
             {showOptions && (
-                <Box sx={{
-                    display: 'flex',
+                <Stack direction="row" spacing={1} sx={{
+                    // display: 'flex',
+                    
                     flexWrap: groupTitle !== "strength" ? 'wrap' : 'nowrap',
-                    flexDirection: groupTitle !== "strength" ? 'row' : 'column',
-                    gap: '0.5rem'
+                    // flexDirection: groupTitle !== "strength" ? 'row' : 'column',
+                    // gap: '0.5rem'
                 }}>
                     {groupTitle !== "strength" && groupAttributes.filter(attribute => !attribute.endsWith("_diff") && attribute !== "calories").map((metric) => (
-                            <Button
-                                key={metric}
-                                sx={{ 
-                                border: '1px solid blue', 
-                                padding: '0.2rem',
-                                backgroundColor: selectOptions.includes(metric) ? 'purple' : 'transparent',
-                                color: selectOptions.includes(metric) ? 'white' : 'initial', }}
-                                onClick={() => handleOptions(metric)}
-                            >{metric.replace(/_/g, ' ')}</Button>
+                                <Chip
+                                    key={metric}
+                                    color='primary'
+                                    variant={selectOptions.includes(metric) ? "contained": "outlined"}
+                                    label={metric.replace(/_/g, ' ')}
+                                    onClick={() => handleOptions(metric)}
+                                />
                     ))}
 
                     {groupTitle === "strength" && Object.keys(groupAttributes).map((key) => (
                         <Box key={key}>
-                            <Box sx={{ border: '1px solid blue', padding: '0.2rem' }} onClick={() => setShowSubOptions(prev => !prev)}>
-                                <Button>{key.replace(/_/g, ' ')}</Button>
-                            </Box>
-                            <Box>
+                            <Typography onClick={() => setShowSubOptions(prev => !prev)}>
+                                <Button>{key.replace(/_/g, ' ')} </Button>
+                            </Typography>
+                            <Stack direction="row" spacing={1}>
                                 {showSubOptions &&
                                     groupAttributes[key].map((metric) => (
-                                            <Button
+                                            <Chip
                                             key={metric}
-                                            sx={{
-                                                border: '1px solid blue',
-                                                padding: '0.2rem',
-                                                margin:'0.5rem 0.5rem 0.5rem 0',
-                                                backgroundColor: selectOptions.includes(metric) ? 'purple' : 'transparent',
-                                                color: selectOptions.includes(metric) ? 'white' : 'initial',
-                                                cursor: 'pointer'
-                                            }}
+                                            color='primary'
+                                            variant={selectOptions.includes(metric) ? "contained": "outlined"}
+                                            label={metric}
                                             onClick={() => handleOptions(metric)}
                                             
-                                            >{metric}</Button>
+                                            />
                                     ))
                                 }
-                            </Box>
+                            </Stack>
                         </Box>
                     ))}
-                </Box>
+                </Stack>
             )}
 
             <Box>

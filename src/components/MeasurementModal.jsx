@@ -58,8 +58,8 @@ function MeasurementModal({values}) {
     },[]) 
 
     return (
-    <Box>
-        <Button onClick={handleOpen}>+ Add Goal</Button>
+    <Box fullWidth>
+        <Button fullWidth variant='contained' color='secondary' onClick={handleOpen}>+ Add Goal</Button>
         <Modal
             open={open}
             onClose={handleClose}

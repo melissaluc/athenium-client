@@ -29,10 +29,13 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#9B6EDE',
+      light: '#E8E5E5',
+      orange:'#FF9926',
+      cyan:'#00E4C5',
     },
     secondary: {
       main: '#F3F0FB',
-      light:'#D8D8D8'
+      light:'rgba(216, 216, 216, 0.6)'
     },
     progress: {
       level1: '#F4D35E', // Yellow

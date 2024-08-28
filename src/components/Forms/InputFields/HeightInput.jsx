@@ -89,12 +89,13 @@ function HeightInput({ addStyle, id, placeholderText, defaultValue, defaultLabel
                 />
             </FormGroup>
             <Paper
+                    
                     component="form"
                     sx={{
                         p: '2px 2px',
                         display: 'flex',
                         alignItems: 'center',
-                        width: '60vw',
+                        width: '100%',
                         boxShadow: 'none',
                         border: '1px solid',
                         borderColor: '#D9D9DE',

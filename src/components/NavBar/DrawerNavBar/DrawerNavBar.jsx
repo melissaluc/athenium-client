@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React, {useState, useContext} from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -11,24 +12,23 @@ import { googleLogout } from '@react-oauth/google';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TimelineIcon from '@mui/icons-material/Timeline';
-import TodayIcon from '@mui/icons-material/Today';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FlagIcon from '@mui/icons-material/Flag';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
-import MenuIcon from '@mui/icons-material/Menu';
+import AppsIcon from '@mui/icons-material/Apps';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AtheniumLogo from "../../../assets/AtheniumLogo";
-import {UserDataContext} from '../../../UserDataContext'
+import {UserDataContext} from '../../../Contexts/UserDataContext'
 import { useTheme } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
-import { Typography } from '@mui/material';
 
-export default function DrawerNavBar() {
-  const {userData, setUserData, setIsDataFetched} = React.useContext(UserDataContext)
-  const [state, setState] = React.useState({
+
+function DrawerNavBar() {
+  const {setUserData, setIsDataFetched} = useContext(UserDataContext)
+  const [state, setState] = useState({
     right: false,
+    left: false,
   });
 
   const theme = useTheme();
@@ -38,7 +38,7 @@ export default function DrawerNavBar() {
     { text: 'Dashboard', path: '../dashboard', icon: <DashboardIcon /> },
     { text: 'Trend', path: '../trends', icon: <TimelineIcon /> },
     { text: 'Strength', path: '../strength', icon: <AssessmentIcon /> },
-    { text: 'Schedule', path: '../schedule', icon: <TodayIcon /> },
+    // { text: 'Schedule', path: '../schedule', icon: <TodayIcon /> },
     // { text: 'Log', path: '/log', icon: <FormatListBulletedIcon /> },
     { text: 'Goals', path: '../goals', icon: <FlagIcon /> },
     { text: 'Workouts', path: '../workouts', icon: <FitnessCenterIcon /> },
@@ -47,21 +47,31 @@ export default function DrawerNavBar() {
   ];
 
 
-  const googleLogOut = () => {
-    googleLogout();
-    // Clear out UserData
-  };
-  const handleLogout = () => {
-    try{
-      googleLogOut()
-    } catch(error) {
-      console.log(error)
+  const googleLogOut = async () => {
+   
+      await googleLogout(); 
+
+};
+
+const handleLogout = async () => {
+    try {
+
+        await googleLogOut();
+
+        setUserData({});
+        setIsDataFetched(false);
+
+        localStorage.removeItem('authToken');
+
+
+        navigate('/login');
+    } catch (error) {
+
+        console.error('Error during logout:', error);
     }
-    setUserData({})
-    setIsDataFetched(false)
-    localStorage.removeItem('authToken');
-    navigate('/login');
-  };
+};
+
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -72,9 +82,13 @@ export default function DrawerNavBar() {
 
   return (
     <div>
-      {['right'].map((anchor) => (
+      {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}><MenuIcon/></Button>
+          <IconButton sx={{
+            '& .MuiSvgIcon-root': {
+              fontSize: '5vh', 
+        },
+      }} color='primary' onClick={toggleDrawer(anchor, true)}><AppsIcon/></IconButton>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -132,10 +146,10 @@ export default function DrawerNavBar() {
                   onClick={handleLogout}
                   sx={{
                     width: '100%',
-                    backgroundColor: theme.palette.error.main,
+                    backgroundColor: theme.palette.primary.main,
                     color: 'white',
                     '&:hover': {
-                      backgroundColor: theme.palette.error.dark,
+                      backgroundColor: theme.palette.primary.cyan,
                     },
                   }}
                 >
@@ -149,3 +163,5 @@ export default function DrawerNavBar() {
     </div>
   );
 }
+
+export default DrawerNavBar;
