@@ -1,200 +1,92 @@
-import { Box, Typography, Button, Card, CardActionArea, CardActions, CardContent, TextField } from "@mui/material";
+import { Box, Typography, Button, Card, CardActionArea, CardActions, CardContent, 
+    Chip, Stack,
+    List, ListItem, Grid, ListItemText, 
+    ImageListItem} from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ExerciseModal from "../../Modals/ExerciseModal";
-import ListItemExerciseCard from "./ListItemExerciseCard";
-import { useEffect, useState} from "react";
+import {useNavigate} from 'react-router-dom'
+import {useState} from "react";
 import { useTheme } from "@emotion/react";
-import axiosInstance from "../../../utils/axiosConfig"
+import { format, parseISO } from 'date-fns';
+import { unixToLocal } from "../../../utils/utils";
 
 
 function WorkoutCard({ 
-                        userData,
-                        data, 
-                        handleAddTag, 
-                        handleAddExercise, 
-                        handleDeleteExercise, 
-                        handleUpdateData, 
-                        handleDeleteWorkout,  
-                        addedExercises, 
-                        setAddedExercises,
-                        deletedExercises, 
-                        setDeletedExercises,
-                        updatedExercises, 
-                        setUpdatedExercises }) {
+                        workout, 
+                         }) {
     const [expandWorkout, setExpandWorkout] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [formData, setFormData] = useState(data);
-    const [originalData, setOriginalData] = useState(data);
-    const [open, setOpen] = useState(false);
-    const [updateWorkoutDetails, setUpdateWorkoutDetails] = useState({})
+
     const theme = useTheme();
+    const navigate = useNavigate()
+   
 
-    useEffect(() => {
-        setFormData(data);
-        setOriginalData(data);
-    }, [data]);
-    
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
-    const handleClickAddExercise = () => {
-        handleOpen();
-    };
-
-    const handleClickEdit = (e) => {
-        e.preventDefault()
-        setEditMode(true);
-        setExpandWorkout(true); // Expand workout panel on edit
-    };
-
-    const handleCancel = () => {
-        setFormData(originalData); // Reset form data to original
-        setEditMode(false);
-        setDeletedExercises([])
-        setAddedExercises([])
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUpdateWorkoutDetails(prev=>({...prev, [name]: value}))
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleExerciseChanges = (updatedExercises) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            exercises: updatedExercises,
-        }));
-    };
-    
-    const handleClickDeleteExercise = (selectedExercise) => {
-        const updatedExercises = formData.exercises.filter(exercise => exercise.id !== selectedExercise.id);
-        handleExerciseChanges(updatedExercises);
-        handleDeleteExercise(selectedExercise); // Only pass exercise id or data needed for deletion
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Update exercises and workout details
-        console.log( 'addedExercises: ',addedExercises )
-        console.log( 'updatedExercises: ',updatedExercises)
-        if(deletedExercises || addedExercises || updatedExercises || updateWorkoutDetails){
-            const patchData = {
-                updatedWorkoutDetails: updateWorkoutDetails? updateWorkoutDetails : {},
-                addedExercises: addedExercises ? addedExercises : [],
-                deletedExercises: deletedExercises ? deletedExercises : [],
-                updatedExercises: updatedExercises ? updatedExercises : [],
-            }
-            console.log(patchData)
-            
-            axiosInstance.patch(`/workouts/${data.workout_id}`,patchData)
-            .then(response =>{
-                handleUpdateData(formData);
-                setOriginalData(formData);
-                
-                setEditMode(false);
-                console.log(response.data)
-                setDeletedExercises([])
-                setAddedExercises([])
-                setUpdatedExercises([])
-                setUpdateWorkoutDetails({})
-            })
-            .catch(error=>console.error(error))
-        }
-    };
 
     return (
-        <Card>
-            <CardContent component="form" onSubmit={handleSubmit} noValidate>
-                <Box>
-                    {/* TODO: update conversion of last_completed */}
-                    <Typography>{data.last_completed && `Last completed on  ${new Date(data.last_completed).toLocaleDateString()}`}</Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                        {editMode ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <TextField name='workout_name' value={formData.workout_name} onChange={handleChange} />
-                                <Button onClick={() => handleDeleteWorkout(data.workout_id)}>Delete</Button>
-                            </Box>
-                        ) : (
-                            <Typography variant="h6">{formData.workout_name}</Typography>
-                        )}
-                        {editMode ? (
-                            <Button type="submit">Save</Button>
-                        ) : (
-                            <Button onClick={handleClickEdit}>Edit</Button>
-                        )}
-                    </Box>
-                    {/* <Box>
-                        {editMode ? (
-                            <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                                {formData.tags.map((tag) => (
-                                    <Typography key={tag} sx={{ backgroundColor: 'black', color: 'white', p: '0.2rem' }}>{tag.toUpperCase()}</Typography>
-                                ))}
-                                <Button onClick={handleAddTag}>Add tag</Button>
-                            </Box>
-                        ) : (
-                            <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                                {formData.tags.length ? formData.tags.map((tag) => (
-                                    <Typography key={tag} sx={{ backgroundColor: 'black', color: 'white', p: '0.2rem' }}>{tag.toUpperCase()}</Typography>
-                                )) : (
-                                    <Typography>No Tags</Typography>
-                                )}
-                            </Box>
-                        )}
-                    </Box> */}
+        <Card width='100%' sx={{border:'1px solid #D9D9DE'}}>
+            <CardContent >
+                <Box display='flex' sx={{justifyContent:'space-between'}}>
+                    <Chip 
+                        size='small'
+                        label='unknown'
+                        />
+                    {workout.last_completed && 
+                        <Stack direction='column' pb={'1rem'}>
+                            <Typography fontSize={'0.7rem'}>Last Completed</Typography>
+                            <Typography fontSize={'0.7rem'}>{unixToLocal(workout.last_completed)}</Typography>
+                        </Stack>
+                    }
                 </Box>
-                {expandWorkout &&
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: "1rem" }}>
-                        {editMode ? (
-                            <TextField name='description' multiline value={formData.description} onChange={handleChange} />
-                        ) : (
-                            <Typography variant="body">{formData.description}</Typography>
-                        )}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '1px black solid', pt: "1rem" }}>
-                            {formData.exercises.length ? formData.exercises.map((exercise) => (
-                                <ListItemExerciseCard
-                                    userData={userData}
-                                    key={exercise.id}
-                                    data={exercise}
-                                    editMode={editMode}
-                                    setUpdatedExercises={setUpdatedExercises}
-                                    handleClickDeleteExercise={handleClickDeleteExercise}
-                                    handleExerciseChanges={(updatedExercise) => {
-                                        const updatedExercises = formData.exercises.map(ex => ex.id === updatedExercise.id ? updatedExercise : ex);
-                                        handleExerciseChanges(updatedExercises);
-                                    }}
-                                />
-                            )) : (
-                                <Typography>No Exercises</Typography>
-                            )}
-                            {editMode && (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                                    <Button onClick={handleClickAddExercise}>+ Add Exercise</Button>
-                                    <Button onClick={handleCancel}>Cancel</Button>
-                                </Box>
-                            )}
-                            <ExerciseModal workout_id={data.workout_id} handleClose={handleClose} open={open} handleAddExercise={handleAddExercise} />
-                        </Box>
+                <Box display='flex' sx={{justifyContent:'space-between'}}>
+                    <Box>
+                        <Typography fontSize={'1.5rem'} fontWeight={''}>{workout.workout_name}</Typography>
+                        <Typography fontSize={'0.8rem'}>{workout.exercises?.length || 0} Exercises</Typography>
                     </Box>
+                    <Button variant='outlined' onClick={()=>{navigate(`/workouts/${workout.workout_id}`)}}>View</Button>
+                </Box>
+                { expandWorkout && 
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <List>
+                            {workout.exercises.map(exercise => {
+                                return (
+                                    <ListItem style={{ display: 'flex', alignItems: 'center', gap:'2rem' }}>
+                                        <ImageListItem>
+                                            <img
+                                                src={exercise.img_url}
+                                                alt={exercise.exercise_name}
+                                                layout="responsive"
+                                                // height={75}
+                                            />
+                                        </ImageListItem>
+                                        <ListItemText
+                                            primary={exercise.exercise_name}
+                                            secondary={exercise.group}
+                                        />
+                                    </ListItem>
+                                )
+                            })
+                            }
+                            </List>
+                        </Grid>
+                    </Grid>
+
                 }
             </CardContent>
-            <CardActionArea sx={{
-                width: '100%',
-                margin: '0px',
-                padding: '0px',
-                backgroundColor: theme.palette.secondary.main,
-                opacity: "40%",
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0
-            }}>
-                <CardActions sx={{ width: '100%', margin: '0px', padding: '0px' }}>
-                    <Button onClick={() => setExpandWorkout(prev => !prev)} sx={{ width: '100%', margin: '0px', padding: '0px' }}><ArrowDropDownIcon sx={{ transform: expandWorkout ? 'scaleY(-1)' : 'none' }} /></Button>
-                </CardActions>
-            </CardActionArea>
+            {
+                workout.exercises?.length> 0 && 
+                <CardActionArea sx={{
+                    width: '100%',
+                    margin: '0px',
+                    padding: '0px',
+                    backgroundColor: theme.palette.secondary.main,
+                    opacity: "40%",
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0
+                }}>
+                    <CardActions sx={{ width: '100%', margin: '0px', padding: '0px' }}>
+                        <Button onClick={() => setExpandWorkout(prev => !prev)} sx={{ width: '100%', margin: '0px', padding: '0px' }}><ArrowDropDownIcon sx={{ transform: expandWorkout ? 'scaleY(-1)' : 'none' }} /></Button>
+                    </CardActions>
+                </CardActionArea>
+            }
         </Card>
     );
 }

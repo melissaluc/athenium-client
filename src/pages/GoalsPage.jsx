@@ -4,7 +4,7 @@ import GoalsCard from '../components/GoalsCard';
 import GoalModal from "../components/Modals/GoalModal";
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
-import { UserDataContext } from '../UserDataContext';
+import { UserDataContext } from '../Contexts/UserDataContext';
 
 function GoalsPage() {
   const {userData, setUserData }= useContext(UserDataContext);

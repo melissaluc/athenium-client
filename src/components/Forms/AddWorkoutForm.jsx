@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Grid} from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+import { useWorkoutContext } from '../../Contexts/WorkoutContext';
 
-const AddWorkoutForm = ({ onClose, handleAddWorkout }) => {
+
+const AddWorkoutForm = ({ onClose}) => {
+  const {addWorkout} = useWorkoutContext();
+
   const [formData, setFormData] = useState({
     workout_id: null,
     workout_name: '',
@@ -29,9 +32,8 @@ const AddWorkoutForm = ({ onClose, handleAddWorkout }) => {
     e.preventDefault();
     const newFormData = {
       ...formData,
-      workout_id: uuidv4()
     };
-    handleAddWorkout(newFormData);
+    addWorkout(newFormData);
     onClose();
   };
 

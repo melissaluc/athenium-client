@@ -1,4 +1,3 @@
-// src/axiosConfig.js
 import axios from 'axios';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
@@ -10,7 +9,7 @@ const axiosInstance = axios.create({
     }
 });
 
-
+// add token
 axiosInstance.interceptors.request.use(config => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -20,6 +19,17 @@ axiosInstance.interceptors.request.use(config => {
 }, error => {
     return Promise.reject(error);
 });
+
+// Error remove token
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('authToken');
+        }
+        return Promise.reject(error);
+    }
+);
 
 
 export default axiosInstance;

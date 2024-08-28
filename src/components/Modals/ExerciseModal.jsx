@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import {Box, Button, Modal, CircularProgress} from '@mui/material';
-
+import {Box, Button, Modal, CircularProgress, Divider, Stack, Chip} from '@mui/material';
+import { useWorkoutContext } from '../../Contexts/WorkoutContext';
 import exercisesData from "../../data/exercises.json"
 import { maxHeight } from '@mui/system';
 import { TextField, Typography } from '@mui/material';
+import { IconButton } from 'rsuite';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: 'absolute',
@@ -17,11 +19,12 @@ const style = {
   p: 4,
   borderRadius: 2,
   maxHeight:'80vh',
-  overflow:'auto'
+  overflow:'hidden'
 
 };
 
-function ExerciseModal({workout_id, handleClose, open, handleAddExercise}) {
+function ExerciseModal({workoutDetailForm, handleClose, open}) {
+    const {addExercise, updateWorkoutDetails} = useWorkoutContext();
     const [fullExercises] = useState(exercisesData)
     const [activeView, setActiveView] = useState('strength_training')
     const [exercises,setExercises] = useState(exercisesData)
@@ -32,12 +35,13 @@ function ExerciseModal({workout_id, handleClose, open, handleAddExercise}) {
 
     useEffect(()=>{
         setExercises(fullExercises)
-
     },[activeView])
-
+    
     const handleOnClickSelectExercise = (exercise) =>{
         console.log(exercise)
-        handleAddExercise(exercise)
+        addExercise(exercise)
+        updateWorkoutDetails(workoutDetailForm)
+        
         handleClose()
     }
 
@@ -50,28 +54,55 @@ function ExerciseModal({workout_id, handleClose, open, handleAddExercise}) {
         aria-describedby="modal-modal-description"
         >
         <Box sx={style}>
-            <Box sx={{display:'flex', flexDirection:'column'}}>
-                <Typography>Select an Exercise</Typography>
-                <Box sx={{display:'flex', justifyContent:'flex-start', gap:'1rem', margin:'1rem 0', flexWrap:'wrap'}}>
-                    {Object.keys(fullExercises).map((category)=>{
-                        return(
-                            <Button key={category} variant="outlined" onClick={()=>{handleView(category)}}>{category.replace(/_/g, " ")}</Button>
-                        )
-                    })}
+            <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', width:'100%', justifyContent:'center',}}>
+                <Box sx={{position:'sticky', top:'0px', backgroundColor: 'background.paper', paddingBottom:'0.5rem'}} >
+                    <Stack direction='row' justifyContent={'space-between'}>
+                        <Typography variant='subtitle1' fontWeight={'bold'} color='primary'>SELECT AN EXERCISE</Typography>
+                        {/* <IconButton variant='' onClick={handleClose} ><CloseIcon/></IconButton> */}
+                        <Button variant='text' onClick={handleClose} >close</Button>
+                    </Stack>
+                    <Stack  
+                        direction="row"
+                        justifyContent="space-evenly"
+                        alignItems="center"
+                        useFlexGap 
+                        gap='0.5rem'
+                        paddingBottom='1rem'
+                        flexWrap="wrap">
+                        {Object.keys(fullExercises).map((category)=>{
+                            return(
+                                <Chip clickable key={category} size='large' onClick={()=>{handleView(category)}} label={category.replace(/_/g, " ")}/>
+                            )
+                        })}
+                    </Stack>
+                <Divider/>
                 </Box>
-                <Box >
+                <Box 
+                        m='1rem' 
+                        display='flex'
+                        flexDirection='column'
+                        alignItems='center'
+                        width='100%'
+                        maxHeight='calc(50vh - 2rem)' // Adjust height to fit within the modal
+                        overflow='auto'
+                        sx={{
+                            border: '1px solid #ddd',
+                            padding: '1rem',
+                            boxSizing: 'border-box', // Ensures padding and border are included in the total width and height
+                        }}
+                    >
                     {exercises !== null ? Object.entries(exercises).map(([group, value])=>{
                         return (
-                            <Box key={group} sx={{borderTop:'1px solid black', p:'1.5rem 0'}}>
-                                <Typography variant='h6'>{group.toUpperCase()}</Typography>
-        
+                            <Box key={group} width='100%' >
+                                <Divider><Typography variant='subtitle1' fontWeight={'bold'}>{group.toUpperCase()}</Typography></Divider>
                                 {value && value.map((item)=>{ 
                                     const {exerciseName, imgURL} = item
                                     return(
-                                        <Box sx={{display:'flex', justifyContent:'flex-start', alignItems:'center', gap:'2rem'}}>
-                                            <Box><img src={imgURL} alt={exerciseName}></img></Box>
-                                            <Button onClick={()=>handleOnClickSelectExercise(({workout_id, exerciseName, group, imgURL}))}>{exerciseName}</Button>
-                                        </Box>
+                                            <Box sx={{display:'flex', justifyContent:'flex-start', alignItems:'center', gap:'2rem', cursor:'pointer'}} onClick={()=>handleOnClickSelectExercise(({exerciseName, group, imgURL}))}>
+                                                    <Box><img src={imgURL} alt={exerciseName}></img></Box>
+                                                    <Typography >{exerciseName}</Typography>
+                                            </Box>
+    
                                         )
                                 })}
                             </Box>

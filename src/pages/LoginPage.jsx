@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/Forms/LoginForm';
 import { styled } from '@mui/material/styles';
 import { GoogleLogin } from '@react-oauth/google';
-import { UserDataContext } from '../UserDataContext';
+import { UserDataContext } from '../Contexts/UserDataContext';
 
 
 function LoginPage() {
@@ -56,7 +56,7 @@ function LoginPage() {
     };
 
     useEffect(()=>{
-        if (Object.keys(userData).length > 0) {
+        if (userData) {
             navigate('/dashboard');
         }
     },[userData])

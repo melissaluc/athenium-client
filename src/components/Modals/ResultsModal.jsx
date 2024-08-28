@@ -46,7 +46,7 @@ function ResultsModal({open, handleClose, results, error}) {
           <StrengthResults results={results} handleClose={handleClose} />
         ) : (
           <>
-            <Typography>Calculating Strength</Typography>
+            <Typography variant='h6' color={'primary'}>Calculating Strength</Typography>
             <LinearProgress />
           </>
         ))}

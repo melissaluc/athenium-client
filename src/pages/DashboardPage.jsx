@@ -2,15 +2,12 @@ import { Button, Typography, Container, Box } from '@mui/material';
 import BodyAvatar from '../assets/Body'
 import {useState, useEffect, useContext} from 'react'
 import ParamsCard from '../components/Cards/ParamsCard/ParamsCard';
-import DashboardHeader from '../components/DashboardHeader/DashboardHeader';
-import userAvatar from "../assets/placeholderuseravatar.jpg"
 import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { useNavigate } from 'react-router-dom';
-import MiniScheduleCard from '../components/Cards/ScheduleCard/ScheduleCard';
 import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
-import { UserDataContext } from '../UserDataContext';
+import { UserDataContext } from '../Contexts/UserDataContext';
 
 
 function DashboardPage({}){
@@ -20,7 +17,7 @@ function DashboardPage({}){
     const [measurementData, setMeasurementData] = useState([]);
     const [selectMeasurementData, setSelectMeasurementData] = useState({});
     const [otherData, setOtherData] = useState(null)
-    const [scheduleData, setScheduleData] = useState([])
+
 
     const today = new Date();
     const formattedDate = today.toISOString().slice(0, 10); // Get YYYY-MM-DD format
@@ -86,21 +83,10 @@ function DashboardPage({}){
     }, [userData]);
 
 
-    // // Current Schedule
-    // useEffect(() => {
-    //     axiosInstance.get(`/schedule?planned_on=${formattedDate}`)
-    //         .then(response => {
-    //             setScheduleData(response.data)
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         });
-    // }, [userData]);
+ 
 
     return (
         <Container sx={{}}>
-            {/* Nav */}
-            <DashboardHeader userAvatar={userAvatar} userData={userData}/>
             {/* Date selector */}
             <Box sx={{margin:'1.5rem 0rem'}}>
                 <Box>
@@ -182,22 +168,6 @@ function DashboardPage({}){
                 </Box>
             </Box>
 
-            {/* Upcoming Activities: shows activities within 3 hours away in a 5 hour time block, or shows the next activity*/}
-            {/* <Box>
-                <Typography>Upcoming Activities Today</Typography>
-                <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"baseline"}}>
-                    <Typography>{new Date().toDateString()}</Typography>
-                    <Button onClick={()=>navigate("../schedule")}>See more</Button> 
-                </Box>
-                <Box sx={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
-                    
-                    {dashData.schedule.map((item) => {
-      
-                    return <MiniScheduleCard key={item.id} data={item} />;
-                })}
-
-                </Box>
-            </Box> */}
 
         </Container>
     )

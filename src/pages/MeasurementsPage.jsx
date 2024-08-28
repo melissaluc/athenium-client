@@ -4,7 +4,7 @@ import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import MeasurementModal from '../components/MeasurementModal';
 import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
-import { UserDataContext } from '../UserDataContext';
+import { UserDataContext } from '../Contexts/UserDataContext';
 
 function MeasurementPage() {
     const {userData, setUserData }= useContext(UserDataContext);
@@ -194,10 +194,9 @@ function MeasurementPage() {
                 width="100%"
             >
                 <MeasurementModal
-                    sx={{ width: '80vw' }}
                     values={{ ...inputValues.left, ...inputValues.right }}
                 />
-                <Button onClick={handleSubmit} sx={{ width: '80%' }}>Save</Button>
+                <Button fullWidth  variant='contained' onClick={handleSubmit} >Save</Button>
             </Box>
         </Container>
     );

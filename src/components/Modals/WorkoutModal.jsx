@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import AddWorkoutForm from '../Forms/AddWorkoutForm';
 import { maxHeight } from '@mui/system';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -21,8 +22,7 @@ const style = {
 
 };
 
-function WorkoutModal({handleAddWorkout}) {
-
+function WorkoutModal({buttonText}) {
   const [open, setOpen] = useState(false);
 
 
@@ -30,20 +30,22 @@ function WorkoutModal({handleAddWorkout}) {
   const handleClose = () => setOpen(false);
 
   return (
-    <Box>
-      <Button onClick={handleOpen}>+ Add Workout</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-       <Box sx={style}>
-          <AddWorkoutForm onClose={handleClose} handleAddWorkout={handleAddWorkout}/>
-        </Box>
-    
-      </Modal>
-    </Box>
+    <>
+    <Button fullWidth variant='contained' onClick={handleOpen}>{buttonText}</Button>
+      <Box>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+        <Box sx={style}>
+            <AddWorkoutForm onClose={handleClose}/>
+          </Box>
+      
+        </Modal>
+      </Box>
+    </>
   );
 }
 

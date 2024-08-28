@@ -5,7 +5,7 @@ import TrendsGroup from "../components/TrendsGroup";
 import { useTheme } from "@emotion/react";
 import { startOfWeek, endOfWeek, startOfMonth,endOfMonth, startOfYear, endOfYear, format } from 'date-fns';
 import axiosInstance from "../utils/axiosConfig";
-import { UserDataContext } from '../UserDataContext';
+import { UserDataContext } from '../Contexts/UserDataContext';
 
 const getWeekRange = (date) => {
   const start = startOfWeek(date, { weekStartsOn: 0 }); // Sun
@@ -97,7 +97,7 @@ function TrendsPage() {
     <Container>
     <Box>
         
-        <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap:'0.5rem', flexWrap:'wrap', backgroundColor:theme.palette.secondary.main}}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap:'0.2rem', flexWrap:'wrap', }}>
           {["month","6 months","year","select range"].map((view)=>{
               if(view==='select range'){
                 return <DateRangePickerModal handleSelectDate={handleSelectDate} />
@@ -106,7 +106,10 @@ function TrendsPage() {
                         key={view}
                         onClick={() => handleView(view)}
                         sx={{
-                          backgroundColor: activeView === view ? "white" : "none",
+                          textDecoration: activeView === view ? 'solid 1px underline' : "none",
+                          '&:hover': {
+                              textDecoration: 'underline', // Ensures underline stays on hover
+                          },
                           color: activeView === view ? theme.palette.primary.main : theme.palette.primary.main
                         }}
                         >{view}</Button>
