@@ -22,23 +22,26 @@ const style = {
 };
 
 
-function ResultsModal({open, handleClose, results, error}) {
+function ResultsModal({open, handleClose, results, error, handleStrengthCalcError}) {
   
-
+  const handleError = () => {
+    handleStrengthCalcError()
+    handleClose(false)
+  }
 
   return (
     <Box>
       {/* <Button onClick={handleClose}>Close</Button> */}
       <Modal
         open={open}
-        onClose={()=>{handleClose(false)}}
+        onClose={handleError}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
       <Box sx={style}>
         {error ? (
           <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <Button sx={{alignSelf:'flex-end'}} onClick={()=>{handleClose(false)}}>close</Button>
+            <Button sx={{alignSelf:'flex-end'}} onClick={handleError}>close</Button>
             <Typography>(っ °Д °;)っ Error ❌</Typography>
           </Box>
         )
