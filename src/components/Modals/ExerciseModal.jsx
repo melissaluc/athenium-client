@@ -19,7 +19,7 @@ const style = {
   p: 4,
   borderRadius: 2,
   maxHeight:'80vh',
-  overflow:'hidden'
+//   overflow:'hidden'
 
 };
 

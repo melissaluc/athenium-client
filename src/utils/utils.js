@@ -104,6 +104,7 @@ const convertFtInToCm = (feet, inches) => {
 
 function unixToLocal(unixTimestamp) {
     // seconds
+    console.log('unixTime: ',unixTimestamp)
     const date = new Date(unixTimestamp*1000);
 
 
