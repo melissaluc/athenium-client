@@ -151,13 +151,14 @@ function WorkoutDetailPage() {
     
         try {
 
-            const completed_on_dt = Date.now()/1000;
+            const completed_on_dt = Date.now(); // milliseconds
+            const completed_on_dt_in_seconds = Math.floor(completed_on_dt / 1000);
             const updatedWorkoutDetails = editMode
                 ? workoutDetailForm
                 : {
                     ...workoutDetailForm,
                     frequency: parseInt(workoutDetailForm.frequency) + 1,
-                    last_completed: completed_on_dt
+                    last_completed: completed_on_dt_in_seconds
                 };
     
             await updateWorkout(updatedWorkoutDetails);
