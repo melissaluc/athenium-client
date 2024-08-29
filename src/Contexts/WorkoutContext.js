@@ -48,11 +48,13 @@ export const WorkoutProvider = ({ children }) => {
         }
     }, []);
 
-    const calculateStrengthLevel = useCallback(async (exercise_name, weight, sets, reps) => {
+    const calculateStrengthLevel = useCallback(async (exercise_name, group, weight, sets, reps) => {
         const data = {
             body_weight: userData.weight,
             age: userData.age,
             gender: userData.gender,
+            group,
+            category:'strength',
             weight,
             reps,
             exercise_name,
@@ -62,12 +64,14 @@ export const WorkoutProvider = ({ children }) => {
         console.log('data to pass to calc: ',data)
         try {
             const response = await axiosInstance.post('/strength', data);
+          
             return { result: response.data[0], error: null };
+            
         } catch (error) {
             console.error('Error calculating strength level:', error);
             return { result: null, error: true };
         }
-    }, [userData]);
+    }, [userData,]);
 
 
     const handleStart = () => {

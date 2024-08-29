@@ -29,7 +29,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
     })
     const [openResults, setOpenResults] = useState(false)
     const [results, setResults] = useState(null)
-    const [errorResults, setErrorResults] = useState(null);
+    const [errorResults, setErrorResults] = useState(false);
 
     // useEffect(()=>{
     //     console.log('workoutMode: ',workoutMode)
@@ -45,16 +45,17 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
     }
     const handleClickStengthCalc = async () => {
         setOpenResults(true)
-        const { exercise_name, weight, sets, reps } = exercise;
-        console.log({ exercise_name, weight, sets, reps } )
+        const { exercise_name, group, weight, sets, reps } = exercise;
+        console.log({ exercise_name, group, weight, sets, reps } )
         console.log('form Data',formData )
         console.log('workoutData',workoutData )
         try {
-            const { result, error } = calculateStrengthLevel(exercise_name, weight, sets, reps);
+            const { result, error } = await calculateStrengthLevel(exercise_name, group, weight, sets, reps);
             if (result) {
                 setResults(result);
+                setErrorResults(false); 
             } else {
-                setErrorResults(error);
+                setErrorResults(true);
             }
         } catch (error) {
             console.error('Error in handleClickStengthCalc:', error);
@@ -86,12 +87,14 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
         
     };
     
-
+    const handleStrengthCalcError = () => {
+        setErrorResults(false)
+    }
 
 
     return (
             <>  
-                <ResultsModal open={openResults} handleClose={setOpenResults} results={results} error={errorResults}/>
+                <ResultsModal open={openResults} handleClose={setOpenResults} results={results} error={errorResults} handleStrengthCalcError={handleStrengthCalcError}/>
                 <Card 
                     sx={{
                         width:'90%',
