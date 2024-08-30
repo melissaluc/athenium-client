@@ -24,8 +24,10 @@ import { useTheme } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 
 
+
+
 function DrawerNavBar() {
-  const {setUserData, setIsDataFetched} = useContext(UserDataContext)
+  const {setUserData, setIsDataFetched, setIsAuthenticated} = useContext(UserDataContext)
   const [state, setState] = useState({
     right: false,
     left: false,
@@ -46,30 +48,23 @@ function DrawerNavBar() {
     { text: 'Measurements', path: '../measurements', icon: <SquareFootIcon /> },
   ];
 
-
-  const googleLogOut = async () => {
-   
-      await googleLogout(); 
-
-};
-
-const handleLogout = async () => {
+  
+  const handleLogout = async () => {
     try {
+      localStorage.removeItem('authToken');
+      setUserData(null);
+      setIsDataFetched(false);
+      setIsAuthenticated(false);
 
-        await googleLogOut();
+      // Sign out from Google
+      googleLogout();
 
-        setUserData({});
-        setIsDataFetched(false);
-
-        localStorage.removeItem('authToken');
-
-
-        navigate('/login');
+      // Redirect to login page
+      navigate('/login', { replace: true });
     } catch (error) {
-
-        console.error('Error during logout:', error);
+      console.error('Error during logout:', error);
     }
-};
+  };
 
 
   const toggleDrawer = (anchor, open) => (event) => {

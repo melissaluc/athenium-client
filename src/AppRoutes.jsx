@@ -26,11 +26,11 @@ import { MeasurementProvider } from './Contexts/MeasurementContext';
 import { Container, Box, Typography } from '@mui/material';
 
 function AppRoutes() {
-    const { userData, loading } = useContext(UserDataContext);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const {loading, isAuthenticated } = useContext(UserDataContext);
+
     const theme = useTheme();
     const location = useLocation();
-    const navigate = useNavigate();
+    
 
     const pageNames = {
         '/settings': 'Settings',
@@ -50,26 +50,28 @@ function AppRoutes() {
         // Scroll to top on route change
         window.scrollTo(0, 0);
         console.log(location.pathname)
+        console.log('Authenticated? ',isAuthenticated)
     }, [location]);
 
-    useEffect(() => {
-        const authToken = localStorage.getItem('authToken');
-        const isLoggedIn = userData?.first_name || !!authToken;
-    
-        if (!isLoggedIn && currentPath !== "/login") {
-            navigate('/login');
-        } else {
-            setIsAuthenticated(isLoggedIn);
-        }
-    }, [userData]);
+
 
     if (loading) {
         return <PageLoadingProgress />;
     }
 
-    if (isAuthenticated) {
+    return isAuthenticated ? (
+        <AuthenticatedRoutes theme={theme} pageName={pageName} pageNameLabel={pageNames[pageName]} />
+    ) : (
+        <UnauthenticatedRoutes />
+    );
+
+}
+
+
+function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
+
         return (
-            <Container>
+            <>
                 <Box 
                     sx={{
                         backgroundColor: theme.palette.primary.light,
@@ -94,7 +96,7 @@ function AppRoutes() {
                     >
                         <DrawerNavBar />
                         <Typography color='primary' variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
-                            {pageNames[pageName]}
+                            {pageNameLabel}
                         </Typography>
                     </Box>
                     {pageName === '/dashboard' && <DashboardHeader />}
@@ -119,9 +121,11 @@ function AppRoutes() {
                             </GoalsProvider>
                     </NutritionProvider>
                 </WorkoutProvider>
-            </Container>
+            </>
         );
-    } else {
+    }
+
+function UnauthenticatedRoutes() {
         return (
             <UserSignUpProvider>
                 <Routes>
@@ -134,8 +138,8 @@ function AppRoutes() {
             </UserSignUpProvider>
         );
 
-    }
-
 }
+
+
 
 export default AppRoutes;
