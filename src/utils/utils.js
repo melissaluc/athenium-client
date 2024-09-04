@@ -76,18 +76,26 @@ function getStrengthRating (strengthLevel) {
 
 }
 
-function calculateAge(birthDate) {
-    const today = new Date();
+function calculateAge(birthDate, calculatedOn = null) {
+    // Convert birthDate to Date object
     const birthDateObj = new Date(birthDate);
+
+    // If no calculatedOn date is provided, use today
+    const today = calculatedOn ? new Date(calculatedOn) : new Date();
+
+    // Calculate age
     let age = today.getFullYear() - birthDateObj.getFullYear();
     const monthDifference = today.getMonth() - birthDateObj.getMonth();
-    
+
+    // Adjust age if the birthday hasn't occurred yet in the current year
     if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
         age--;
     }
-    
+
     return age;
 }
+
+
 
 
 const convertCmToFtIn = (cm) => {
@@ -117,6 +125,9 @@ function unixToLocal(unixTimestamp) {
     return `${year}/${month}/${day} at ${hours}:${minutes}`;
 }
 
+
+
+  
 
 
 export { findClosestData, getProgressColour, getStrengthRating, calculateAge, convertCmToFtIn, convertFtInToCm,unixToLocal };
