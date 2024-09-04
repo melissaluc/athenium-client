@@ -53,7 +53,7 @@ function VerifyEmail({ googleOauth, email_address, userData }) {
     }, [googleOauth]);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, width:'80%' }}>
             {!showSuccess && !googleOauth ? (
                 <Box sx={{ textAlign: 'center' }}>
                     <Typography textAlign='center' variant='h4' color='black' paddingBottom='2vh'>Verify Email</Typography>

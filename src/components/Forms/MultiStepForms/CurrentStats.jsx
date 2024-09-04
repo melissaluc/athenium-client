@@ -77,7 +77,7 @@ function  CurrentStats ({data, handleParentFormChange}) {
 
 
     return (
-        <Box sx={{width:'60vw', display:'flex', flexDirection:'column', alignItems:'center'}}>
+        <Box sx={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
 
             <form>
                 <FormGroup sx={{margin:'2vh 0'}}>
@@ -108,7 +108,7 @@ function  CurrentStats ({data, handleParentFormChange}) {
                                     required
                                     sx={{
                                         p:'4px',
-                                        width: '60vw',
+                                        width: '100%',
                                         borderRadius: 2,
                                         '& .MuiInputBase-input': {
                                             borderRadius: 2,

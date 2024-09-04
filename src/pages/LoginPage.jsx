@@ -66,7 +66,7 @@ function LoginPage() {
     };
 
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10%' }}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10%', maxWidth:'smn'}}>
             <Box> 
                 <AtheniumLogo width={"100%"} />
             </Box>

@@ -66,10 +66,10 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
     }, []);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '3vh', alignItems: 'center' }}>
-            <Box display="flex" flexDirection="column" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%'>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2vh', justifyContent:'center', alignItems: 'center', width:'100%', height:'100%'}}>
+            <Box display="flex" flexDirection="column" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%' alignItems='center'>
                 {/* AGE Row */}
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" width='50%'>
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                     AGE
                     </Typography>
@@ -83,7 +83,7 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
                 </Box>
             
                 {/* HEIGHT Row */}
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" width='50%'>
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                     HEIGHT
                     </Typography>
@@ -119,7 +119,7 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
                     }
                 </Box>
                 {/* BODY MASS Row */}
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" width='50%'>
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                     WEIGHT
                     </Typography>
@@ -133,18 +133,18 @@ function ResultBmrBmi({ data, handleParentFormChange }) {
                 </Box>
             </Box>
             
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%'>
+            <Box display="flex" flexDirection="column" alignItems="center" gap={1} padding={2} borderRadius={1} boxShadow={1} width='100%'>
                 <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>WE ESTIMATE YOUR BMR TO BE</Typography>
-                <Typography variant="subtitle1" style={{ fontSize:'3rem', fontWeight: 'bold' }}>{bmr}</Typography>
+                <Typography variant="subtitle1" style={{ fontSize:'2rem', fontWeight: 'bold' }}>{bmr}</Typography>
                 <Typography style={{ fontSize:'0.8rem',fontWeight: 'bold'}}>CALORIES PER DAY</Typography>
             </Box>
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%'>
-                <Box display="flex" alignItems="center">
-                    <Typography variant="subtitle1" style={{ fontWeight: 'bold', marginRight: '8px'}}>
+            <Box display="flex" flexDirection="column" justifyContent='center' alignItems="center" gap={2} padding={2} borderRadius={1} boxShadow={1} width='100%'>
+                <Box display="flex" alignItems="center" flexWrap={'wrap'}>
+                    <Typography  variant="subtitle1" style={{ fontWeight: 'bold', marginRight: '8px', fontSize:'0.8rem'}}>
                         YOUR BMI IS WITHIN THE
                     </Typography>
-                    <Chip label={label} style={{fontFamily:'silkscreen',  backgroundColor:color, fontWeight: 'bold', marginRight: '8px' }} />
-                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                    <Chip label={label} size='small' style={{fontFamily:'silkscreen', fontSize:'0.8rem', backgroundColor:color, fontWeight: 'bold', marginRight: '8px' }} />
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold', fontSize:'0.8rem' }}>
                         RANGE
                     </Typography>
                 </Box>

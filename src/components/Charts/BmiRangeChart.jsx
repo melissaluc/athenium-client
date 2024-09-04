@@ -11,8 +11,8 @@ function BmiRangeChart({ userValue }) {
     const chartDom = chartRef.current;
     if (!chartDom) return;
     const myChart = echarts.init(chartDom, null, {
-      width: 400,
-      height: 100
+      // width: 400,
+      // height: 100
     });
 
 
@@ -66,11 +66,11 @@ function BmiRangeChart({ userValue }) {
           symbol: 'none',
           markPoint: {
             data: [
-              { coord: [18.5, 0], name: '18.5', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
-              { coord: [24.9, 0], name: '25', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
-              { coord: [29.9, 0], name: '30', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
-              { coord: [34.9, 0], name: '35', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
-              { coord: [39.9, 0], name: '40=<', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
+              { coord: [18.5, 0], name: '18.5', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } },
+              { coord: [24.9, 0], name: '25', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } },
+              { coord: [29.9, 0], name: '30', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } },
+              { coord: [34.9, 0], name: '35', symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } },
+              { coord: [39.9, 0], name: '40=<', symbolSize: 0, label: { show: true, position: 'bottom', offset: [8, 15] } },
               { coord: [userValue, 0], name: `${userValue}`, itemStyle: { color: theme.palette.primary.main }, symbolSize: 10, symbol: 'triangle', symbolRotate: 180, symbolOffset: [0, -20], label: { show: true, position: 'top', offset: [0, 0] } },
             ],
             label: {
@@ -113,15 +113,21 @@ function BmiRangeChart({ userValue }) {
     // Set the chart options
     myChart.setOption(option);
 
-    // Dispose of the chart instance on component unmount
+    // Resize chart on window resize
+    const handleResize = () => myChart.resize();
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup on unmount
     return () => {
+      window.removeEventListener('resize', handleResize);
       myChart.dispose();
     };
+
   }, [userValue]);
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
-      <div ref={chartRef} style={{ height: '150px', width: '100%' }} />
+      <div ref={chartRef} style={{ height: '100%', width: '100%' }} />
     </Box>
   );
 }

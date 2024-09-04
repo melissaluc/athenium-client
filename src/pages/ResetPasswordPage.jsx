@@ -48,7 +48,7 @@ const ResetPasswordPage = () => {
     };
 
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth:'smn' }}>
             <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {isComplete ? (

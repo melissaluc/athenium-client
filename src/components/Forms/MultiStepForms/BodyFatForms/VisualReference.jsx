@@ -68,7 +68,7 @@ function VisualReference({data, handleChange}) {
 
 
    return (
-        <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+        <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center', width:'80%'}}>
             {/* <CustomInput 
                 fieldName={'body_fat_percentage'}
                 inputLabel={'BF'}
