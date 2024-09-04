@@ -73,7 +73,7 @@ function AppRoutes() {
 function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
 
         return (
-            <>
+            <Container maxWidth="smn" display='flex' flexDirection='column' justifyContent='center'>
                 <Box 
                     sx={{
                         backgroundColor: theme.palette.primary.light,
@@ -83,7 +83,7 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
-                        gap: '1rem'
+                        gap: '1rem',
                     }}
                 >
                     <Box className='mobile-nav-bar__wrapper'
@@ -126,7 +126,7 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                     </NutritionProvider>
                     </StrengthLevelProvider>
                 </WorkoutProvider>
-            </>
+            </Container>
         );
     }
 

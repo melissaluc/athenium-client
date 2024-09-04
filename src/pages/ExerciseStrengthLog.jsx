@@ -453,7 +453,7 @@ function ExerciseStrengthLog () {
       }
 
       return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', width:'100vw'}}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', width:'100%'}}>
             <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} mt='1rem'>
                 {exercise_name && <Typography fontWeight={'bold'}>{exercise_name}</Typography>}
                 {editMode && <Button variant='contained' onClick={handleDeleteExercise}>Delete</Button>}

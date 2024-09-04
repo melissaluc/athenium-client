@@ -82,7 +82,7 @@ function SettingsPage() {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap:'1rem', mt:'1rem' }}>
-      <Box sx={{ width: '80vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Box sx={{ width: '90%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>Settings</Typography>
         <Box sx={{ display: 'flex', gap: '0.5rem' }}>
           <Button variant='contained' color='secondary' disabled={true}>Cancel</Button>
