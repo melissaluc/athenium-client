@@ -1,99 +1,34 @@
-import { Box, Container, Card,CardContent, Button, Typography} from "@mui/material"; 
+import { Box, Container, Card,CardContent, Button, Typography, ButtonGroup} from "@mui/material"; 
 import { useState, useEffect, useContext } from 'react';
 import MuscleGroupStrengthCard from "../components/MuscleGroupStrengthCard";
 import ExerciseStrengthLevel from "../components/ExerciseStrengthLevel"
-import axiosInstance from "../utils/axiosConfig";
+import { useStrengthLevelContext } from "../Contexts/StrengthLevelContext";
+import { useLocation } from "react-router-dom";
 
 function StrengthPage() {
-    const [toggleView,setToggleView] = useState(false)
-    const [strengthData, setStrengthData] = useState([])
-    const [sortedExercises, setSortedExercises] = useState([]);
+    const {sortedExercises, strengthData, toggleView, handleClickExercisesRanked, handleClickMuscleGroupRanked} = useStrengthLevelContext()
+    const location = useLocation();
 
-
-    const calcNormalizedScore = (data) => {
-
-        const groupScore = {};
-
-        let maxCountGroupExercises = 0;
-
-        Object.keys(data).forEach((group) => {
-            const exercises = data[group];
-            const numGroupExercises = exercises.length;
-    
-            if (numGroupExercises > maxCountGroupExercises) {
-                maxCountGroupExercises = numGroupExercises;
-            }
-
-            let groupTotal = 0;
-            exercises.forEach((exercise) => {
-                groupTotal += exercise.score || 0;
-            });
-    
-            groupScore[group] = groupTotal / numGroupExercises;
-        });
-    
-        // Normalize the scores based on the number of exercises
-        const normalizedScores = {};
-        Object.keys(groupScore).forEach((group) => {
-            const normalizationFactor = data[group].length/maxCountGroupExercises;
-            normalizedScores[group] = (groupScore[group] * normalizationFactor).toFixed(2);
-        });
-
-
-        return normalizedScores 
-    };
-
-    const sortExercisesByStrengthLevel = (data) => {
-        // Flatten the exercises and sort them by strength_level
-        const exercisesArray = Object.values(data).flat();
-        return exercisesArray.sort((a, b) => b.score - a.score);
-    };
-
-    const handleClickMuscleGroupRanked = () => {
-        // Normalize the scores actual/maxscore 
-        setToggleView(false)
-        
-    }
-    
-    const handleClickExercisesRanked = () => {
-        // Sort exercises by strengthLevel
-        setToggleView(true)
-    }
-
-
-    useEffect(()=>{
-        axiosInstance.get(`/strength`)
-        .then(response => {
-            const data = response.data
-            const groupScores = calcNormalizedScore(data)
-            const sortExercises = sortExercisesByStrengthLevel(data)
-
-            const sortedGroups = Object.entries(groupScores)
-                .sort((a, b) => b[1] - a[1])
-                .map(([group, score]) => ({
-                    group,
-                    score,
-                    exercises: data[group],
-                }));
-
-            setStrengthData(sortedGroups);
-            setSortedExercises(sortExercises)
-
-        })
-        .catch(error=>console.error(error))
-    },[])
-    
+    useEffect(() => {
+        // Check if there is state from the previous page
+        console.log(location.view)
+        if (location.state?.view && strengthData && sortedExercises) {
+            handleClickExercisesRanked();
+        } else {
+            handleClickMuscleGroupRanked()
+        }
+    }, [location.state?.view, strengthData, sortedExercises]);
 
     return (
         <Container>
 
-            <Box sx={{display:'flex', justifyContent:'space-around'}}>
-                <Button onClick={handleClickMuscleGroupRanked}>Muscle Group Ranking</Button>
-                <Button onClick={handleClickExercisesRanked}>Exercises Ranked</Button>
-            </Box>
+            <ButtonGroup sx={{display:'flex', justifyContent:'space-around'}}>
+                <Button variant='text' onClick={handleClickMuscleGroupRanked}>Groups</Button>
+                <Button variant='text' onClick={handleClickExercisesRanked}>Exercises</Button>
+            </ButtonGroup>
          
             {!toggleView ? (
-                <Box sx={{display:'flex', flexDirection:'column', gap:'1rem'}}>
+                <Box sx={{display:'flex', gap:'1rem', flexWrap:'wrap', justifyContent:'center'}}>
                     {strengthData.map((group)=>{
                         return <MuscleGroupStrengthCard key={group.group} muscleGroup={group.group} exercises={group.exercises} groupScore={group.score}/>
                     })}

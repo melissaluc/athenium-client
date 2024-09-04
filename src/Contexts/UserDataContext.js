@@ -17,6 +17,10 @@ export const UserDataProvider = ({ children }) => {
     //     }
     // },[userData])
 
+    useEffect(()=>{
+        console.log(userData)
+    },[userData])
+
     const updateUserData = async () => {
         const token = localStorage.getItem('authToken');
         if (token) {

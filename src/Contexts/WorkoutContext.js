@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { UserDataContext } from './UserDataContext';
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
-import { RestorePageOutlined } from '@mui/icons-material';
+
 
 const WorkoutContext = createContext();
 export const WorkoutProvider = ({ children }) => {
@@ -33,7 +33,9 @@ export const WorkoutProvider = ({ children }) => {
         })
         .catch(error=>console.error(error))
         console.log(workoutListData)
-    },[])
+    },[editMode,workoutMode])
+
+    
 
     const getWorkoutById = useCallback(async (workout_id) => {
 
@@ -54,6 +56,7 @@ export const WorkoutProvider = ({ children }) => {
             age: userData.age,
             gender: userData.gender,
             group,
+            sets,
             category:'strength',
             weight,
             reps,
@@ -98,7 +101,7 @@ export const WorkoutProvider = ({ children }) => {
             deletedExercises: deletedExercises || [],
             updatedExercises: updatedExercises || {},
         }
-        
+        console.log('Patch data: ', patchData)
         axiosInstance.patch(`/workouts/${activeWorkoutData.workout_id}`,patchData)
         .then(response =>{
 
@@ -166,15 +169,7 @@ export const WorkoutProvider = ({ children }) => {
 
     const updateExercise = (exerciseId, exercise) => {
         // Check if the exercise is in the addedExercises
-        if (addedExercises[exerciseId]) {
-            setAddedExercises(prev => ({
-                ...prev,
-                [exerciseId]: {
-                    ...prev[exerciseId], 
-                    ...exercise          
-                }
-            }));
-        } else {
+
             setUpdatedExercises(prev => ({
                 ...prev,
                 [exerciseId]: {
@@ -182,7 +177,7 @@ export const WorkoutProvider = ({ children }) => {
                     ...exercise      
                 }
             }));
-        }
+        
     }
     
 
@@ -190,6 +185,7 @@ export const WorkoutProvider = ({ children }) => {
 
     const deleteExercise = (exerciseId) => {
         // Not permanent
+        console.log('delete exercise: ',exerciseId)
         const updatedExercises = activeWorkoutData.exercises.filter(exercise => exercise.id !== exerciseId);
 
         setAddedExercises(prev => {
@@ -260,8 +256,7 @@ export const WorkoutProvider = ({ children }) => {
     const onFilter = (filterText) => {
         if (!filterText) {
              setWorkoutListData(workoutListData);
-        } else {
-            handleFilter(filterText)
+        } else { 
         }
     }
 

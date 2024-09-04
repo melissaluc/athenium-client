@@ -10,7 +10,7 @@ function StrengthResults ({handleClose, results}) {
     const orderedValues = orderOfLevels.map(level => strength_bounds[level]);
 
     return(
-        <Box sx={{display:'flex', flexDirection:'column'}}>
+        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
             <Button sx={{alignSelf:'flex-end'}} onClick={()=>{handleClose(false)}}>close</Button>
             <Box display='flex'sx={{flexDirection:'column', alignItems:'center'}}>
                 <Typography variant='subtitle1' fontSize='1.5rem'>Your strength level for {exercise_name} is</Typography>
@@ -28,7 +28,7 @@ function StrengthResults ({handleClose, results}) {
                     </li>
                 </ul>
             </Box>
-            <TableContainer component={Paper} sx={{ overflowX: 'auto', maxWidth: { xs: '100%', sm: '90%', md: '80%' } }}>
+            <TableContainer component={Paper} sx={{ overflowX: 'auto', maxWidth: { xs: '100%', sm: '90%', md: '100%' } }}>
                 <Table>
                 <TableHead>
                     <TableRow>

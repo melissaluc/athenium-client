@@ -1,4 +1,4 @@
-import { Box,  Typography, Card,CardContent, CardActionArea, CardActions, Button} from "@mui/material";
+import { Box,  Typography, Card,CardContent, CardActionArea, CardActions, Button, Rating, Stack, Divider} from "@mui/material";
 import { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ExerciseStrengthLevel from "./ExerciseStrengthLevel";
@@ -11,11 +11,17 @@ function MuscleGroupStrengthCard ({muscleGroup, exercises, groupScore}) {
 
     return(
 
-        <Card key={muscleGroup} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', width: '100%' }}>
+        <Card key={muscleGroup} sx={{ display: 'flex', flexDirection: 'column',width:{ xs: '100%', sm: '50%', md: '30%' }}}>
             <CardContent>
-                <Box sx={{display:'flex', justifyContent:'space-around'}}>
-                    <Typography>{groupScore}</Typography>
-                    <Typography>{muscleGroup}</Typography>
+                <Box sx={{ display: 'flex', flexDirection:'column',justifyContent:'space-between'}}>
+                    <Box sx={{ display: 'flex', flexDirection:'column', mb:{ xs: '10%', sm: '10%', md: '15%' }}} >
+                        <Typography fontSize='2rem'>{muscleGroup}</Typography>
+                        <Stack direction='row' spacing='0.5rem' alignItems={'center'}>
+                            <Rating name="read-only" value={groupScore} precision={0.5} readOnly />
+                            <Typography variant='h6'>{groupScore}</Typography>   
+                        </Stack>
+                    </Box>
+                    <Typography fontSize={'0.8rem'}>{exercises?.length || 0} Exercises</Typography>
                 </Box>
                 {expandWorkout && 
                 
@@ -34,25 +40,34 @@ function MuscleGroupStrengthCard ({muscleGroup, exercises, groupScore}) {
                         next_strength_level,
                         strength_bounds,
                         score,
+                        sets,
                         img_url
                         } = exercise
-    
-                    return <ExerciseStrengthLevel
-                    key={exercise_name}
-                    date_calculated={date_calculated}
-                    exercise_name={exercise_name}
-                    group={group}
-                    body_weight={body_weight}
-                    relative_strength_demographic={relative_strength_demographic}
-                    one_rep_max={one_rep_max}
-                    reps={reps}
-                    lift={lift}
-                    strength_level={strength_level}
-                    next_strength_level={next_strength_level}
-                    strength_bounds={strength_bounds}
-                    score={score}
-                    img_url={img_url}
-                            />
+                        
+                    return (
+                        <Box>
+                            <Divider sx={{ flexGrow: 1, marginLeft: 1, pt:'1rem' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true" />
+                            <Box pt='1rem'>
+                                <ExerciseStrengthLevel
+                                        key={exercise_name}
+                                        date_calculated={date_calculated}
+                                        exercise_name={exercise_name}
+                                        group={group}
+                                        body_weight={body_weight}
+                                        relative_strength_demographic={relative_strength_demographic}
+                                        one_rep_max={one_rep_max}
+                                        reps={reps}
+                                        lift={lift}
+                                        sets={sets}
+                                        strength_level={strength_level}
+                                        next_strength_level={next_strength_level}
+                                        strength_bounds={strength_bounds}
+                                        score={score}
+                                        img_url={img_url}
+                                                />
+                            </Box>
+                        </Box>
+                    )
                 })
                 }
             </>            

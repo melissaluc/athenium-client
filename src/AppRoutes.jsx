@@ -11,6 +11,7 @@ import TrendsPage from './pages/TrendsPage';
 import WorkoutPage from './pages/WorkoutPage';
 import WorkoutDetailPage from './pages/WorkoutDetailPage';
 import StrengthPage from './pages/StrengthPage';
+import ExerciseStrengthLog from './pages/ExerciseStrengthLog';
 import LoginPage from './pages/LoginPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -19,6 +20,7 @@ import DashboardHeader from './components/DashboardHeader/DashboardHeader';
 import DrawerNavBar from './components/NavBar/DrawerNavBar/DrawerNavBar';
 import { UserDataContext } from './Contexts/UserDataContext';
 import { WorkoutProvider } from './Contexts/WorkoutContext';
+import { StrengthLevelProvider } from './Contexts/StrengthLevelContext';
 import { NutritionProvider } from './Contexts/NutritionContext';
 import { GoalsProvider } from './Contexts/GoalsContext';
 import { UserSignUpProvider } from './Contexts/UserSignUpContext';
@@ -95,31 +97,34 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                         }}
                     >
                         <DrawerNavBar />
-                        <Typography color='primary' variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                        {pageNameLabel && <Typography color='primary' variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
                             {pageNameLabel}
-                        </Typography>
+                        </Typography>}
                     </Box>
                     {pageName === '/dashboard' && <DashboardHeader />}
                 </Box>
                 <WorkoutProvider>
+                    <StrengthLevelProvider>
                     <NutritionProvider>
                             <GoalsProvider>
                                     <MeasurementProvider>
                                         <Routes>
                                             <Route path='/settings' element={<SettingsPage />} />
                                             <Route path='/dashboard' element={<DashboardPage />} />
-                                            <Route path='/goals' element={<GoalsPage />} />
+                                            {/* <Route path='/goals' element={<GoalsPage />} /> */}
                                             <Route path='/measurements' element={<MeasurementPage />} />
-                                            <Route path='/nutrition' element={<NutritionPage />} />
+                                            {/* <Route path='/nutrition' element={<NutritionPage />} /> */}
                                             <Route path='/trends' element={<TrendsPage />} />
                                             <Route path='/workouts' element={<WorkoutPage />} />
                                             <Route path='/workouts/:id' element={<WorkoutDetailPage />} />
                                             <Route path='/strength' element={<StrengthPage />} />
+                                            <Route path='/strength/:exercise_name' element={<ExerciseStrengthLog/>} />
                                             <Route path='*' element={<Navigate to='/dashboard' />} />
                                         </Routes>
                                     </MeasurementProvider>
                             </GoalsProvider>
                     </NutritionProvider>
+                    </StrengthLevelProvider>
                 </WorkoutProvider>
             </>
         );

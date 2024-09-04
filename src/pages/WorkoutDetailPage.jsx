@@ -13,6 +13,7 @@ import { unixToLocal } from '../utils/utils';
 
 function WorkoutDetailPage() {
     const { id: workout_id } = useParams();
+    const [isDisabled, setIsDisabled] = useState(false);
     const theme = useTheme()
     const formRef = useRef(null);
     const navigate = useNavigate()
@@ -23,11 +24,11 @@ function WorkoutDetailPage() {
         workout_name: activeWorkoutData.workout_name || '',
         exercises:activeWorkoutData.exercises || [],
         last_completed:activeWorkoutData.last_completed || null,
-        frequency:activeWorkoutData.frequency
+        frequency:activeWorkoutData.frequency || 0
     })
 
     useEffect(() => {
-        if (activeWorkoutData) {
+        if (activeWorkoutData && (!editMode | !workoutMode )) {
             setWorkoutDetailForm({
                 description: activeWorkoutData.description || '',
                 workout_name: activeWorkoutData.workout_name || '',
@@ -48,9 +49,16 @@ function WorkoutDetailPage() {
         getWorkoutById(workout_id)
     },[workout_id])
 
+    const disableButton = () => {
+
+        setIsDisabled(true);
+    
+        setTimeout(() => {
+          setIsDisabled(false);
+        }, 2000); 
+      };
 
     const handleTopButton = () => {
-
         if(!editMode & !workoutMode){
             // Edit workout
             setEditMode(prev => !prev);
@@ -60,6 +68,7 @@ function WorkoutDetailPage() {
             // Keep user changes
         } else if (editMode){
             // Cancel edit
+            disableButton()
             setEditMode(prev => !prev);
             // remove user changes
         } 
@@ -71,6 +80,7 @@ function WorkoutDetailPage() {
             // Start Workout
             setWorkoutMode(prev => !prev);
         } else if (workoutMode) {
+            disableButton()
             // Finish Workout
             // Save any changes to lift, reps, sets
             setWorkoutMode(prev => {
@@ -97,6 +107,7 @@ function WorkoutDetailPage() {
 
 
     const handleBottomButton = () =>{
+        disableButton()
         if(workoutMode){
             setWorkoutMode(prev => {
                 const newMode = !prev;
@@ -157,7 +168,8 @@ function WorkoutDetailPage() {
                 ? workoutDetailForm
                 : {
                     ...workoutDetailForm,
-                    frequency: parseInt(workoutDetailForm.frequency) + 1,
+                    // TODO: fix this
+                    frequency: workoutDetailForm.frequency ? parseInt(workoutDetailForm.frequency) + 1 : 1,
                     last_completed: completed_on_dt_in_seconds
                 };
     
@@ -181,7 +193,7 @@ function WorkoutDetailPage() {
                 // flexDirection: 'column',
                 // minHeight: '100vh',
                 paddingTop:'2%',
-                paddingBottom: '60px',
+                paddingBottom: '20vh',
             }}
         >   
             <ExerciseModal workoutDetailForm={workoutDetailForm} handleClose={handleCloseAddExercise } open={openAddExerciseModal}/>
@@ -272,7 +284,7 @@ function WorkoutDetailPage() {
                                     </Box>
                                     <Box>
                                         <Button 
-                                            disabled= {!(activeWorkoutData.exercises?.length || editMode)}
+                                            disabled= {!(activeWorkoutData.exercises?.length || editMode) | isDisabled}
                                             sx={{
                                                 backgroundColor: editMode ? '#c93049' : '#57c90c',
                                                 // color: editMode ? theme => theme.palette.primary.main : 'white'
@@ -407,7 +419,7 @@ function WorkoutDetailPage() {
                         left: '0%',
                         width: '100%',
                         margin: 0,
-                        padding: '2% 10%',
+                        padding: '1% 10%',
                         boxSizing: 'border-box',
                         zIndex: 1000,
                     }}
@@ -417,7 +429,7 @@ function WorkoutDetailPage() {
                             <Button 
                                 type={editMode ? 'submit' : 'button'} 
                                 fullWidth
-                                disabled ={workoutMode && true} 
+                                disabled ={(workoutMode && true) | isDisabled} 
                                 onClick={handleBottomButton} 
                                 variant={editMode ? 'contained' : 'outlined'} 
                                 >
