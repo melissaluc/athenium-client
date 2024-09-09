@@ -131,7 +131,7 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
     },[formData])
 
     return(
-        <Box sx={{ width: '100%', height:'100vh', mx: 'auto', mt: 0 , display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between'}}>
+        <Box sx={{ width: '100%', maxHeight:'100vh', mx: 'auto', mt: 0 , display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between'}}>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={backDropOpen}
@@ -139,7 +139,7 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Typography textAlign='center' variant='h4' color='black' paddingBottom='2vh'>{stepTitle[steps[activeStep]]}</Typography>
-            <Box sx={{ maxWidth: '100%', p: 2 , display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
+            <Box sx={{ width: '100%', p: 2 , display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
                 {selectView(steps[activeStep], formData, handleChange)}
             </Box>
             <MobileStepper
@@ -147,7 +147,7 @@ const MultiStepForm = ({userCredentials, setIsComplete, setUserData}) => {
             steps={steps.length}
             position="static"
             activeStep={activeStep}
-            sx={{ width:'50vw',  mb:'2vh' }}
+            sx={{ width:'80%',  mb:'3vh' }}
             nextButton={
                 activeStep === steps.length - 1 ? (
                     <Button

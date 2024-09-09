@@ -41,8 +41,8 @@ const OnboardingPage = () => {
     // },[formData])
 
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  maxWidth:'100vw', maxHeight:'100vh', padding:'0 2vh'}}>
-            <Root sx={{ display: 'flex', flexDirection: 'column', width: "70vw", alignItems: 'center', margin: '10% 0%' }}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  maxWidth:'smn', padding:'2vh 0', maxHeight:'100vh'}}>
+            <Root sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {userCredentials ? ( !isComplete?
                         <MultiStepForm userCredentials={userCredentials} setIsComplete={setIsComplete} setUserData={setUserData}/>

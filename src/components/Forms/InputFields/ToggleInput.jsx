@@ -39,6 +39,7 @@ function ToggleInput({ id, inputValue, options, defaultValue, onChange, inputLab
             >
                 <FormLabel
                     sx={{
+                        flexGrow:1,
                         color: '#3D3D3D',
                         padding: '0% 2%',
                         '&.MuiFormLabel-root': {
@@ -49,13 +50,14 @@ function ToggleInput({ id, inputValue, options, defaultValue, onChange, inputLab
                         },
                     }}
                 >
-                    {inputLabel.toUpperCase()}
+                    {inputLabel}
                 </FormLabel>
 
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" /> 
 
                 <Typography
                     style={{
+                        width:'50%',
                         padding: '0 1rem',
                         color: theme.palette.primary.main,
                         display: 'flex',

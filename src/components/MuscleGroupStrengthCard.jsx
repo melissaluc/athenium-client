@@ -11,7 +11,7 @@ function MuscleGroupStrengthCard ({muscleGroup, exercises, groupScore}) {
 
     return(
 
-        <Card key={muscleGroup} sx={{ display: 'flex', flexDirection: 'column',width:{ xs: '100%', sm: '50%', md: '30%' }}}>
+        <Card key={muscleGroup} sx={{ display: 'flex', flexDirection: 'column',width:'100%'}}>
             <CardContent>
                 <Box sx={{ display: 'flex', flexDirection:'column',justifyContent:'space-between'}}>
                     <Box sx={{ display: 'flex', flexDirection:'column', mb:{ xs: '10%', sm: '10%', md: '15%' }}} >

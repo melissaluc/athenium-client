@@ -28,7 +28,7 @@ function StrengthPage() {
             </ButtonGroup>
          
             {!toggleView ? (
-                <Box sx={{display:'flex', gap:'1rem', flexWrap:'wrap', justifyContent:'center'}}>
+                <Box sx={{display:'flex', gap:'1rem', flexDirection:'column', justifyContent:'center'}}>
                     {strengthData.map((group)=>{
                         return <MuscleGroupStrengthCard key={group.group} muscleGroup={group.group} exercises={group.exercises} groupScore={group.score}/>
                     })}

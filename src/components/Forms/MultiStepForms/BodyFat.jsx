@@ -1,4 +1,4 @@
-import { Card, CardContent, Button, Typography, Box,Divider, Link} from "@mui/material";
+import { Card, CardContent, Button, Typography, Box,Divider, Link, Container} from "@mui/material";
 import {useState } from "react";
 import VisualReferenceImg from '../../../assets/visual-reference-bodies.svg'
 import GirthMeasurementsImg from '../../../assets/girth-measurements.svg'
@@ -70,13 +70,13 @@ function BodyFat({ data, handleParentFormChange }) {
     };
 
     return (
-        <>
+        <Container maxWidth='smn'>
             {!selectMethod ? 
-                (<>  
+                (<Box display={'flex'} sx={{flexDirection:'column', width:'100%', alignItems:'center'}}>  
                     <ManualInput  data={formData} handleChange={handleChange}/>
-                    <Divider sx={{ width: '80%', marginY: 1, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or</Divider>
+                    <Divider sx={{ width: '90%', marginY: 1, cursor: 'default', userSelect: 'none' }} orientation="horizontal" component="div" role="presentation" aria-hidden="true">Or</Divider>
                     <Box>
-                        <Box>
+                        <Box width='100%'>
                             <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>ESTIMATION METHODS</Typography>
                             <Typography variant="body1" style={{ marginTop: '16px' }}>
                                 Choose between two methods for estimating body fat percentage: visual representation (selecting the photo that best matches your body composition) or girth measurements using the <Link href='https://www.calculator.net/body-fat-calculator.html' sx={{fontStyle:'italic',  textDecoration: 'none',}}>US Navy method</Link>. 
@@ -89,7 +89,7 @@ function BodyFat({ data, handleParentFormChange }) {
                             <Button onClick={()=>handleMethodClick('visual_reference')}
                                 sx={{ 
                                     p: 0, 
-                                    width: '40vw',
+                                    width: '80%',
                                     display: 'flex',
                                 }}
                                 >
@@ -110,7 +110,7 @@ function BodyFat({ data, handleParentFormChange }) {
                             <Button onClick={()=>handleMethodClick('girth_measurements')}
                                 sx={{ 
                                     p: 0,
-                                    width: '40vw',
+                                    width: '80%',
                                     display: 'flex',
                                 }}
                                 >
@@ -131,7 +131,7 @@ function BodyFat({ data, handleParentFormChange }) {
                         </Box>
 
                     </Box>
-                </>) : (
+                </Box>) : (
                 <Box  sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
                     <Box sx={{ display: 'flex', gap: '1rem', marginBottom: '1rem', justifyContent: 'center',flexWrap:'wrap' }}>
                         {methods.map((method) => (
@@ -172,7 +172,7 @@ function BodyFat({ data, handleParentFormChange }) {
                 )
 
             }
-        </>
+        </Container>
     );
 }
 

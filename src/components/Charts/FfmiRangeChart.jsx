@@ -30,8 +30,8 @@ function FfmiRangeChart({ userValue, gender }) {
     const chartDom = chartRef.current;
     if (!chartDom) return;
     const myChart = echarts.init(chartDom, null, {
-      width: 400,
-      height: 100
+      // width: 400,
+      // height: 100
     });
 
     const option = {
@@ -69,8 +69,8 @@ function FfmiRangeChart({ userValue, gender }) {
           markPoint: {
             data: [
               ...Object.entries(ffmiRanges).map(([category, { min, max }]) => [
-                { coord: [min, 0], name: min.toString(), itemStyle: { color: '#333' }, symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } },
-                { coord: [max, 0], name: max.toString(), itemStyle: { color: '#333' }, symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 10] } }
+                { coord: [min, 0], name: min.toString(), itemStyle: { color: '#333' }, symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } },
+                { coord: [max, 0], name: max.toString(), itemStyle: { color: '#333' }, symbolSize: 0, label: { show: true, position: 'bottom', offset: [0, 15] } }
               ]).flat(),
               { coord: [userValue, 0], name: `${userValue}`, itemStyle: { color: theme.palette.primary.main }, symbolSize: 10, symbol: 'triangle', symbolRotate: 180, symbolOffset: [0, -20], label: { show: true, position: 'top', offset: [0, 0] } }
             ],
@@ -89,8 +89,13 @@ function FfmiRangeChart({ userValue, gender }) {
     // Set the chart options
     myChart.setOption(option);
 
-    // Dispose of the chart instance on component unmount
+    // Resize chart on window resize
+    const handleResize = () => myChart.resize();
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup on unmount
     return () => {
+      window.removeEventListener('resize', handleResize);
       myChart.dispose();
     };
   }, [userValue]);
@@ -103,8 +108,9 @@ function FfmiRangeChart({ userValue, gender }) {
       height="100%"
       width="100%"
     >
-      <div ref={chartRef} style={{ height: '150px', width: '100%' }} />
+      <div ref={chartRef} style={{ height: '100%', width: '100%' }} />
     </Box>
+
   );
 }
 

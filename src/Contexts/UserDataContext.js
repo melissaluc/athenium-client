@@ -41,21 +41,23 @@ export const UserDataProvider = ({ children }) => {
         setIsDataFetched(true);
     };
 
-    const updateUser = async (settingsData) => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
+    const updateUserSettings = async (settingsData) => {
+            const sendData = {
+                country: settingsData.country,
+                dob: settingsData.dob.toISOString().split('T')[0],
+                first_name:settingsData.first_name,
+                last_name:settingsData.last_name,
+                uom:settingsData.uom
+            }
             try {
-                const response = await axiosInstance.put(`${process.env.REACT_APP_API_BASE_URL}/user`, settingsData);
+                console.log('settingsData: ',settingsData)
+                const response = await axiosInstance.put(`${process.env.REACT_APP_API_BASE_URL}/user/settings`, sendData);
+                console.log('Setting response: ',response.data)
                 setUserData(response.data);
             } catch (error) {
-                console.error('Error updating user data:', error);
-                localStorage.removeItem('authToken');
-                setUserData(null);
-                setIsAuthenticated(false);
+                console.error(error)
             }
-        }
-        setLoading(false);
-        setIsDataFetched(true);
+        
     };
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export const UserDataProvider = ({ children }) => {
         setUserData,
         loading,
         updateUserData,
-        updateUser,
+        updateUserSettings,
         isDataFetched,
         setIsDataFetched,
         isAuthenticated,
@@ -75,7 +77,7 @@ export const UserDataProvider = ({ children }) => {
     }), [userData, loading, isDataFetched, isAuthenticated]);
 
     return (
-        <UserDataContext.Provider value={{ contextValue, userData, setUserData, loading, setLoading, updateUserData, updateUser, isDataFetched, setIsDataFetched, isAuthenticated, setIsAuthenticated }}>
+        <UserDataContext.Provider value={{ contextValue, userData, setUserData, loading, setLoading, updateUserData, updateUserSettings, isDataFetched, setIsDataFetched, isAuthenticated, setIsAuthenticated,  }}>
             {children}
         </UserDataContext.Provider>
     );

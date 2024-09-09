@@ -95,9 +95,8 @@ function LeanMuscleMass({ data, handleParentFormChange }) {
     };
 
     return (
-        <Box>
-            <Box>
-            </Box>
+        <Box display='flex' width='80%' sx={{flexDirection:'column', alignItems:'center'}}>
+
             <form>
                 <FormGroup sx={{display:'flex', flexDirection:'column', }}>
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>ESTIMATED FAT FREE MASS (FFM)</Typography>

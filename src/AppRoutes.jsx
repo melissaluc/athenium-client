@@ -25,7 +25,7 @@ import { NutritionProvider } from './Contexts/NutritionContext';
 import { GoalsProvider } from './Contexts/GoalsContext';
 import { UserSignUpProvider } from './Contexts/UserSignUpContext';
 import { MeasurementProvider } from './Contexts/MeasurementContext';
-import { Container, Box, Typography } from '@mui/material';
+import { Container, Box, Typography, AppBar } from '@mui/material';
 
 function AppRoutes() {
     const {loading, isAuthenticated } = useContext(UserDataContext);
@@ -73,8 +73,9 @@ function AppRoutes() {
 function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
 
         return (
-            <>
-                <Box 
+            <Container maxWidth="smn" display='flex' flexDirection='column' justifyContent='center'>
+                <AppBar
+                    position="static"
                     sx={{
                         backgroundColor: theme.palette.primary.light,
                         borderBottomLeftRadius: '30px',
@@ -83,7 +84,10 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
-                        gap: '1rem'
+                        gap: '1rem',
+                        elevation: 0, 
+                        boxShadow: 'none', 
+                        color:'black'
                     }}
                 >
                     <Box className='mobile-nav-bar__wrapper'
@@ -102,7 +106,7 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                         </Typography>}
                     </Box>
                     {pageName === '/dashboard' && <DashboardHeader />}
-                </Box>
+                </AppBar>
                 <WorkoutProvider>
                     <StrengthLevelProvider>
                     <NutritionProvider>
@@ -126,7 +130,7 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                     </NutritionProvider>
                     </StrengthLevelProvider>
                 </WorkoutProvider>
-            </>
+            </Container>
         );
     }
 

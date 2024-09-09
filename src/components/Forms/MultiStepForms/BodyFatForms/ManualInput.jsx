@@ -6,7 +6,7 @@ function ManualInput({data, handleChange}) {
 
 
    return (
-            <Box>
+            <Box width='80%'>
             <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>MANUAL INPUT</Typography>
             <CustomInput 
                     fieldName={'body_fat_percentage'}

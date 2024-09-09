@@ -194,6 +194,7 @@ function WorkoutDetailPage() {
                 // minHeight: '100vh',
                 paddingTop:'2%',
                 paddingBottom: '20vh',
+                maxWidth:'500px'
             }}
         >   
             <ExerciseModal workoutDetailForm={workoutDetailForm} handleClose={handleCloseAddExercise } open={openAddExerciseModal}/>
