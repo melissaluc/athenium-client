@@ -1,8 +1,9 @@
 
 import { useParams, useNavigate } from "react-router-dom";
+import { UserDataContext } from '../Contexts/UserDataContext';
 import { Button, Box, Container, Stack, Typography, Menu, MenuItem} from "@mui/material";
 import { useStrengthLevelContext } from "../Contexts/StrengthLevelContext";
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef, useContext } from "react";
 import { getProgressColour } from '../utils/utils'
 import {
     GridRowModes,
@@ -102,6 +103,7 @@ function ToolBar(props) {
 
 function ExerciseStrengthLog () {
     const { exercise_name } = useParams();
+    const {userData} = useContext(UserDataContext)
     const navigate = useNavigate()
     const {getExerciseRecords, exerciseLogRecords, deleteExercise, toggleView, updateRecords} = useStrengthLevelContext();
     const [rowModesModel, setRowModesModel] = useState({});
@@ -364,7 +366,7 @@ function ExerciseStrengthLog () {
         {
           field: 'body_weight',
           description: 'Body weight at time of calculation',
-          headerName: 'BW',
+          headerName: `BW ${userData.uom.body_mass.uom}`,
           type: 'number',
           editable: editMode,
           align: 'left',
@@ -401,7 +403,7 @@ function ExerciseStrengthLog () {
         {
           field: 'one_rep_max',
           description: 'Estimated one rep max',
-          headerName: '1RM',
+          headerName: `1RM ${userData.uom.lift_weight.uom}`,
           type: 'number',
           editable: false,
           align: 'left',
@@ -410,7 +412,7 @@ function ExerciseStrengthLog () {
         {
           field: 'lift',
           description: 'Lift mass or assisted mass or extra mass added',
-          headerName: 'Lift',
+          headerName: `Lift ${userData.uom.lift_weight.uom}`,
           type: 'number',
           editable: editMode,
           align: 'left',
