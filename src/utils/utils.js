@@ -95,8 +95,13 @@ function calculateAge(birthDate, calculatedOn = null) {
     return age;
 }
 
+const convertLbtoKg = (lb) => {
+    return lb * 0.453592;
+}
 
-
+const convertKgtoLb = (kg) => {
+    return kg * 2.20462;
+}
 
 const convertCmToFtIn = (cm) => {
     const totalInches = cm / 2.54;
@@ -130,4 +135,14 @@ function unixToLocal(unixTimestamp) {
   
 
 
-export { findClosestData, getProgressColour, getStrengthRating, calculateAge, convertCmToFtIn, convertFtInToCm,unixToLocal };
+export { 
+    findClosestData, 
+    getProgressColour, 
+    getStrengthRating, 
+    calculateAge, 
+    convertCmToFtIn, 
+    convertFtInToCm,
+    unixToLocal,
+    convertLbtoKg,
+    convertKgtoLb
+};
