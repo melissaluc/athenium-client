@@ -26,6 +26,7 @@ function SettingsPage() {
       lift_weight:userData.uom?.lift_weight?.uom || 'kg',
       body_mass:userData.uom?.body_mass?.uom || 'kg',
       length:userData.uom?.girth_measurements?.uom || 'cm',
+      height:userData.uom?.height?.uom || 'cm',
     }
     
   });
@@ -67,6 +68,7 @@ function SettingsPage() {
         lift_weight: userData.uom?.lift_weight.uom || 'lb',
         body_mass: userData.uom?.body_mass.uom || 'lb',
         length: userData.uom?.girth_measurements?.uom || 'cm',
+        height: userData.uom?.height?.uom || 'cm',
       },
     };
     setInitialFormData(newInitialFormData);
@@ -372,7 +374,7 @@ const handleSubmit = async (e) => {
                   { label: ['ft', 'in'], value: 'imperial' }
                 ]}
                 defaultValue={formData.height || null} 
-                defaultLabel={formData.uom?.height?.uom}
+                defaultLabel={formData.uom?.height}
                 onChangeToggle={handleHeightUOMChange}
                 onChange={handleChange}
               />

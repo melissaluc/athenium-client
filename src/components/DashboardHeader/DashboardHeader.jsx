@@ -2,9 +2,13 @@ import {Typography,Box } from '@mui/material';
 import CircularAvatar from "../CircularAvatar/CircularAvatar"
 import {useContext} from 'react'
 import { UserDataContext } from '../../Contexts/UserDataContext';
+import {convertCmToFtIn} from '../../utils/utils'
 
 function DashboardHeader () {
     const { userData } = useContext(UserDataContext);
+    const {feet, inches} = convertCmToFtIn(userData.height_cm)
+
+
     return(
         <Box sx={{display:'flex', width:"100%", justifyContent:'space-between'}}>
         <Box className='userNavBar' sx={{display:'flex', width:"100%", gap:'2rem'}}>
@@ -31,7 +35,7 @@ function DashboardHeader () {
                     </Box>
                     <Box>
                         <Typography fontSize="0.8rem">HEIGHT</Typography>
-                        <Typography fontSize="0.8rem">{userData.height_cm}</Typography>
+                        <Typography fontSize="0.8rem">{userData.uom?.height?.uom === 'cm'? `${userData.height_cm} cm` : `${feet}'${inches}"`}</Typography>
                     </Box>
                 </Box>
             </Box>
