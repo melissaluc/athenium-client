@@ -165,7 +165,7 @@ const handleSubmit = async (e) => {
   // ];
 
   const displayUnitsFields = [
-    { label: 'Lift Mass', key: 'lift_mass', type: 'switch', value: formData.uom?.lift_weight, options: ['kg', 'lb'] },
+    { label: 'Lift Mass', key: 'lift_weight', type: 'switch', value: formData.uom?.lift_weight, options: ['kg', 'lb'] },
     { label: 'Body Mass', key: 'body_mass', type: 'switch', value: formData.uom?.body_mass, options: ['kg', 'lb'] },
     { label: 'Length', key: 'length', type: 'select', value: formData.uom?.length, options: ['cm', 'in'] }
   ];

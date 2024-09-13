@@ -15,6 +15,7 @@ import {
 import { useTheme } from "@mui/system";
 import PageLoadingProgress from "../components/Loading/Progress/PageLoadingProgress";
 import { v4 as uuidv4 } from 'uuid'
+import {convertLbtoKg} from '../utils/utils'
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -128,13 +129,28 @@ function ExerciseStrengthLog () {
 
     useEffect(() => {
         if (exerciseLogRecords) {
-            setRows([...exerciseLogRecords]);
-            setOriginalRows([...exerciseLogRecords]);
+            const convertedRecords = exerciseLogRecords.map(record => {
+                const convertedRecord = { ...record };
+    
+                if (userData.uom.lift_weight.uom !== 'lb') {
+                    convertedRecord.one_rep_max = convertLbtoKg(record.one_rep_max);
+                    convertedRecord.lift = convertLbtoKg(record.lift);
+                }
+    
+                if (userData.uom.body_mass.uom !== 'lb') {
+                    convertedRecord.body_weight = convertLbtoKg(record.body_weight);
+                }
+    
+                return convertedRecord;
+            });
+    
+            setRows(convertedRecords);
+            setOriginalRows(convertedRecords);
             setLoading(false); // Data is now available
         } else {
             setLoading(true); // Data is not yet available
         }
-    }, [exerciseLogRecords]);
+    }, [exerciseLogRecords, userData.uom]);
 
     // const handleCellFocus = useCallback((event) => {
     // const row = event.currentTarget.parentElement;
@@ -199,7 +215,7 @@ function ExerciseStrengthLog () {
         console.log('add record: ',unsavedChangesRef.current.addedRecords)
         const id = uuidv4()
         const isoString = (new Date().toISOString()).split('T')[0]
-        const newRecord = { uid: id, created_on: isoString, strength_level: 'TBD', one_rep_max:'TBD', category:'strength', exercise_name ,group:rows[0]?.group || '', body_weight:0  , lift:0, reps: 0, sets: 0, isNew: true }
+        const newRecord = { uid: id, created_on: isoString, strength_level: 'TBD', one_rep_max:'TBD', category:'strength', exercise_name ,group:rows[0]?.group || '', body_weight:userData.weight || 0  , lift:0, reps: 0, sets: 0, isNew: true }
         setRows((oldRows) => [newRecord,...oldRows]);
         setRowModesModel((oldModel) => ({
           ...oldModel,

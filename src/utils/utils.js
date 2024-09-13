@@ -96,11 +96,11 @@ function calculateAge(birthDate, calculatedOn = null) {
 }
 
 const convertLbtoKg = (lb) => {
-    return lb * 0.453592;
+    return (lb * 0.453592).toFixed(1);
 }
 
 const convertKgtoLb = (kg) => {
-    return kg * 2.20462;
+    return (kg * 2.20462).toFixed(1);
 }
 
 const convertCmToFtIn = (cm) => {
@@ -113,6 +113,14 @@ const convertCmToFtIn = (cm) => {
 
 const convertFtInToCm = (feet, inches) => {
     return (feet * 30.48) + (inches * 2.54);
+};
+
+const convertCmtoIn = (cm) => {
+    return (cm/2.54).toFixed(2);
+};
+
+const convertIntoCm = (inches) => {
+    return inches*2.54;
 };
 
 function unixToLocal(unixTimestamp) {
@@ -144,5 +152,7 @@ export {
     convertFtInToCm,
     unixToLocal,
     convertLbtoKg,
-    convertKgtoLb
+    convertKgtoLb,
+    convertCmtoIn,
+    convertIntoCm
 };
