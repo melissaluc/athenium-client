@@ -8,8 +8,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { DataGrid } from '@mui/x-data-grid';
 import { useTheme } from '@mui/system';
 import ResultsModal from '../../Modals/ResultsModal';
-
-
+import {getProgressColour} from '../../../utils/utils'
 
 function ExerciseCard ({exercise, handleExerciseChange}) {
     const theme = useTheme()
@@ -30,11 +29,9 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
     const [openResults, setOpenResults] = useState(false)
     const [results, setResults] = useState(null)
     const [errorResults, setErrorResults] = useState(false);
+    const [calculateButtonText, setCalculateButtonText] = useState('Calc');
+    const [chipColour, setChipColour] = useState(getProgressColour(exercise.strength_level, theme));
 
-    // useEffect(()=>{
-    //     console.log('workoutMode: ',workoutMode)
-    //     console.log('editMode: ',editMode)
-    // },[workoutMode,editMode])
 
     useEffect(()=>{
         setCompleted(false)
@@ -53,7 +50,9 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
             const { result, error } = await calculateStrengthLevel(exercise_name, group, weight, sets, reps);
             if (result) {
                 setResults(result);
+                setChipColour(getProgressColour(result.strength_level, theme))
                 setErrorResults(false); 
+                setCalculateButtonText('Re-Calc')
             } else {
                 setErrorResults(true);
             }
@@ -109,7 +108,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                                     <img src={exercise.img_url} alt={'sd'} layout="responsive" height='60%'/>
                                 </Box>
                                 <Box>
-                                        <Chip size='small' label='novice'/>
+                                        <Chip size='small' label={exercise.strength_level} sx={{ backgroundColor: chipColour, color: '#fff' }}/>
                                     <Box>
                                         <Typography >{exercise.exercise_name}</Typography>
                                         <Typography fontSize={'0.8rem'} color='grey'>{exercise?.group}</Typography>
@@ -119,7 +118,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                             </Stack>
                             {editMode ? <IconButton onClick={handleClickDeleteExercise} color='primary'><DeleteOutlineIcon/></IconButton> :
                             (workoutMode ? <IconButton onClick={handleSetComplete} color={completed ? 'primary' : 'default'}><AssignmentTurnedInIcon/></IconButton> : 
-                            <Button onClick={handleClickStengthCalc} variant='contained' size='small'>Calc</Button>
+                            <Button onClick={handleClickStengthCalc} variant='contained' size='small'>{calculateButtonText}</Button>
                             )}
                         </Box>
             
@@ -136,7 +135,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                                     <TextField
                                         
                                         id={`lift-${exercise.id}`}
-                                        label={`Lift in ${userData.uom.lift_weight.uom}`}
+                                        label={`Lift ${userData.uom.lift_weight.uom}`}
                                         type="number"
                                         name={'weight'}
                                         value={formData.weight}
@@ -236,7 +235,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                                     <>
                                     <TextField
                                         id={`weight-${exercise.id}`}
-                                        label={`Lift in ${userData.uom.lift_weight.uom}`}
+                                        label={`Lift ${userData.uom.lift_weight.uom}`}
                                         type="number"
                                         value={formData.weight}
                                         onChange={handleOnChange}

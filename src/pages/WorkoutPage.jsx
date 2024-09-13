@@ -16,7 +16,7 @@ function WorkoutPage(){
 
 
     return (
-        <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem', maxWidth:'500px'}}>
+        <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem', maxWidth:'500px', pb:'2vh'}}>
             <Box sx={{ width:'100%', padding:'2%', display:'flex', justifyContent:'center'}}>
                 <WorkoutModal buttonText={'+ Add Workout'}/>
             </Box>

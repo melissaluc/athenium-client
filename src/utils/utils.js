@@ -96,11 +96,19 @@ function calculateAge(birthDate, calculatedOn = null) {
 }
 
 const convertLbtoKg = (lb) => {
-    return (lb * 0.453592).toFixed(1);
+    if(lb === 0){
+        return 0
+    } else {
+        return (lb * 0.453592).toFixed(1);
+    }
 }
 
 const convertKgtoLb = (kg) => {
-    return (kg * 2.20462).toFixed(1);
+    if(kg === 0){
+        return 0
+    } else {
+        return (kg * 2.20462).toFixed(1);
+    }
 }
 
 const convertCmToFtIn = (cm) => {

@@ -44,6 +44,7 @@ function MyDatePicker({handleSelectDate, handleClose}) {
       alignItems:'center',
       marginTop:"0rem",
       paddingTop:"0rem",
+      width:'100%'
       
       }}>
     {/* Display data related to the selected date */}

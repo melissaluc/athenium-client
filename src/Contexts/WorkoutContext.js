@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { UserDataContext } from './UserDataContext';
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
-import {convertKgtoLb} from '../utils/utils'
+import {convertKgtoLb, convertLbtoKg} from '../utils/utils'
 
 const WorkoutContext = createContext();
 export const WorkoutProvider = ({ children }) => {
@@ -28,15 +28,16 @@ export const WorkoutProvider = ({ children }) => {
     useEffect(()=>{
         axiosInstance.get(`/workouts`)
         .then(response =>{
+            // Calculate proficiency of WO based on exercise scores
             setActiveViewWorkoutData(response.data)
-             setWorkoutListData(response.data)
-             setDeletedExercises([])
-             setAddedExercises({})
-             setUpdatedExercises({})
+            setWorkoutListData(response.data)
+            setDeletedExercises([])
+            setAddedExercises({})
+            setUpdatedExercises({})
         })
         .catch(error=>console.error(error))
         console.log(workoutListData)
-    },[editMode,workoutMode])
+    },[editMode, workoutMode])
 
     
 
@@ -50,7 +51,7 @@ export const WorkoutProvider = ({ children }) => {
         if (userData.uom.lift_weight.uom !== 'lb') {
             workoutData.exercises = workoutData.exercises.map(exercise => ({
                 ...exercise,
-                weight: convertKgtoLb(exercise.weight)
+                weight: convertLbtoKg(exercise.weight)
             }));
         }
 

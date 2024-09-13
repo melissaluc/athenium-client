@@ -53,7 +53,7 @@ export const StrengthLevelProvider = ({ children }) => {
 
         const groupScore = {};
 
-        let maxCountGroupExercises = 0;
+        let maxCountGroupExercises = 1;
 
         Object.keys(data).forEach((group) => {
             const exercises = data[group];
@@ -70,15 +70,18 @@ export const StrengthLevelProvider = ({ children }) => {
     
             groupScore[group] = groupTotal / numGroupExercises;
         });
-    
+
+        console.log(groupScore)
+
         // Normalize the scores based on the number of exercises
         const normalizedScores = {};
         Object.keys(groupScore).forEach((group) => {
-            const normalizationFactor = data[group].length/maxCountGroupExercises;
+            const numExercises = data[group].length;
+            const normalizationFactor =  numExercises / maxCountGroupExercises 
             normalizedScores[group] = (groupScore[group] * normalizationFactor).toFixed(2);
         });
 
-
+        console.log(normalizedScores)
         return normalizedScores 
     };
 

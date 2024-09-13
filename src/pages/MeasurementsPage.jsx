@@ -127,7 +127,7 @@ function MeasurementPage() {
         let convertedRight = right;
     
         // Convert all measurements to cm if they are in inches
-        if (userData.uom.girth_measurements.uom === 'inches') {
+        if (userData.uom.girth_measurements.uom === 'in') {
             convertedLeft = Object.keys(left).reduce((acc, key) => {
                 acc[key] = convertIntoCm(left[key]);
                 return acc;
@@ -213,7 +213,6 @@ function MeasurementPage() {
                 }}
             >
             </Box>
-            <Typography color='primary'>{userData.uom && `In ${userData.uom.girth_measurements.uom}`}</Typography>
             <MeasurementForm
                 handleInputChange={handleInputChange}
                 inputValues={inputValues}
