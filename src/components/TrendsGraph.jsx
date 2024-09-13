@@ -2,7 +2,10 @@ import { useTheme } from "@emotion/react";
 import { Box, Typography } from "@mui/material"; 
 import * as echarts from 'echarts';
 import { SVGRenderer, CanvasRenderer } from 'echarts/renderers';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import {convertLbtoKg, convertCmtoIn} from '../utils/utils'
+import { UserDataContext } from '../Contexts/UserDataContext';
+
 
 // Helper function to get macro calories
 // const getMacroCalories = (macro) => {
@@ -33,7 +36,7 @@ const generateXAxisLabels = (startTimestamp, endTimestamp) => {
 }
 
 // Helper function to extract data
-const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
+const extractData = (groupData, attribute, groupTitle, toggleGraph, theme, userData) => {
     // console.log('extractData ',attribute)
     if (groupTitle === "nutrition") {
         // For nutrition groupTitle
@@ -61,7 +64,10 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
             // When toggleGraph is true, include only attributes ending with '_diff'
             return groupData
             .filter(entry => attribute.endsWith('_diff')) 
-            .map(entry => ({
+            .map(entry => {
+
+
+                return {
                 timestamp: entry.timestamp,
                 value: entry[attribute],
                 itemStyle: {
@@ -69,22 +75,36 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
                         ? theme.palette[groupTitle][entry.group]
                         : theme.palette[groupTitle][attribute],
                 }
-            }));
+            }
+            }    
+        );
         
         } else {
             // When toggleGraph is false, exclude attributes ending with '_diff'
             return groupData
             .filter(entry => !attribute.endsWith('_diff'))
-            .map(entry => ({
+            .map(entry => {
+                let value = entry[attribute]
+                if (['lean_muscle_mass','weight'].includes(attribute)){
+                    value = userData.uom.body_mass.uom === 'lb' ? entry[attribute] :convertLbtoKg(entry[attribute])
+
+                } else if (groupTitle === 'measurements') {
+                    value = userData.uom.girth_measurements.uom === 'cm'? entry[attribute] : convertCmtoIn(entry[attribute])
+
+                }
+                console.log('entry[attribute]', attribute)
+                return {
                 timestamp: entry.timestamp,
-                value: entry[attribute],
+                value: value,
                 itemStyle: {
                     color: groupTitle === 'strength'
                         ? (entry.group ? theme.palette[groupTitle][entry.group] : theme.palette[groupTitle][attribute])
                         : theme.palette[groupTitle][attribute]
                 },
 
-            }));
+            }
+            }
+        );
         }
         
     }
@@ -93,7 +113,7 @@ const extractData = (groupData, attribute, groupTitle, toggleGraph, theme) => {
 
 
 // Function to generate ECharts options
-const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme,xAxisData, xAxisType ) => {
+const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme,xAxisData, xAxisType, userData ) => {
 
     switch (groupTitle) {
         case "nutrition":
@@ -117,7 +137,7 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                     name: option,
                     type: 'bar',
                     stack: toggleGraph ? null : 'nutrition',
-                    data: extractData(groupData, option, groupTitle, toggleGraph, theme)
+                    data: extractData(groupData, option, groupTitle, toggleGraph, theme, userData)
                 }))
             };
         case "strength":
@@ -142,14 +162,17 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                     series: Object.entries(groupData).flatMap(([muscleGroup, exercises]) =>
                         Object.entries(exercises).filter(([exerciseName, data]) => attributes.includes(exerciseName))
                             .flatMap(([exerciseName, exerciseData]) =>
-                                exerciseData.map(entry => ({
-                                    name: exerciseName,
-                                    type: 'line',
-                                    data: toggleGraph ? exerciseData.map(entry => [entry.timestamp * 1000, entry.relative_strength]) : exerciseData.map(entry => [entry.timestamp * 1000, entry.lift]),
-                                    itemStyle: {
-                                        color: theme.palette[groupTitle][exerciseName]
+                                exerciseData.map(entry => {
+                                    const lift = userData.uom.lift_weight.uom === 'lb'? entry.lift : convertLbtoKg(entry.lift)
+                                    return {
+                                        name: exerciseName,
+                                        type: 'line',
+                                        data: toggleGraph ? exerciseData.map(entry => [entry.timestamp * 1000, entry.relative_strength]) : exerciseData.map(entry => [entry.timestamp * 1000, lift]),
+                                        itemStyle: {
+                                            color: theme.palette[groupTitle][exerciseName]
+                                        }
                                     }
-                                }))
+                                })
                             )
                     )
                 };
@@ -176,7 +199,7 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                 series: attributes.map(option => ({
                     name: option,
                     type: toggleGraph ? 'bar' :'line',
-                    data: extractData(groupData, option, groupTitle, toggleGraph, theme),
+                    data: extractData(groupData, option, groupTitle, toggleGraph, theme, userData),
                     lineStyle: {
                         color: groupTitle === 'strength'
                             ? (groupData.group ? theme.palette[groupTitle][groupData.group] : theme.palette[groupTitle][option])
@@ -193,6 +216,7 @@ function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setTog
     const [attributes, setAttributes] = useState(groupAttributes)
     const [xAxisType, setXAxisType] = useState('category')
     const theme = useTheme()
+    const {userData} = useContext(UserDataContext)
 
     const handleSetToggleText = (text) => {
         setToggleText(text)
@@ -242,7 +266,7 @@ function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setTog
         const xAxisData = generateXAxisData(groupData, dateRange);
         console.log('GroupTitle: ', groupTitle)
         console.log('xAxis: ', xAxisData)
-        chart.setOption(generateOptions(groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme, xAxisData,xAxisType));
+        chart.setOption(generateOptions(groupTitle, attributes, toggleGraph, groupData, hideLegend, hideXAxisLabels, theme, xAxisData,xAxisType, userData));
    
         return () => {
             chart.dispose();
@@ -253,9 +277,19 @@ function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setTog
         <>  
             {groupTitle === "strength" || groupTitle === "nutrition" ?
                 <Typography variant="h6">
-                    {groupTitle === "strength" ? (toggleGraph ? "Relative Strength" : "Lift Weight in lbs") : (toggleGraph ? "Macros" : "Caloric Intake")}
+                    {groupTitle === "strength" ? (toggleGraph ? "Relative Strength" : `Lift Weight in ${userData.uom.lift_weight.uom}`) : (toggleGraph ? "Macros" : "Caloric Intake")}
                 </Typography> :
-                null
+                ( groupTitle === "body_composition" ?
+                    <Typography variant="h6">
+                        {toggleGraph ? "Change in Body Composition" : null}
+                    </Typography>
+
+                : ( groupTitle === "measurements"? 
+                    <Typography variant="h6">
+                    {`In ${userData.uom.girth_measurements.uom === 'cm' ? 'cm' : 'inches'}`}
+                    </Typography>
+                    : null
+                ))
             }
             <Box id={`TrendChart${groupTitle}`} sx={{ width: '100%', height: '400px' }}></Box>
         </>
