@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { UserDataContext } from './UserDataContext';
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
-
+import {convertKgtoLb, convertLbtoKg} from '../utils/utils'
 
 const WorkoutContext = createContext();
 export const WorkoutProvider = ({ children }) => {
@@ -17,23 +17,27 @@ export const WorkoutProvider = ({ children }) => {
     const [activeViewExerciseData, setActiveViewExerciseData] = useState([]);
     const [workoutMode, setWorkoutMode] = useState(false);
     const [editMode, setEditMode] = useState(false);
+
+    // Lift  weight/mass are stored as display units
     const [addedExercises, setAddedExercises] = useState({})
     const [updatedExercises, setUpdatedExercises] = useState({})
     const [deletedExercises, setDeletedExercises] = useState([])
+
     const [isFiltered, setIsFiltered] = useState(false);
 
     useEffect(()=>{
         axiosInstance.get(`/workouts`)
         .then(response =>{
+            // Calculate proficiency of WO based on exercise scores
             setActiveViewWorkoutData(response.data)
-             setWorkoutListData(response.data)
-             setDeletedExercises([])
-             setAddedExercises({})
-             setUpdatedExercises({})
+            setWorkoutListData(response.data)
+            setDeletedExercises([])
+            setAddedExercises({})
+            setUpdatedExercises({})
         })
         .catch(error=>console.error(error))
         console.log(workoutListData)
-    },[editMode,workoutMode])
+    },[editMode, workoutMode])
 
     
 
@@ -42,15 +46,27 @@ export const WorkoutProvider = ({ children }) => {
         try {
             console.log('Fetching workout data for: ', workout_id)
             const response = await axiosInstance.get(`/workouts/${workout_id}`);
-            console.log('workout data: ', response.data[0]);
-            setActiveWorkoutData(response.data[0]);
-            setWorkoutData(response.data[0]);
+            const workoutData = response.data[0];
+
+        if (userData.uom.lift_weight.uom !== 'lb') {
+            workoutData.exercises = workoutData.exercises.map(exercise => ({
+                ...exercise,
+                weight: convertLbtoKg(exercise.weight)
+            }));
+        }
+
+        console.log('workout data: ', workoutData);
+        setActiveWorkoutData(workoutData);
+        setWorkoutData(workoutData);
         } catch (error) {
             console.error('Error fetching workout:', error);
         }
-    }, []);
+    }, [userData.uom.lift_weight.uom]);
 
     const calculateStrengthLevel = useCallback(async (exercise_name, group, weight, sets, reps) => {
+        //  Convert to standard uom lb and cm
+        const standardizedWeight = userData.uom.lift_weight.uom==='lb'? weight : convertKgtoLb(weight)
+
         const data = {
             body_weight: userData.weight,
             age: userData.age,
@@ -58,13 +74,13 @@ export const WorkoutProvider = ({ children }) => {
             group,
             sets,
             category:'strength',
-            weight,
+            weight: standardizedWeight,
             reps,
             exercise_name,
-            lift_uom: userData.uom.lift_weight.uom,
-            body_mass_uom: userData.uom.body_mass.uom
+            lift_uom: userData.uom.lift_weight.uom, // remove?
+            body_mass_uom: userData.uom.body_mass.uom // remove?
         };
-        console.log('data to pass to calc: ',data)
+
         try {
             const response = await axiosInstance.post('/strength', data);
           
@@ -87,20 +103,36 @@ export const WorkoutProvider = ({ children }) => {
         setWorkoutMode(false);
         setAddedExercises({})
         setDeletedExercises([])
-
-        // Optionally reset state or undo changes
     };
 
   
 
     const updateWorkout = (newWorkoutDetails) => {
         const {exercises,...rest} = newWorkoutDetails
+
+        let convertedUpdatedExercises = updatedExercises;
+        if (userData.uom.lift_weight.uom!='lb'){
+            convertedUpdatedExercises = Object.keys(updatedExercises).reduce((acc, exerciseId) => {
+                const exercise = updatedExercises[exerciseId];
+                const weightInLbs = userData.uom.lift_weight.uom === 'lb' ? exercise.weight : convertKgtoLb(exercise.weight);
+        
+                acc[exerciseId] = {
+                    ...exercise,
+                    weight: weightInLbs
+                };
+                return acc;
+            }, {});
+        } 
+
         const patchData = {
             updatedWorkoutDetails: rest || {},
             addedExercises: addedExercises || {},
             deletedExercises: deletedExercises || [],
-            updatedExercises: updatedExercises || {},
+            updatedExercises: convertedUpdatedExercises || {},
         }
+
+
+
         console.log('Patch data: ', patchData)
         axiosInstance.patch(`/workouts/${activeWorkoutData.workout_id}`,patchData)
         .then(response =>{

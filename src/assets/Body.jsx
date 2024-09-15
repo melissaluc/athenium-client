@@ -117,8 +117,8 @@ const SvgBody = ({selectLabel, width, height, data}) => {
   // const pomRefLine = [
   //   {id:"midline",  d: "m 103.394, 30  v 250"},
   //   // Relative to user measurements
-  //   {id:"rlowerlegline", d:"M88.324 193.198  v50 "},
-  //   {id:"llowerlegline", d:"M88.324 193.198 v50 "},
+  //   {id:"rlowerlegline", d:"95.394 30  v50 "},
+  //   {id:"llowerlegline", d:"195.394 30 v50 "},
   //   {id:"lupperlegline", d:"M86.141 148.957 v50 "},
   //   {id:"rupperlegline", d:"M86.141 148.957 v50 "},
   //   // Fixed measurements
@@ -166,7 +166,7 @@ const SvgBody = ({selectLabel, width, height, data}) => {
   //   {id:"L-Upper Thigh", d:`M104.086 148.765 h18.335 v5.418 h-18.335z`}
   // ]
   const pomRectangles = [
-    {id:"R-Bicep", d:`M64.161 77.284 h7.607 v${scaleFactor*selectMeasurement['R-Bicep']/pi} h-7.607z`},
+    {id:"R-Bicep-", d:`M64.161 77.284 h7.607 v${scaleFactor*selectMeasurement['R-Bicep']/pi} h-7.607z`},
     {id:"L-Bicep", d:`M132.504 77.43 h7.607 v${scaleFactor*selectMeasurement['L-Bicep']/pi} h-7.607z`},
     {id:"Neck", d:`M98.86 62.84 h${scaleFactor*selectMeasurement['Neck']/pi} v8.347 H98.86z`},
     {id:"Shoulder", d:`M86.141 73.143 h35.558 v8.105 H86.141z`},

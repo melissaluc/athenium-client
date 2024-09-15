@@ -232,7 +232,7 @@ function WorkoutDetailPage() {
                                 <Box display='flex' sx={{justifyContent:'space-between'}} >
                                     <Chip 
                                         size='small'
-                                        label='novice'
+                                        label='unknown'
                                     />
                                     {activeWorkoutData.last_completed && 
                                         <Stack direction={'column'}>
@@ -411,34 +411,36 @@ function WorkoutDetailPage() {
                 
             
                 </Box>
-                <Box
-                        sx={{
-                        backgroundColor:'background.paper',
-                        // opacity:'90%',
-                        position: 'fixed',
-                        bottom: '0%',
-                        left: '0%',
-                        width: '100%',
-                        margin: 0,
-                        padding: '1% 10%',
-                        boxSizing: 'border-box',
-                        zIndex: 1000,
-                    }}
-                >
-                    <Box width='100%' display='flex' sx={{alignItems:'center', justifyContent:'center'}}>
-                        <Box width="50vw" >
-                            <Button 
-                                type={editMode ? 'submit' : 'button'} 
-                                fullWidth
-                                disabled ={(workoutMode && true) | isDisabled} 
-                                onClick={handleBottomButton} 
-                                variant={editMode ? 'contained' : 'outlined'} 
-                                >
-                                {editMode ? 'Save' : 'Back'}
-                            </Button>
+                { !workoutMode && 
+                    <Box
+                            sx={{
+                            backgroundColor:'background.paper',
+                            // opacity:'90%',
+                            position: 'fixed',
+                            bottom: '0%',
+                            left: '0%',
+                            width: '100%',
+                            margin: 0,
+                            padding: '1% 10%',
+                            boxSizing: 'border-box',
+                            zIndex: 1000,
+                        }}
+                    >
+                        <Box width='100%' display='flex' sx={{alignItems:'center', justifyContent:'center'}}>
+                            <Box width="50vw" >
+                                <Button 
+                                    type={editMode ? 'submit' : 'button'} 
+                                    fullWidth
+                                    disabled ={(workoutMode && true) | isDisabled} 
+                                    onClick={handleBottomButton} 
+                                    variant={editMode ? 'contained' : 'outlined'} 
+                                    >
+                                    {editMode ? 'Save' : 'Back'}
+                                </Button>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
+                }
             </form>
         </Container>
     );

@@ -2,9 +2,9 @@ import { Box, Typography, LinearProgress, Stack, Button, Chip} from "@mui/materi
 import { useTheme } from '@mui/material/styles';
 import {getProgressColour} from '../utils/utils'
 import { UserDataContext } from '../Contexts/UserDataContext';
-import {useContext} from 'react'
+import {useContext, useState, useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
-
+import {convertLbtoKg} from '../utils/utils'
 
 function ExerciseStrengthLevel ({
                                 date_calculated,
@@ -29,7 +29,31 @@ function ExerciseStrengthLevel ({
     const progressValue = parseFloat((((one_rep_max - strength_bounds[strength_level]) / (strength_bounds[next_strength_level]-strength_bounds[strength_level])) * 100).toFixed(1));
     const relative_strength = (one_rep_max/body_weight).toFixed(2)
     const {userData} = useContext(UserDataContext)
-    const strengthLevelColor = getProgressColour(strength_level, theme)     
+    const strengthLevelColor = getProgressColour(strength_level, theme)
+    const [displayValues, setDisplayValues] = useState({
+        display_one_rep_max: one_rep_max,
+        display_strength_level: strength_bounds[strength_level],
+        display_next_level: strength_bounds[next_strength_level],
+        display_lift:lift
+    });
+    
+    useEffect(() => {
+        console.log('userData.uom.lift_weight.uom',userData.uom.lift_weight.uom)
+        const display_one_rep_max = userData.uom.lift_weight.uom === 'lb' ? one_rep_max : convertLbtoKg(one_rep_max);
+        const display_strength_level = userData.uom.lift_weight.uom === 'lb' ? strength_bounds[strength_level] : convertLbtoKg(strength_bounds[strength_level]);
+        const display_next_level = userData.uom.lift_weight.uom === 'lb' ? strength_bounds[next_strength_level] :convertLbtoKg(strength_bounds[next_strength_level]);
+        const display_lift = userData.uom.lift_weight.uom === 'lb' ? lift : convertLbtoKg(lift);
+    
+        setDisplayValues({
+            display_one_rep_max,
+            display_strength_level,
+            display_next_level,
+            display_lift
+        });
+    }, [userData, one_rep_max, strength_bounds, strength_level, next_strength_level, lift]);
+    
+    // Now you can use displayValues in your component
+    const { display_one_rep_max, display_lift, display_strength_level, display_next_level } = displayValues;
 
     return(
         <Box >
@@ -56,8 +80,8 @@ function ExerciseStrengthLevel ({
                 </Stack>
                 <Stack direction='column' >
                     <Typography fontSize='0.8rem'><b>Relative Strength</b> {relative_strength} times your body weight</Typography>
-                    <Typography fontSize='0.8rem'><b>Last Performed</b> {lift }{userData.uom.lift_weight.uom} | {reps} reps | {sets} sets</Typography>
-                    <Typography fontSize='0.8rem'><b>One Rep Max</b> {one_rep_max}{userData.uom.lift_weight.uom}</Typography>
+                    <Typography fontSize='0.8rem'><b>Last Performed</b> {display_lift }{userData.uom.lift_weight.uom} | {reps} reps | {sets} sets</Typography>
+                    <Typography fontSize='0.8rem'><b>One Rep Max</b> {display_one_rep_max}{userData.uom.lift_weight.uom}</Typography>
                     <Typography fontSize='0.8rem'><b>Stronger than</b> {relative_strength_demographic}% of your group</Typography>
                     {!(strength_level==="elite") && <Typography fontSize='0.8rem'><b>Next Level</b> {next_strength_level}</Typography>}
 
@@ -91,9 +115,9 @@ function ExerciseStrengthLevel ({
             />
         <Box sx={{display:'flex', justifyContent:'space-between'}}>
             {/* Value at current level */}
-            <Typography fontSize={'0.8rem'}>{strength_bounds[strength_level]}{userData.uom.lift_weight.uom}</Typography>
+            <Typography fontSize={'0.8rem'}>{display_strength_level}{userData.uom.lift_weight.uom}</Typography>
             {/* Value at next level */}
-            <Typography fontSize={'0.8rem'}>{strength_level==="elite"? one_rep_max : strength_bounds[next_strength_level]}{userData.uom.lift_weight.uom}</Typography>
+            <Typography fontSize={'0.8rem'}>{strength_level==="elite"? display_one_rep_max : display_next_level}{userData.uom.lift_weight.uom}</Typography>
         </Box>
         </Box>
     </Box>

@@ -78,12 +78,13 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
                     <IconButton color={toggleGraph? 'primary' : 'default'} onClick={() => setToggleGraph(prev => !prev)}> {toggleGraph? <ToggleOnIcon /> : <ToggleOffIcon /> }</IconButton>
                 )}
             </Box>
-
+            {/* TODO: break into components to control show or no show subOptions */}
             {showOptions && (
                 <Stack direction="row" spacing={1} sx={{
                     // display: 'flex',
                     
-                    flexWrap: groupTitle !== "strength" ? 'wrap' : 'nowrap',
+                    // flexWrap: groupTitle !== "strength" ? 'wrap' : 'nowrap',
+                    flexWrap:'wrap'
                     // flexDirection: groupTitle !== "strength" ? 'row' : 'column',
                     // gap: '0.5rem'
                 }}>
@@ -102,7 +103,7 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
                             <Typography onClick={() => setShowSubOptions(prev => !prev)}>
                                 <Button>{key.replace(/_/g, ' ')} </Button>
                             </Typography>
-                            <Stack direction="row" spacing={1}>
+                            <Stack direction="column" spacing={1}>
                                 {showSubOptions &&
                                     groupAttributes[key].map((metric) => (
                                             <Chip

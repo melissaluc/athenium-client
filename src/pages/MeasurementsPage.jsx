@@ -3,11 +3,11 @@ import { useEffect, useState, useContext } from 'react';
 import MeasurementForm from '../components/MeasurementForm/MeasurementForm';
 import MeasurementModal from '../components/MeasurementModal';
 import axiosInstance from '../utils/axiosConfig';
-import {findClosestData} from '../utils/utils'
+import {findClosestData, convertCmtoIn, convertIntoCm} from '../utils/utils'
 import { UserDataContext } from '../Contexts/UserDataContext';
 
 function MeasurementPage() {
-    const {userData, setUserData }= useContext(UserDataContext);
+    const {userData}= useContext(UserDataContext);
     const [waistHipRatio, setWaistHipRatio] = useState(null);
     const [data, setData] = useState([]);
     const [inputValues, setInputValues] = useState({
@@ -50,31 +50,50 @@ function MeasurementPage() {
     const handleSelectDate = (selectedDate) => {
         const selectedData = findClosestData(selectedDate, data);
         if (selectedData) {
+            const convertedMeasurements = (measurements) => {
+                if (userData.uom.girth_measurements.uom !== 'cm') {
+                    return Object.keys(measurements).reduce((acc, key) => {
+                        acc[key] = convertCmtoIn(measurements[key] || 0);
+                        return acc;
+                    }, {});
+                }
+                return measurements;
+            };
+    
+            const convertedLeft = convertedMeasurements({
+                Neck: selectedData.neck_cm,
+                Chest: selectedData.chest_cm,
+                Abdomen: selectedData.abdomen_cm,
+                'L-Bicep': selectedData.l_bicep_cm,
+                'L-Upper Thigh': selectedData.l_upper_thigh_cm,
+                'L-Thigh': selectedData.l_thigh_cm,
+                'L-Calf': selectedData.l_calf_cm,
+            });
+    
+            const convertedRight = convertedMeasurements({
+                Shoulder: selectedData.shoulder_cm,
+                Waist: selectedData.waist_cm,
+                Hip: selectedData.hip_cm,
+                'R-Bicep': selectedData.r_bicep_cm,
+                'R-Upper Thigh': selectedData.r_upper_thigh_cm,
+                'R-Thigh': selectedData.r_thigh_cm,
+                'R-Calf': selectedData.r_calf_cm,
+            });
+    
             const newData = {
                 dateSelected: selectedDate,
                 left: {
                     ...inputValues.left,
-                    Neck: selectedData.neck_cm || 0,
-                    Chest: selectedData.chest_cm || 0,
-                    Abdomen: selectedData.abdomen_cm || 0,
-                    'L-Bicep': selectedData.l_bicep_cm || 0,
-                    'L-Upper Thigh': selectedData.l_upper_thigh_cm || 0,
-                    'L-Thigh': selectedData.l_thigh_cm || 0,
-                    'L-Calf': selectedData.l_calf_cm || 0,
+                    ...convertedLeft,
                 },
                 right: {
                     ...inputValues.right,
-                    Shoulder: selectedData.shoulder_cm || 0,
-                    Waist: selectedData.waist_cm || 0,
-                    Hip: selectedData.hip_cm || 0,
-                    'R-Bicep': selectedData.r_bicep_cm || 0,
-                    'R-Upper Thigh': selectedData.r_upper_thigh_cm || 0,
-                    'R-Thigh': selectedData.r_thigh_cm || 0,
-                    'R-Calf': selectedData.r_calf_cm || 0,
+                    ...convertedRight,
                 },
             };
+    
             setInputValues(newData);
-            console.log('new inputvalues', inputValues);
+            console.log('new inputvalues', newData);
         }
     };
 
@@ -103,23 +122,39 @@ function MeasurementPage() {
         const convertDateSelected = dateSelectedObj.toISOString()
         console.log('converted date ',convertDateSelected )
 
+        //  Convert measurements back to cm if in inches 
+        let convertedLeft = left;
+        let convertedRight = right;
+    
+        // Convert all measurements to cm if they are in inches
+        if (userData.uom.girth_measurements.uom === 'in') {
+            convertedLeft = Object.keys(left).reduce((acc, key) => {
+                acc[key] = convertIntoCm(left[key]);
+                return acc;
+            }, {});
+    
+            convertedRight = Object.keys(right).reduce((acc, key) => {
+                acc[key] = convertIntoCm(right[key]);
+                return acc;
+            }, {});
+        }
         const newData = {
             dateSelected: convertDateSelected,
             newMeasurements: {
-                neck_cm: left.Neck,
-                shoulder_cm: right.Shoulder,
-                chest_cm: left.Chest,
-                abdomen_cm: left.Abdomen,
-                waist_cm: right.Waist,
-                hip_cm: right.Hip,
-                r_upper_thigh_cm: right['R-Upper Thigh'],
-                l_upper_thigh_cm: left['L-Upper Thigh'],
-                r_bicep_cm: right['R-Bicep'],
-                l_bicep_cm: left['L-Bicep'],
-                r_thigh_cm: right['R-Thigh'],
-                l_thigh_cm: left['L-Thigh'],
-                r_calf_cm: right['R-Calf'],
-                l_calf_cm: left['L-Calf'],
+                neck_cm: convertedLeft.Neck,
+                shoulder_cm: convertedRight.Shoulder,
+                chest_cm: convertedLeft.Chest,
+                abdomen_cm: convertedLeft.Abdomen,
+                waist_cm: convertedRight.Waist,
+                hip_cm: convertedRight.Hip,
+                r_upper_thigh_cm: convertedRight['R-Upper Thigh'],
+                l_upper_thigh_cm: convertedLeft['L-Upper Thigh'],
+                r_bicep_cm: convertedRight['R-Bicep'],
+                l_bicep_cm: convertedLeft['L-Bicep'],
+                r_thigh_cm: convertedRight['R-Thigh'],
+                l_thigh_cm: convertedLeft['L-Thigh'],
+                r_calf_cm: convertedRight['R-Calf'],
+                l_calf_cm: convertedLeft['L-Calf'],
             },
         };
 
@@ -178,7 +213,6 @@ function MeasurementPage() {
                 }}
             >
             </Box>
-            <Typography color='primary'>{userData.uom && `In ${userData.uom.girth_measurements.uom}`}</Typography>
             <MeasurementForm
                 handleInputChange={handleInputChange}
                 inputValues={inputValues}
@@ -193,9 +227,9 @@ function MeasurementPage() {
                 alignItems="center"
                 width="100%"
             >
-                <MeasurementModal
+                {/* <MeasurementModal
                     values={{ ...inputValues.left, ...inputValues.right }}
-                />
+                /> */}
                 <Button fullWidth  variant='contained' onClick={handleSubmit} >Save</Button>
             </Box>
         </Container>

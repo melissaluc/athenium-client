@@ -1,7 +1,7 @@
 import Calendar from './Calendar/Calendar';
 import MeasurementInput from './MeasurementInput';
 import { useState, useContext } from 'react';
-import { Button, Typography, Container, Box, TextField } from '@mui/material';
+import { Button, Typography, Container, Box, TextField, Stack } from '@mui/material';
 import BodyAvatar from '../../assets/Body';
 import { UserDataContext } from '../../Contexts/UserDataContext';
 
@@ -15,9 +15,11 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handle
     };
 
     return (
-        <Container>
+        <Stack direction='column' alignItems='center' width='100%' spacing={'1rem'}>
             {userData.weight &&
             <Calendar handleSelectDate={handleSelectDate} />}
+            <BodyAvatar selectLabel={selectLabel} data={{...inputValues.left,...inputValues.right}} sx={{ width: '150px', height: 'auto' }} /> {/* Adjusted avatar size */}
+            <Typography color='primary'>{userData.uom && `In ${userData.uom.girth_measurements.uom ==='cm'? 'cm': 'inches'}`}</Typography>
             <Box
                 sx={{
                     display: 'flex',
@@ -34,36 +36,11 @@ function MeasurementForm({ waistHipRatio, inputValues, handleInputChange, handle
                         alignItems: 'center',
                     }}
                 >
-          
-                    {/* <Box sx={{ marginBottom: '1rem' }}>
-                        <TextField
-                            id="outlined-read-only-input"
-                            label="Waist-to-Hip Ratio"
-                            defaultValue={waistHipRatio && waistHipRatio.toFixed(2)}
-                            InputProps={{
-                                readOnly: true,
-                                style: {
-                                    fontSize: '0.7rem', // Adjust the font size as needed
-                                    textAlign:'center'
-                                },
-                            }}
-                            sx={{
-                                width: '3.5rem',
-                                paddingTop: '1rem', // Adjusted top padding
-                                '& .MuiInputLabel-root': {
-                                    whiteSpace: 'normal',
-                                    fontSize: '0.8rem', // Adjusted font size
-                                },
-                            }}
-                        />
-                    </Box> */}
-             
 
-                    <BodyAvatar selectLabel={selectLabel} data={{...inputValues.left,...inputValues.right}} sx={{ width: '150px', height: 'auto' }} /> {/* Adjusted avatar size */}
                 </Box>
                 <MeasurementInput inputs={inputValues.left} handleInputClick={handleInputClick} handleInputChange={handleInputChange} side='left' />
             </Box>
-        </Container>
+        </Stack>
     );
 }
 

@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { UserDataContext } from './UserDataContext';
 import axiosInstance from '../utils/axiosConfig';
-import {calculateAge} from '../utils/utils'
+import {calculateAge, convertKgtoLb} from '../utils/utils'
 
 const StrengthLevelContext = createContext();
 export const StrengthLevelProvider = ({ children }) => {
@@ -53,7 +53,7 @@ export const StrengthLevelProvider = ({ children }) => {
 
         const groupScore = {};
 
-        let maxCountGroupExercises = 0;
+        let maxCountGroupExercises = 1;
 
         Object.keys(data).forEach((group) => {
             const exercises = data[group];
@@ -70,15 +70,18 @@ export const StrengthLevelProvider = ({ children }) => {
     
             groupScore[group] = groupTotal / numGroupExercises;
         });
-    
+
+        console.log(groupScore)
+
         // Normalize the scores based on the number of exercises
         const normalizedScores = {};
         Object.keys(groupScore).forEach((group) => {
-            const normalizationFactor = data[group].length/maxCountGroupExercises;
+            const numExercises = data[group].length;
+            const normalizationFactor =  numExercises / maxCountGroupExercises 
             normalizedScores[group] = (groupScore[group] * normalizationFactor).toFixed(2);
         });
 
-
+        console.log(normalizedScores)
         return normalizedScores 
     };
 
@@ -124,14 +127,18 @@ export const StrengthLevelProvider = ({ children }) => {
     const updateRecords = async (updatedData, exerciseName) => {
         // delete all records for selected exercise
         console.log('updateRecords function',exerciseName, updatedData, )
-        
+
         const updateUnsavedRows = Object.keys(updatedData.unsavedRows).reduce((acc, rowId) => {
             const row = updatedData.unsavedRows[rowId];
             const age = calculateAge(userData.dob, row.calculated_on);
+            const liftWeightInLb = row.lift_uom === 'kg' ? convertKgtoLb(row.lift) : row.lift;
+            const bodyWeightInLb = row.body_mass_uom === 'kg' ? convertKgtoLb(row.body_weight) : row.body_weight;
             acc[rowId] = {
                 ...row,
                 exercise_name:exerciseName,
                 age,
+                lift: liftWeightInLb,
+                body_weight: bodyWeightInLb,
             };
             return acc;
         }, {});
@@ -152,10 +159,7 @@ export const StrengthLevelProvider = ({ children }) => {
             const data = response.data;
             console.log('updated ',data)
             setExerciseLogRecords(data.log)
-            // setStrengthData(prev => prev.filter(group =>
-            //     group.exercises.every(exercise => exercise.exercise_name === data.log.exercise_name)
-            // ));
-
+   
         } catch (error) {
             console.error('Patch request failed:', error.response ? error.response.data : error.message);
         }
