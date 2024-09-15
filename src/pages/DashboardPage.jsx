@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
 import { UserDataContext } from '../Contexts/UserDataContext';
-
+import {convertLbtoKg} from '../utils/utils'
 
 function DashboardPage({}){
     const navigate = useNavigate()
@@ -130,9 +130,13 @@ function DashboardPage({}){
                 >
                     {otherData && Object.entries(otherData.body_composition.delta).map(([key, value], index, array) => {
                         const { label, value: paramValue, uom } = value;
+                        let convertedValue =   paramValue
+                        if(uom !== 'lb'){
+                            convertedValue = convertLbtoKg(paramValue)
+                        }
                         return (
                         <Box key={key} sx={{display: "flex", alignItems:"center", padding:'0rem', margin:"0rem" , width:'100%'}}>
-                            <DeltaCards header={label} value={paramValue} units={uom}/>
+                            <DeltaCards header={label} value={convertedValue} units={uom}/>
                             {index !== array.length - 1 && <Box sx={{ borderRight: '1px solid black', height: "1.5rem", padding:"0rem", margin:"0rem", }}></Box>}
                         </Box>    
                 )
@@ -160,7 +164,11 @@ function DashboardPage({}){
 
                     {otherData && Object.entries(otherData.body_composition.params).map(([key, value]) => {
                         const { label, value: paramValue, uom } = value;
-                        return <ParamsCard key={key} paramName={label} paramValue={paramValue} uom={uom} />;
+                        let convertedValue =   paramValue
+                        if(uom !== 'lb'){
+                            convertedValue = convertLbtoKg(paramValue)
+                        }
+                        return <ParamsCard key={key} paramName={label} paramValue={convertedValue} uom={uom} />;
                     })}
 
 
