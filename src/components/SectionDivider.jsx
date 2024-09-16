@@ -1,7 +1,7 @@
 import {Box, Divider, Typography} from '@mui/material'
 import { styled } from '@mui/system';
 
-function SectionDivider ({sectionName}) {
+function SectionDivider ({sectionName, actionComponent}) {
     const Root = styled('div')(({ theme }) => ({
         width: '100%',
         ...theme.typography.body2,
@@ -22,7 +22,7 @@ function SectionDivider ({sectionName}) {
                 component="div"
                 role="presentation"
                 aria-hidden="true"
-            /></Box>
+            />{actionComponent && actionComponent}</Box>
         </Root>
     )
 }

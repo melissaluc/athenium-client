@@ -1,15 +1,23 @@
-import { Button, Typography, Container, Box,  Chip } from '@mui/material';
+import { Button, Typography, Container, Box, Dialog, Slide, IconButton, Accordion, AccordionActions, AccordionSummary } from '@mui/material';
 import BodyAvatar from '../assets/Body'
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, forwardRef} from 'react'
 import ParamsCard from '../components/Cards/ParamsCard/ParamsCard';
 import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
 import SectionDivider from '../components/SectionDivider'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
 import {findClosestData} from '../utils/utils'
 import { UserDataContext } from '../Contexts/UserDataContext';
 import {convertLbtoKg} from '../utils/utils'
+import CloseIcon from '@mui/icons-material/Close';
+
+
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />;
+  });
+
 
 function DashboardPage({}){
     const navigate = useNavigate()
@@ -18,7 +26,15 @@ function DashboardPage({}){
     const [measurementData, setMeasurementData] = useState([]);
     const [selectMeasurementData, setSelectMeasurementData] = useState({});
     const [otherData, setOtherData] = useState(null)
+    const [openBodyCompDialog, setOpenBodyCompDialog] = useState(false);
 
+    const handleClickBodyCompDialogOpen = () => {
+        setOpenBodyCompDialog(true);
+      };
+    
+      const handleBodyCompDialogClose = () => {
+        setOpenBodyCompDialog(false);
+      };
 
     const today = new Date();
     const formattedDate = today.toISOString().slice(0, 10); // Get YYYY-MM-DD format
@@ -113,7 +129,26 @@ function DashboardPage({}){
                     </Button>
                 </Box>
             </Box>
-            <SectionDivider sectionName={'BODY COMPOSITION'} />
+            <SectionDivider sectionName={'BODY COMPOSITION'} actionComponent={
+                <IconButton variant="outlined" color="primary" onClick={handleClickBodyCompDialogOpen}>
+                    <AddCircleIcon/>
+                </IconButton>}
+                />
+            <Dialog
+                fullScreen
+                open={openBodyCompDialog}
+                onClose={handleBodyCompDialogClose}
+                TransitionComponent={Transition}
+            > 
+                <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleBodyCompDialogClose}
+                aria-label="close"
+                >
+                <CloseIcon />
+                </IconButton>
+            </Dialog>
             <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
             {otherData && <Typography sx={{alignSelf:'flex-start'}} fontSize='0.8rem'>
                 From {(new Date(otherData.body_composition.last_updated_on*1000)).toLocaleDateString('en-US', {

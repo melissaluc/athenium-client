@@ -37,7 +37,7 @@ function DeltaCards({header, value, units}) {
                     // alignItems:'center'
                 }}
             >
-            <Typography fontSize="0.7rem" sx={{textAlign:"center"}}>{header.toUpperCase()}</Typography>
+            <Typography fontSize="0.6rem" fontWeight='bold' sx={{textAlign:"center"}}>{header.toUpperCase()}</Typography>
             <Box
                 sx={{
                     display:'flex',

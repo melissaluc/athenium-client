@@ -13,6 +13,9 @@ function ParamsCard({paramName, paramValue, uom}) {
             }}
         >
             <CardContent>
+                <Typography fontSize="0.6rem" fontWeight={'bold'} sx={{ wordWrap: "break-word"}}>
+                   {paramName.toUpperCase()}
+                </Typography>
                 <Box sx={{
                     display:'flex',
                     gap:'0.1rem',
@@ -25,9 +28,6 @@ function ParamsCard({paramName, paramValue, uom}) {
                     {uom}
                     </Typography>
                 </Box>
-                <Typography fontSize="0.7rem" sx={{ wordWrap: "break-word"}}>
-                   {paramName}
-                </Typography>
             </CardContent>
         </Card>
 
