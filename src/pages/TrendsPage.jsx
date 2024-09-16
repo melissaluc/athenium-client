@@ -1,4 +1,5 @@
-import { Box, Container, Button } from "@mui/material"; 
+import { Box, Container, Button, Tabs } from "@mui/material"; 
+import {TabContext, TabPanel, TabList} from '@mui/lab';
 import { useState, useEffect, useContext } from 'react';
 import DateRangePickerModal from "../components/Modals/DateRangePickerModal";
 import TrendsGroup from "../components/TrendsGroup";
