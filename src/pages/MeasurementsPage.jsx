@@ -200,6 +200,7 @@ function MeasurementPage() {
                 justifyContent: 'center',
                 alignItems: "center",
                 gap: "1rem",
+                padding:'1rem 0'
             }}
         >
             <Box

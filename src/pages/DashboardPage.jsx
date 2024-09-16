@@ -1,8 +1,9 @@
-import { Button, Typography, Container, Box } from '@mui/material';
+import { Button, Typography, Container, Box,  Chip } from '@mui/material';
 import BodyAvatar from '../assets/Body'
 import {useState, useEffect, useContext} from 'react'
 import ParamsCard from '../components/Cards/ParamsCard/ParamsCard';
 import DeltaCards from '../components/Cards/DeltaCards/DeltaCards';
+import SectionDivider from '../components/SectionDivider'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
@@ -89,6 +90,7 @@ function DashboardPage({}){
         <Container sx={{}}>
             {/* Date selector */}
             <Box sx={{margin:'1.5rem 0rem'}}>
+            <SectionDivider sectionName={'MEASUREMENTS'} />
                 <Box>
                     <Typography fontSize="0.8rem">From {selectDate.toLocaleDateString('en-US', 
                                                                                         {
@@ -111,8 +113,8 @@ function DashboardPage({}){
                     </Button>
                 </Box>
             </Box>
-                                                                             
-            <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+            <SectionDivider sectionName={'BODY COMPOSITION'} />
+            <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
             {otherData && <Typography sx={{alignSelf:'flex-start'}} fontSize='0.8rem'>
                 From {(new Date(otherData.body_composition.last_updated_on*1000)).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -126,7 +128,7 @@ function DashboardPage({}){
                 </Typography>}
             {/* Delta params */}
                 <Box 
-                    sx={{display: "flex", alignItems:"center"}}
+                    sx={{display: "flex", alignItems:"center", gap:"0.5rem",flexWrap:'wrap', justifyContent:'center' }}
                 >
                     {otherData && Object.entries(otherData.body_composition.delta).map(([key, value], index, array) => {
                         const { label, value: paramValue, uom } = value;
@@ -135,18 +137,16 @@ function DashboardPage({}){
                             convertedValue = convertLbtoKg(paramValue)
                         }
                         return (
-                        <Box key={key} sx={{display: "flex", alignItems:"center", padding:'0rem', margin:"0rem" , width:'100%'}}>
                             <DeltaCards header={label} value={convertedValue} units={uom}/>
-                            {index !== array.length - 1 && <Box sx={{ borderRight: '1px solid black', height: "1.5rem", padding:"0rem", margin:"0rem", }}></Box>}
-                        </Box>    
-                )
+
+                        )
                 })
                 }
 
                 </Box>
 
                 {/* Current params */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: 'column', alignItems:'center', width:'100%' }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: 'column', alignItems:'center', width:'100%', flexWrap:'wrap' }}>
                     {otherData && <Typography sx={{ alignSelf: 'flex-start' }} fontSize='0.8rem'>Last updated on {(new Date(otherData.body_composition.updated_on*1000)).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
