@@ -1,5 +1,5 @@
 import { Button, Typography, Container, Box, Card, CardContent } from '@mui/material';
-
+import {roundToDecimalPlace} from '../../../utils/utils'
 
 
 function ParamsCard({paramName, paramValue, uom}) {
@@ -9,10 +9,16 @@ function ParamsCard({paramName, paramValue, uom}) {
         <Card
             sx={{
                 width:"5rem",
-                height:"5rem"
+                height:"5rem",
             }}
         >
-            <CardContent>
+            <CardContent 
+                sx={{
+                    display:'flex',
+                    flexDirection:'column',
+                    justifyContent:'space-between',
+                }}
+            >
                 <Typography fontSize="0.6rem" fontWeight={'bold'} sx={{ wordWrap: "break-word"}}>
                    {paramName.toUpperCase()}
                 </Typography>
@@ -22,7 +28,7 @@ function ParamsCard({paramName, paramValue, uom}) {
                     alignItems: "baseline",
                 }}>
                     <Typography fontSize={"0.9rem"}>
-                    {paramValue}
+                    {roundToDecimalPlace(paramValue,1)}
                     </Typography>
                     <Typography fontSize={"0.7rem"}>
                     {uom}

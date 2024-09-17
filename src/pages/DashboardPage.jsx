@@ -7,12 +7,11 @@ import SectionDivider from '../components/SectionDivider'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosConfig';
-import {findClosestData} from '../utils/utils'
-import { UserDataContext } from '../Contexts/UserDataContext';
 import {convertLbtoKg} from '../utils/utils'
 import CloseIcon from '@mui/icons-material/Close';
-
+import BodyCompositionForm from '../components/Forms/BodyCompositionForm';
+import { useTheme } from '@mui/system';
+import { useDashboardContext } from '../Contexts/DashboardContext';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -20,86 +19,19 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 function DashboardPage({}){
+    const theme = useTheme()
     const navigate = useNavigate()
-    const {userData, setUserData }= useContext(UserDataContext);
-    const [selectDate, setSelectDate] = useState(new Date())
-    const [measurementData, setMeasurementData] = useState([]);
-    const [selectMeasurementData, setSelectMeasurementData] = useState({});
-    const [otherData, setOtherData] = useState(null)
-    const [openBodyCompDialog, setOpenBodyCompDialog] = useState(false);
-
-    const handleClickBodyCompDialogOpen = () => {
-        setOpenBodyCompDialog(true);
-      };
-    
-      const handleBodyCompDialogClose = () => {
-        setOpenBodyCompDialog(false);
-      };
-
-    const today = new Date();
-    const formattedDate = today.toISOString().slice(0, 10); // Get YYYY-MM-DD format
-
-    const handleBackDateClick = () => {
-        const newDate = new Date(selectDate.getTime() - (24 * 60 * 60 * 1000));
-        setSelectDate(newDate);
-    };
-
-    // Handle Forward date click but disables action beyond current date
-    const handleForwardDateClick = () => {
-        const newDate = new Date(selectDate.getTime() + (24 * 60 * 60 * 1000));
-        setSelectDate(newDate);
-    };
-    // console.log(dashData.data.params)
-    const isToday = (date) => {
-        const today = new Date();
-        return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
-    };
-
-    useEffect(()=>{
-        const selectDateOnly = new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate());
-
-        const currentMeasurement = measurementData.filter(measurement => {
-            // Convert measurement.created_on to a Date object with only year, month, and day
-            const measurementDateOnly = new Date(measurement.created_on);
-            measurementDateOnly.setHours(0, 0, 0, 0); // Ensure we compare only the date part
-          
-            // Compare the date parts
-            return measurementDateOnly.getTime() === selectDateOnly.getTime();
-          });
-
-        if(!currentMeasurement.length) {
-            const closestMeasurement = findClosestData(selectDate, measurementData)
-            setSelectMeasurementData(closestMeasurement)
-        } else {
-            console.log('currentMeasurement: ',currentMeasurement)
-            setSelectMeasurementData(currentMeasurement[0])      
-        }
-
-    },[selectDate,measurementData])
-
-    // Measurements
-    useEffect(() => {
-        axiosInstance.get(`/measurements`)
-            .then(response => {
-                setMeasurementData(response.data); 
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, [userData]);
-
-    // Other dashboard data
-    useEffect(() => {
-        axiosInstance.get(`/dashboard`)
-            .then(response => {
-                setOtherData(response.data); 
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, [userData]);
-
-
+    const {
+        handleBodyCompDialogClose,
+        selectDate,
+        handleBackDateClick,
+        handleForwardDateClick,
+        isToday,
+        selectMeasurementData,
+        openBodyCompDialog,
+        handleClickBodyCompDialogOpen,
+        otherData
+    } = useDashboardContext();
  
 
     return (
@@ -140,14 +72,29 @@ function DashboardPage({}){
                 onClose={handleBodyCompDialogClose}
                 TransitionComponent={Transition}
             > 
-                <IconButton
-                edge="start"
-                color="inherit"
-                onClick={handleBodyCompDialogClose}
-                aria-label="close"
-                >
-                <CloseIcon />
-                </IconButton>
+                <Box sx={{ alignSelf:'center', display: 'flex', flexDirection:'column', alignItems:'center', p: 2, maxWidth:"smn", justifyContent:'center' }}>
+                    <Button 
+                        variant='contained' 
+                        onClick={handleBodyCompDialogClose}
+                        sx={{ 
+                            width: '10vw', // Set the desired width
+                            backgroundColor: '#e9dbff',
+                            color: theme.palette.primary.main,
+                            alignSelf:'flex-end'
+                        }}
+                    >
+                    Cancel
+                    </Button>
+                    {/* <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleBodyCompDialogClose}
+                    aria-label="close"
+                    >
+                        <CloseIcon />   
+                    </IconButton> */}
+                    <BodyCompositionForm/>
+                </Box>
             </Dialog>
             <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem'}}>
             {otherData && <Typography sx={{alignSelf:'flex-start'}} fontSize='0.8rem'>
@@ -168,7 +115,7 @@ function DashboardPage({}){
                     {otherData && Object.entries(otherData.body_composition.delta).map(([key, value], index, array) => {
                         const { label, value: paramValue, uom } = value;
                         let convertedValue =   paramValue
-                        if(uom !== 'lb'){
+                        if(uom === 'kg'){
                             convertedValue = convertLbtoKg(paramValue)
                         }
                         return (
@@ -200,7 +147,7 @@ function DashboardPage({}){
                     {otherData && Object.entries(otherData.body_composition.params).map(([key, value]) => {
                         const { label, value: paramValue, uom } = value;
                         let convertedValue =   paramValue
-                        if(uom !== 'lb'){
+                        if(uom === 'kg'){
                             convertedValue = convertLbtoKg(paramValue)
                         }
                         return <ParamsCard key={key} paramName={label} paramValue={convertedValue} uom={uom} />;

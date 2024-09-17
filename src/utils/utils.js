@@ -147,7 +147,10 @@ function unixToLocal(unixTimestamp) {
 }
 
 
-
+function roundToDecimalPlace(number, decimalPlaces) {
+    const factor = Math.pow(10, decimalPlaces);
+    return Math.round(number * factor) / factor;
+}
   
 
 
@@ -162,5 +165,6 @@ export {
     convertLbtoKg,
     convertKgtoLb,
     convertCmtoIn,
-    convertIntoCm
+    convertIntoCm,
+    roundToDecimalPlace
 };

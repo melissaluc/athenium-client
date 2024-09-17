@@ -33,7 +33,7 @@ function DeltaCards({header, value, units}) {
                 sx={{
                     display:'flex',
                     flexDirection:'column',
-                    // justifyContent:'center',
+                    justifyContent:'space-between',
                     // alignItems:'center'
                 }}
             >
@@ -48,7 +48,13 @@ function DeltaCards({header, value, units}) {
                 <Chip icon={trendIcon} label={`${Math.abs(value)}${units!== null ? units : ''}`} 
                     sx={{
                         backgroundColor: value > 0 ? 'rgb(178, 206, 178)' : (value < 0 ? 'rgb(191, 210, 228)': 'default'),
-                        color: 'rgb(73, 74, 73)', // Ensure text is readable
+                        color: 'rgb(73, 74, 73)',
+                        '& .MuiChip-label': {
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        p:value != 0 ? '0 0.5rem 0 0.2rem' : '0 1rem',
+                        gap: 0, // Remove gap between icon and label
+                        },
                         '& .MuiChip-icon': {
                                 color: value > 0 ? 'green' :  'blue' ,
                             },
