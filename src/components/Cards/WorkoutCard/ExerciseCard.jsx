@@ -32,6 +32,9 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
     const [calculateButtonText, setCalculateButtonText] = useState('Calc');
     const [chipColour, setChipColour] = useState(getProgressColour(exercise.strength_level, theme));
 
+    useEffect(()=>{
+        setChipColour(getProgressColour(exercise.strength_level, theme))
+    },[exercise.strength_level])
 
     useEffect(()=>{
         setCompleted(false)
@@ -108,7 +111,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                                     <img src={exercise.img_url} alt={'sd'} layout="responsive" height='60%'/>
                                 </Box>
                                 <Box>
-                                        <Chip size='small' label={exercise.strength_level} sx={{ backgroundColor: chipColour, color: '#fff' }}/>
+                                        <Chip size='small' label={exercise.strength_level ? exercise.strength_level : 'unknown'} sx={{fontFamily:'silkscreen',fontSize:'0.6rem', backgroundColor: chipColour, color: '#353535' }}/>
                                     <Box>
                                         <Typography >{exercise.exercise_name}</Typography>
                                         <Typography fontSize={'0.8rem'} color='grey'>{exercise?.group}</Typography>

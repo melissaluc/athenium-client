@@ -26,6 +26,7 @@ import { GoalsProvider } from './Contexts/GoalsContext';
 import { UserSignUpProvider } from './Contexts/UserSignUpContext';
 import { MeasurementProvider } from './Contexts/MeasurementContext';
 import { Container, Box, Typography, AppBar } from '@mui/material';
+import { DashboardProvider } from './Contexts/DashboardContext';
 
 function AppRoutes() {
     const {loading, isAuthenticated } = useContext(UserDataContext);
@@ -112,19 +113,21 @@ function AuthenticatedRoutes({ theme, pageName, pageNameLabel }) {
                     <NutritionProvider>
                             <GoalsProvider>
                                     <MeasurementProvider>
-                                        <Routes>
-                                            <Route path='/settings' element={<SettingsPage />} />
-                                            <Route path='/dashboard' element={<DashboardPage />} />
-                                            {/* <Route path='/goals' element={<GoalsPage />} /> */}
-                                            <Route path='/measurements' element={<MeasurementPage />} />
-                                            {/* <Route path='/nutrition' element={<NutritionPage />} /> */}
-                                            <Route path='/trends' element={<TrendsPage />} />
-                                            <Route path='/workouts' element={<WorkoutPage />} />
-                                            <Route path='/workouts/:id' element={<WorkoutDetailPage />} />
-                                            <Route path='/strength' element={<StrengthPage />} />
-                                            <Route path='/strength/:exercise_name' element={<ExerciseStrengthLog/>} />
-                                            <Route path='*' element={<Navigate to='/dashboard' />} />
-                                        </Routes>
+                                        <DashboardProvider>
+                                            <Routes>
+                                                <Route path='/settings' element={<SettingsPage />} />
+                                                <Route path='/dashboard' element={<DashboardPage />} />
+                                                {/* <Route path='/goals' element={<GoalsPage />} /> */}
+                                                <Route path='/measurements' element={<MeasurementPage />} />
+                                                {/* <Route path='/nutrition' element={<NutritionPage />} /> */}
+                                                <Route path='/trends' element={<TrendsPage />} />
+                                                <Route path='/workouts' element={<WorkoutPage />} />
+                                                <Route path='/workouts/:id' element={<WorkoutDetailPage />} />
+                                                <Route path='/strength' element={<StrengthPage />} />
+                                                <Route path='/strength/:exercise_name' element={<ExerciseStrengthLog/>} />
+                                                <Route path='*' element={<Navigate to='/dashboard' />} />
+                                            </Routes>
+                                        </DashboardProvider>
                                     </MeasurementProvider>
                             </GoalsProvider>
                     </NutritionProvider>
