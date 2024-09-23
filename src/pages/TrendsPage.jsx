@@ -124,6 +124,7 @@ function TrendsPage() {
 
     <Box sx={{display:'flex', flexDirection:'column', gap:'1rem'}}>
       {data && Object.entries(data).map(([key,value,index])=>{
+        // console.log('groupData value.data ',value.data)
         return <TrendsGroup
                 key={key}
                 dateRange={selectDateRange} 

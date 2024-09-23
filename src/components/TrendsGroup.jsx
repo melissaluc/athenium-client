@@ -41,11 +41,11 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
             Object.keys(groupData).forEach(categoryName => {
                 const category = groupData[categoryName];
                 filteredData[categoryName] = {};
-
+                
                 Object.keys(category).forEach(exerciseName => {
                     const exerciseData = category[exerciseName];
                     const filteredExerciseData = exerciseData.filter(entry => {
-                        const timestamp = new Date(entry.timestamp * 1000);
+                        const timestamp = entry.timestamp
                         return timestamp >= dateRange.start && timestamp <= dateRange.end;
                     });
                     filteredData[categoryName][exerciseName] = filteredExerciseData;

@@ -141,7 +141,7 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                 }))
             };
         case "strength":
-
+                console.log('strength data: ', groupData)
                 return {
                     legend: {
                         data: Object.values(attributes).flatMap(exercises => exercises),
@@ -159,24 +159,24 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                         }
                     },
                     yAxis: {},
-                    series: Object.entries(groupData).flatMap(([muscleGroup, exercises]) =>
-                        Object.entries(exercises).filter(([exerciseName, data]) => attributes.includes(exerciseName))
-                            .flatMap(([exerciseName, exerciseData]) =>
-                                exerciseData.map(entry => {
-                                    const lift = userData.uom.lift_weight.uom === 'lb'? entry.lift : convertLbtoKg(entry.lift)
-                                    return {
-                                        name: exerciseName,
-                                        type: 'line',
-                                        data: toggleGraph ? exerciseData.map(entry => [entry.timestamp * 1000, entry.relative_strength]) : exerciseData.map(entry => [entry.timestamp * 1000, lift]),
-                                        itemStyle: {
-                                            color: theme.palette[groupTitle][exerciseName]
-                                        }
+                    series: Object.entries(groupData).flatMap(([muscleGroup, exercises]) => {
+                        return Object.entries(exercises)
+                            .filter(([exerciseName]) => attributes.includes(exerciseName))
+                            .flatMap(([exerciseName, exerciseData]) => {
+                                const color = theme.palette[groupTitle][exerciseName]
+                                return {
+                                    name: exerciseName,
+                                    type: 'line',
+                                    data: toggleGraph ? 
+                                        exerciseData.map(entry => [entry.timestamp, entry.relative_strength]) : 
+                                        exerciseData.map(entry => [entry.timestamp, userData.uom.lift_weight.uom === 'lb' ? entry.lift : convertLbtoKg(entry.lift)]),
+                                    itemStyle: {
+                                        color
                                     }
-                                })
-                            )
-                    )
-                };
-            
+                                };
+                            });
+                    })
+                }
         default:
             return {
                 legend: {
@@ -261,6 +261,7 @@ function TrendsGraph ({groupTitle, groupData, selectOptions, toggleGraph, setTog
     },[selectOptions, groupAttributes])
 
     useEffect(() => {
+        console.log('groupDataGraph: ',groupData)
         echarts.use([SVGRenderer, CanvasRenderer]);
         const chart = echarts.init(document.getElementById(`TrendChart${groupTitle}`), null, { renderer: 'svg' });
         const xAxisData = generateXAxisData(groupData, dateRange);
