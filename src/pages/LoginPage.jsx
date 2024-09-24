@@ -98,10 +98,11 @@ function LoginPage() {
                 bottom: 16,
                 right: expanded ? 96 : 16, 
                 transition: 'right 0.3s ease', 
-                backgroundColor:" white",
+                backgroundColor:'rgb(255, 255, 255, 1)',
                 boxShadow: 3,
                 borderRadius: 2,
                 padding: 2,
+                zIndex:10,
                 opacity: expanded ? 1 : 0, 
                 pointerEvents: expanded ? 'auto' : 'none', 
                 }}
@@ -117,11 +118,11 @@ function LoginPage() {
                 >
                     <Stack direction='row' spacing='1rem'>
                         <Typography variant="h6" fontSize='0.7rem' color={'rgba(27, 27, 27, 0.821)'}>Username: </Typography>
-                        <Typography variant="body1" fontSize='0.7rem' color={'rgba(96, 95, 95, 0.821)'}>demo</Typography>
+                        <Typography variant="body1" fontSize='0.7rem' color={'primary'}>demo</Typography>
                     </Stack>
                     <Stack direction='row' spacing='1rem'>
                         <Typography variant="h6" fontSize='0.7rem' color={'rgba(27, 27, 27, 0.821)'}>Password: </Typography>
-                        <Typography variant="body1" fontSize='0.7rem' color={'rgba(96, 95, 95, 0.821)'}>password</Typography>
+                        <Typography variant="body1" fontSize='0.7rem' color={'primary'}>password</Typography>
                     </Stack>
                 </Box>
             </Box>
