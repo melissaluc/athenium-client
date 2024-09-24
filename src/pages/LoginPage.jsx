@@ -98,7 +98,7 @@ function LoginPage() {
                 bottom: 16,
                 right: expanded ? 96 : 16, 
                 transition: 'right 0.3s ease', 
-                backgroundColor:" rgba(255, 255, 255, 0.5)",
+                backgroundColor:" white",
                 boxShadow: 3,
                 borderRadius: 2,
                 padding: 2,

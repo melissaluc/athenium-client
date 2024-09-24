@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Chip, Stack, Typography } from "@mui/material"; 
+import { Box, Button, IconButton, Chip, Stack, Typography, ListItem, Paper } from "@mui/material"; 
 import { useEffect, useState } from "react";
 import TrendsGraph from "./TrendsGraph";
 import { useTheme } from "@emotion/react";
@@ -6,6 +6,7 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import CircleIcon from '@mui/icons-material/Circle';
 
 
 function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
@@ -80,33 +81,44 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
             </Box>
             {/* TODO: break into components to control show or no show subOptions */}
             {showOptions && (
-                <Stack direction="row" spacing={1} sx={{
-                    // display: 'flex',
-                    
-                    // flexWrap: groupTitle !== "strength" ? 'wrap' : 'nowrap',
-                    flexWrap:'wrap'
-                    // flexDirection: groupTitle !== "strength" ? 'row' : 'column',
-                    // gap: '0.5rem'
-                }}>
-                    {groupTitle !== "strength" && groupAttributes.filter(attribute => !attribute.endsWith("_diff") && attribute !== "calories").map((metric) => (
-                                <Chip
-                                    key={metric}
-                                    color='primary'
-                                    variant={selectOptions.includes(metric) ? "contained": "outlined"}
-                                    label={metric.replace(/_/g, ' ')}
-                                    onClick={() => handleOptions(metric)}
-                                />
-                    ))}
+                <Paper 
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexWrap: 'wrap',
+                        listStyle: 'none',
+                        p: 0.5,
+                        boxShadow:'none',
+                        m: 0,
+                    }}
+                >
+                    {groupTitle !== "strength" && groupAttributes.filter(attribute => !attribute.endsWith("_diff") && attribute !== "calories").map((metric) => {
+                       const chipColor = theme.palette?.[groupTitle]?.[metric] || 'primary';
+                       return <Chip
+                                        key={metric}
+                                        // icon={<CircleIcon sx={{color:chipColor}}/>}
+                                        variant={selectOptions.includes(metric) ? "contained": "outlined"}
+                                        label={metric.replace(/_/g, ' ')}
+                                        onClick={() => handleOptions(metric)}
+                                        sx={{
+                                            color:chipColor,
+                                            fontFamily:'silkscreen',
+                                            border:`1px solid ${chipColor}`
+                                        }}
+                                    />
+      
+                    }
+                    )}
 
                     {groupTitle === "strength" && Object.keys(groupAttributes).map((key) => (
                         <Box key={key}>
-                            <Typography onClick={() => setShowSubOptions(prev => !prev)}>
-                                <Button>{key.replace(/_/g, ' ')} </Button>
-                            </Typography>
+                            <Button 
+                                startIcon={<CircleIcon sx={{color:theme.palette?.[groupTitle]?.[key]}}/>}
+                                onClick={() => setShowSubOptions(prev => !prev)}>{key.replace(/_/g, ' ')} </Button>
                             <Stack direction="column" spacing={1}>
                                 {showSubOptions &&
-                                    groupAttributes[key].map((metric) => (
-                                            <Chip
+                                    groupAttributes[key].map((metric) => {
+                                            return <Chip
                                             key={metric}
                                             color='primary'
                                             variant={selectOptions.includes(metric) ? "contained": "outlined"}
@@ -114,12 +126,12 @@ function TrendsGroup({ dateRange, groupTitle, groupAttributes, groupData}) {
                                             onClick={() => handleOptions(metric)}
                                             
                                             />
-                                    ))
+                                })
                                 }
                             </Stack>
                         </Box>
                     ))}
-                </Stack>
+                </Paper>
             )}
 
             <Box>
