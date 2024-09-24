@@ -163,7 +163,7 @@ const generateOptions = (groupTitle, attributes, toggleGraph, groupData, hideLeg
                         return Object.entries(exercises)
                             .filter(([exerciseName]) => attributes.includes(exerciseName))
                             .flatMap(([exerciseName, exerciseData]) => {
-                                const color = theme.palette[groupTitle][exerciseName]
+                                const color = theme.palette[groupTitle][muscleGroup]
                                 return {
                                     name: exerciseName,
                                     type: 'line',
