@@ -1,4 +1,4 @@
-import { Card, CardContent, Button, Typography, Box,Divider, Link, Container} from "@mui/material";
+import { Card, CardContent, Button, Typography, Box,Divider, Link, Container, Tooltip} from "@mui/material";
 import {useState } from "react";
 import VisualReferenceImg from '../../../assets/visual-reference-bodies.svg'
 import GirthMeasurementsImg from '../../../assets/girth-measurements.svg'
@@ -107,7 +107,10 @@ function BodyFat({ data, handleParentFormChange }) {
                                     </CardContent>
                                 </Card>
                             </Button>
-                            <Button onClick={()=>handleMethodClick('girth_measurements')}
+
+                            <Button 
+                                disabled= {true}
+                                onClick={()=>handleMethodClick('girth_measurements')}
                                 sx={{ 
                                     p: 0,
                                     width: '80%',
@@ -115,6 +118,7 @@ function BodyFat({ data, handleParentFormChange }) {
                                 }}
                                 >
                                 <Card sx={{
+                                        opacity: 0.5,
                                         transition: 'opacity 0.3s',
                                         width:'100%',
                                         '&:hover': {
@@ -128,6 +132,7 @@ function BodyFat({ data, handleParentFormChange }) {
                                     </CardContent>
                                 </Card>
                             </Button>
+                
                         </Box>
 
                     </Box>
@@ -136,6 +141,7 @@ function BodyFat({ data, handleParentFormChange }) {
                     <Box sx={{ display: 'flex', gap: '1rem', marginBottom: '1rem', justifyContent: 'center',flexWrap:'wrap' }}>
                         {methods.map((method) => (
                             <Button
+                                disabled={method === 'girth_measurements' ? true : false}
                                 key={method}
                                 variant={selectMethod === method  ? 'contained' : 'outlined'}
                                 onClick={() => handleMethodClick(method)}
