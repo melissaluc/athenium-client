@@ -79,7 +79,7 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
 
     
     const handleOnClickSelectExercise = (exercise) =>{
-        console.log(exercise)
+        console.log('Added exercise to workout: ',exercise)
         addExercise(exercise)
         updateWorkoutDetails(workoutDetailForm)
         
@@ -170,7 +170,7 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
                                 <Box 
                                 key={exerciseName} 
                                 sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '2rem', cursor: 'pointer', width:'100%' }} 
-                                onClick={() => handleOnClickSelectExercise({ exerciseName, selectedCategory, imgURL })}
+                                onClick={() => handleOnClickSelectExercise({ exerciseName, group:selectedCategory, imgURL })}
                                 >
                                 <Box>
                                     <img src={imgURL} alt={exerciseName} />

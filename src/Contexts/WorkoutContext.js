@@ -9,7 +9,7 @@ export const WorkoutProvider = ({ children }) => {
     //  Lift mass is stored in db as lbs, 
     // use UserData to send data to strengthCalc
     //  Convert lift mass back to lbs or user preferred uom
-    const {userData} = useContext(UserDataContext)
+    const {userData, isAuthenticated} = useContext(UserDataContext)
     const [workoutListData,  setWorkoutListData] = useState([]);
     const [activeWorkoutData, setActiveWorkoutData] = useState({});
     const [workoutData, setWorkoutData] = useState({});
@@ -37,7 +37,7 @@ export const WorkoutProvider = ({ children }) => {
         })
         .catch(error=>console.error(error))
         console.log(workoutListData)
-    },[editMode, workoutMode])
+    },[editMode, workoutMode, isAuthenticated])
 
     
 
@@ -138,18 +138,20 @@ export const WorkoutProvider = ({ children }) => {
         .then(response =>{
 
             if (response.status === 200) {
-                console.log(response.workout)
+                console.log('response.workout: ', response.data.data)
                 setDeletedExercises([])
                 setAddedExercises({})
                 setUpdatedExercises({})
-                setActiveWorkoutData(prev => {
-                    const updatedData = {
-                                    ...prev,
-                                    ...newWorkoutDetails
-                                }
-                    setWorkoutData(updatedData)
-                    return updatedData
-                })
+                // setActiveWorkoutData(prev => {
+                //     const updatedData = {
+                //                     ...prev,
+                //                     ...newWorkoutDetails
+                //                 }
+                //     setWorkoutData(updatedData)
+                //     return updatedData
+                // })
+                setActiveWorkoutData(response.data.data)
+                setWorkoutData(prev => ({...prev, ...response.data.data}))
             } else {
                 throw new Error(`Unexpected response status: ${response.status}`);
             }
@@ -255,7 +257,7 @@ export const WorkoutProvider = ({ children }) => {
             ...prev,
             exercises: [...(prev.exercises || []), newExercise]
         }));
-        console.log('added exercise:',exercise_name)
+        console.log('added exercise:',exercise_name, newExercise)
 
         setAddedExercises(prev => ({
             ...prev,

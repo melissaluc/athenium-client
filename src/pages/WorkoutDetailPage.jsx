@@ -174,9 +174,12 @@ function WorkoutDetailPage() {
                 };
     
             await updateWorkout(updatedWorkoutDetails);
-
-            setEditMode(false);
-            setWorkoutMode(false);
+            
+            if(workoutMode){
+                setWorkoutMode(false);
+            } else {
+                setEditMode(false);
+            }
     
         } catch (error) {
             console.error('Error during workout update:', error);
