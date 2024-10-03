@@ -6,6 +6,7 @@ import { maxHeight } from '@mui/system';
 import { TextField, Typography } from '@mui/material';
 import { IconButton } from 'rsuite';
 import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search'; 
 
 const style = {
   position: 'absolute',
@@ -28,14 +29,54 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
     const [fullExercises] = useState(exercisesData)
     const [activeView, setActiveView] = useState('strength_training')
     const [exercises,setExercises] = useState(exercisesData)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredExercises, setFilteredExercises] = useState(exercisesData);
+    const [selectedCategory, setSelectedCategory] = useState(false);
 
-    const handleView = (category)=> {
-        setActiveView(category)
-    }
 
-    useEffect(()=>{
-        setExercises(fullExercises)
-    },[activeView])
+
+    const handleView = (category) => {
+        setActiveView(category);
+        setSelectedCategory(category);
+      };
+
+      useEffect(()=>{
+        setSearchTerm('')
+        setFilteredExercises(exercisesData)
+        setSelectedCategory(false)
+
+      },[])
+
+
+      const handleSearch = () => {
+        setSelectedCategory(false);
+        const results = Object.entries(fullExercises)
+            .map(([group, value]) => {
+                const filteredItems = value.filter(item =>
+                    item.exerciseName.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+    
+                // Only keep groups that have matching items
+                if (filteredItems.length > 0) {
+                    return {
+                        [group]: filteredItems, 
+                    };
+                }
+                return null; 
+            })
+            .filter(group => group !== null); 
+    
+        setFilteredExercises(Object.assign({}, ...results));
+        console.log(results);
+    };
+    
+
+    // const handleKeyPress = (e) => {
+    //     if (e.key === 'Enter') {
+    //         handleSearch(); // Call the search function when Enter is pressed
+    //     }
+    // };
+
     
     const handleOnClickSelectExercise = (exercise) =>{
         console.log(exercise)
@@ -44,6 +85,13 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
         
         handleClose()
     }
+
+
+  const handleSelectGroup = (group) => {
+    setSelectedCategory(group);
+    setSearchTerm(''); 
+    setFilteredExercises(fullExercises[group] || []);
+  };
 
     return (
     <Box>
@@ -61,20 +109,37 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
                         {/* <IconButton variant='' onClick={handleClose} ><CloseIcon/></IconButton> */}
                         <Button variant='text' onClick={handleClose} >close</Button>
                     </Stack>
-                    <Stack  
-                        direction="row"
-                        justifyContent="space-evenly"
-                        alignItems="center"
-                        useFlexGap 
-                        gap='0.5rem'
-                        paddingBottom='1rem'
-                        flexWrap="wrap">
-                        {Object.keys(fullExercises).map((category)=>{
-                            return(
-                                <Chip clickable key={category} size='large' onClick={()=>{handleView(category)}} label={category.replace(/_/g, " ")}/>
-                            )
-                        })}
+                    <Stack direction={'row'} spacing={'1rem'} margin={'1rem 0rem'}>
+                        <TextField
+                                    variant="outlined"
+                                    placeholder="Search exercises..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    sx={{ marginBottom: '1rem', flexGrow:1 }}
+                                />
+                        <IconButton disabled={searchTerm==='' ? true : false} size='small' color="primary" onClick={handleSearch}><SearchIcon /></IconButton> 
                     </Stack>
+                    <Stack
+                direction="row"
+                justifyContent="space-evenly"
+                alignItems="center"
+                useFlexGap
+                gap='0.5rem'
+                paddingBottom='1rem'
+                flexWrap="wrap">
+                {Object.keys(fullExercises).map((category) => {
+                  return (
+                    <Chip
+                      clickable
+                      key={category}
+                      size='large'
+                      onClick={() => handleSelectGroup(category)}
+                      label={category.replace(/_/g, " ")}
+                      color={selectedCategory === category ? 'primary' : 'default'} // Highlight selected category
+                    />
+                  );
+                })}
+              </Stack>
                 <Divider/>
                 </Box>
                 <Box 
@@ -91,25 +156,68 @@ function ExerciseModal({workoutDetailForm, handleClose, open}) {
                             boxSizing: 'border-box', // Ensures padding and border are included in the total width and height
                         }}
                     >
-                    {exercises !== null ? Object.entries(exercises).map(([group, value])=>{
-                        return (
-                            <Box key={group} width='100%' >
-                                <Divider><Typography variant='subtitle1' fontWeight={'bold'}>{group.toUpperCase()}</Typography></Divider>
-                                {value && value.map((item)=>{ 
-                                    const {exerciseName, imgURL} = item
-                                    return(
-                                            <Box sx={{display:'flex', justifyContent:'flex-start', alignItems:'center', gap:'2rem', cursor:'pointer'}} onClick={()=>handleOnClickSelectExercise(({exerciseName, group, imgURL}))}>
-                                                    <Box><img src={imgURL} alt={exerciseName}></img></Box>
-                                                    <Typography >{exerciseName}</Typography>
-                                            </Box>
-    
-                                        )
+                    {selectedCategory ? (
+                        <>
+                        <Divider>
+                            <Typography variant='subtitle1' fontWeight={'bold'}>
+                            {selectedCategory.toUpperCase()}
+                            </Typography>
+                        </Divider>
+                        {filteredExercises.length > 0 ? (
+                            filteredExercises.map((item) => {
+                            const { exerciseName, imgURL } = item;
+                            return (
+                                <Box 
+                                key={exerciseName} 
+                                sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '2rem', cursor: 'pointer', width:'100%' }} 
+                                onClick={() => handleOnClickSelectExercise({ exerciseName, selectedCategory, imgURL })}
+                                >
+                                <Box>
+                                    <img src={imgURL} alt={exerciseName} />
+                                </Box>
+                                <Typography>{exerciseName}</Typography>
+                                </Box>
+                            );
+                            })
+                        ) : (
+                            <Typography>No exercises found.</Typography>
+                        )}
+                        </>
+                    ) : (
+                        <>
+                        {exercises !== null && Object.keys(filteredExercises) ? (
+                            Object.entries(filteredExercises).map(([group, items]) => {
+                            return (
+                                <Box key={group} width='100%'>
+                                <Divider>
+                                    <Typography variant='subtitle1' fontWeight={'bold'}>
+                                    {group.toUpperCase()}
+                                    </Typography>
+                                </Divider>
+                                {items.map((item) => {
+                                    const { exerciseName, imgURL } = item;
+                                    return (
+                                    <Box 
+                                        key={exerciseName} 
+                                        sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '2rem', cursor: 'pointer' }} 
+                                        onClick={() => handleOnClickSelectExercise({ exerciseName, group, imgURL })}
+                                    >
+                                        <Box>
+                                        <img src={imgURL} alt={exerciseName} />
+                                        </Box>
+                                        <Typography>{exerciseName}</Typography>
+                                    </Box>
+                                    );
                                 })}
-                            </Box>
-                        
-                        )})
-           
-                    :<CircularProgress />}
+                                </Box>
+                            );
+                            })
+                        ) : (
+                            <CircularProgress />
+                        )}
+                        </>
+                    )}
+
                 </Box>
             </Box>
         </Box>
