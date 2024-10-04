@@ -10,8 +10,9 @@ function MeasurementPage() {
     const {userData}= useContext(UserDataContext);
     const [waistHipRatio, setWaistHipRatio] = useState(null);
     const [data, setData] = useState([]);
+    const [isSaving, setIsSaving] = useState(false);
     const [inputValues, setInputValues] = useState({
-        dateSelected: new Date().setHours(0, 0, 0, 0) / 1000,
+        dateSelected: Math.floor(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()) / 1000),
         left: {
             Neck: 0,
             Chest: 0,
@@ -36,7 +37,7 @@ function MeasurementPage() {
         axiosInstance.get(`/measurements`)
             .then(response => {
                 setData(response.data);  // Make sure response.data is correctly set
-                const currentTime = new Date().getTime();
+                const currentTime = new Date().getTime()/1000;
                 handleSelectDate(currentTime);  // Ensure handleSelectDate is called correctly
             })
             .catch(error => {
@@ -48,6 +49,7 @@ function MeasurementPage() {
     
 
     const handleSelectDate = (selectedDate) => {
+
         const selectedData = findClosestData(selectedDate, data);
         if (selectedData) {
             const convertedMeasurements = (measurements) => {
@@ -112,21 +114,21 @@ function MeasurementPage() {
     }, [inputValues]);
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        setIsSaving(true);
+        
         const { left, right, dateSelected } = inputValues;
-        const selectedData = findClosestData(dateSelected, data);
-
-        // const convertDateSelected = dateSelected > 0 ? new Date(dateSelected).toISOString() : dateSelected
-        // const convertDateSelected = dateSelected > 0 ? dateSelected : new Date(dateSelected).getTime() / 1000
+        let selectedData;
+    
+        // Convert the selected date to ISO format for submission
         const dateSelectedObj = new Date(dateSelected);
-        const convertDateSelected = dateSelectedObj.toISOString()
-        console.log('converted date ',convertDateSelected )
-
-        //  Convert measurements back to cm if in inches 
+        const convertDateSelected = dateSelectedObj.toISOString();
+    
+        // Prepare the measurements for submission
         let convertedLeft = left;
         let convertedRight = right;
     
-        // Convert all measurements to cm if they are in inches
+        // Convert measurements to cm if they are in inches
         if (userData.uom.girth_measurements.uom === 'in') {
             convertedLeft = Object.keys(left).reduce((acc, key) => {
                 acc[key] = convertIntoCm(left[key]);
@@ -138,6 +140,7 @@ function MeasurementPage() {
                 return acc;
             }, {});
         }
+    
         const newData = {
             dateSelected: convertDateSelected,
             newMeasurements: {
@@ -157,37 +160,54 @@ function MeasurementPage() {
                 l_calf_cm: convertedLeft['L-Calf'],
             },
         };
-
-
-        console.log("post-put",selectedData.created_on=== convertDateSelected )
-        console.log("post-put",selectedData.created_on,convertDateSelected )
-        // Determine if the data for dateSelected already exists
-        if (selectedData.created_on === convertDateSelected ) {
-            // PATCH request to update existing data
-            axiosInstance.patch(`/measurements`, newData)
-                .then(res => {
-                    console.log(`Data updated: \n ${JSON.stringify(inputValues)} \n ${res}`);
-                    // fetchData(); // Fetch updated data after successful update
-                })
-                .catch(error => {
-                    console.log('Error updating data:', error);
-                });
+    
+        // Determine if there is historical data
+        if (data.length > 0) {
+            selectedData = findClosestData(dateSelected, data);
+    
+            // Check if the found data's date matches the selected date
+            if (selectedData && selectedData.created_on === convertDateSelected) {
+                // PATCH request to update existing data
+                axiosInstance.patch(`/measurements`, newData)
+                    .then(res => {
+                        console.log(`Data updated: \n ${JSON.stringify(inputValues)} \n ${res}`);
+                        setIsSaving(false);
+                    })
+                    .catch(error => {
+                        console.log('Error updating data:', error);
+                        setIsSaving(false);
+                    });
+            } else {
+                // POST request to create new data
+                axiosInstance.post(`/measurements`, newData)
+                    .then(res => {
+                        console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
+                        setIsSaving(false);
+                    })
+                    .catch(error => {
+                        console.log('Error submitting data:', error);
+                        setIsSaving(false);
+                    });
+            }
         } else {
-            //POST request to create new data
+            // If there is no historical data, directly POST the new data
             axiosInstance.post(`/measurements`, newData)
                 .then(res => {
-                    console.log(`Data submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
-                    // fetchData(); // Fetch updated data after successful creation
+                    console.log(`First entry submitted: \n ${JSON.stringify(inputValues)} \n ${res}`);
+                    setIsSaving(false);
                 })
                 .catch(error => {
-                    console.log('Error submitting data:', error);
+                    console.log('Error submitting first entry:', error);
+                    setIsSaving(false);
                 });
         }
     };
+    
     useEffect(() => {
         // Update inputValues whenever data changes
         if (data.length > 0) {
-            const selectedDate = new Date().getTime();  // Example timestamp
+            const selectedDate = new Date().getTime()/1000; 
+            // pass selected date as unix seconds
             handleSelectDate(selectedDate);
         }
     }, [data]);
@@ -231,7 +251,7 @@ function MeasurementPage() {
                 {/* <MeasurementModal
                     values={{ ...inputValues.left, ...inputValues.right }}
                 /> */}
-                <Button fullWidth  variant='contained' onClick={handleSubmit} >Save</Button>
+                <Button fullWidth  variant='contained' onClick={handleSubmit} disabled={isSaving} >{isSaving ? 'Saving...' : 'Save'}</Button>
             </Box>
         </Container>
     );

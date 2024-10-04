@@ -1,4 +1,5 @@
 function findClosestData(selectedDate, data) {
+    // Selected Date in unix seconds
     let closestData = null;
 
     // Convert selectedDate to a Date object
