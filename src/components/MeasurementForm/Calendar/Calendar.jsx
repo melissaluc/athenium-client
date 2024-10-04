@@ -9,18 +9,6 @@ function MyDatePicker({handleSelectDate, handleClose}) {
   const inputRef = useRef(null);
 
   
-  
-  useEffect(() => {
-    fetchDataForDate(selectedDate); // Fetch data for the initial selected date
-  }, [selectedDate]); // Run this effect only once after the component mounts
-  
-  // TODO: replace with useEffect and interact with backend to retrieve PoM data queried by date
-  const fetchDataForDate = (date) => {
-    // Here you can fetch data for the selected date from your API or any other data source
-    console.log('Fetching data for date:', date);
-    
-  };
-  
   const handleDateSelect = (selectedDates) => {
     const selectedDate = selectedDates[0]; // Get the selected date
     selectedDate.setHours(0, 0, 0, 0); 

@@ -26,12 +26,13 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
         distance:exercise.distance || 0,
         duration :exercise.duration || 0,
     })
+    const [strengthLevel, setStrengthLevel] = useState(exercise.strength_level)
     const [openResults, setOpenResults] = useState(false)
     const [results, setResults] = useState(null)
     const [errorResults, setErrorResults] = useState(false);
     const [calculateButtonText, setCalculateButtonText] = useState('Calc');
     const [chipColour, setChipColour] = useState(getProgressColour(exercise.strength_level, theme));
-
+    const isCalcDisabled = formData.lift <= 0 || formData.reps <= 0 || formData.sets <= 0;
     useEffect(()=>{
         setChipColour(getProgressColour(exercise.strength_level, theme))
     },[exercise.strength_level])
@@ -56,6 +57,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                 setChipColour(getProgressColour(result.strength_level, theme))
                 setErrorResults(false); 
                 setCalculateButtonText('Re-Calc')
+                setStrengthLevel(result.strength_level)
             } else {
                 setErrorResults(true);
             }
@@ -111,7 +113,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                                     <img src={exercise.img_url} alt={'sd'} layout="responsive" height='60%'/>
                                 </Box>
                                 <Box>
-                                        <Chip size='small' label={exercise.strength_level ? exercise.strength_level : 'unknown'} sx={{fontFamily:'silkscreen',fontSize:'0.6rem', backgroundColor: chipColour, color: '#353535' }}/>
+                                        <Chip size='small' label={exercise.strength_level ? strengthLevel : 'unknown'} sx={{fontFamily:'silkscreen',fontSize:'0.6rem', backgroundColor: chipColour, color: '#353535' }}/>
                                     <Box>
                                         <Typography >{exercise.exercise_name}</Typography>
                                         <Typography fontSize={'0.8rem'} color='grey'>{exercise?.group}</Typography>
@@ -121,7 +123,7 @@ const {editMode, workoutMode, calculateStrengthLevel, workoutData, deleteExercis
                             </Stack>
                             {editMode ? <IconButton onClick={handleClickDeleteExercise} color='primary'><DeleteOutlineIcon/></IconButton> :
                             (workoutMode ? <IconButton onClick={handleSetComplete} color={completed ? 'primary' : 'default'}><AssignmentTurnedInIcon/></IconButton> : 
-                            <Button onClick={handleClickStengthCalc} variant='contained' size='small'>{calculateButtonText}</Button>
+                            <Button onClick={handleClickStengthCalc} variant='contained' size='small' disabled={isCalcDisabled}>{calculateButtonText}</Button>
                             )}
                         </Box>
             
