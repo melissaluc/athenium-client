@@ -12,19 +12,22 @@ import { useWorkoutContext } from '../Contexts/WorkoutContext';
 
 
 function WorkoutPage(){
-    const {activeViewWorkoutData, onFilter} = useWorkoutContext();
-    const [searchValue, setSearchValue] = useState(null)
+    const {activeViewWorkoutData, onFilter, onSort} = useWorkoutContext();
+    const [searchValue, setSearchValue] = useState('')
 
-    const handleSearch = () => {
-        alert(searchValue)
-        onFilter(searchValue)
-    }
+    const handleSearch = (value) => {
+        console.log('Searching for workout name like: ', value);
+        onFilter(value);
+    };
 
     const onChange = (e) => {
-        e.preventDefailt()
+        const newSearchValue = e.target.value;
+        setSearchValue(newSearchValue);
 
-
-    }
+        if (newSearchValue === '') {  
+            handleSearch(''); 
+        }
+    };
 
     return (
         <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem', maxWidth:'500px', pb:'2vh'}}>
@@ -47,11 +50,11 @@ function WorkoutPage(){
                         value={searchValue}
                     />
                     <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
+                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={()=>handleSearch(searchValue)}>
                         <SearchIcon />
                     </IconButton>
                 </Box>
-                <SortPopover buttonDisplay={<SwapVertIcon/>}/>
+                <SortPopover buttonDisplay={<SwapVertIcon/>} onSort={onSort}/>
             </Box>
             <Stack spacing={2} width='100%'>
                 {activeViewWorkoutData.map((workout)=>{
