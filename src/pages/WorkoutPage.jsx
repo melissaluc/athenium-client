@@ -5,15 +5,26 @@ import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 import WorkoutModal from "../components/Modals/WorkoutModal"
 import {IconButton ,InputBase ,Divider} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
+import { useState } from "react";
 
 
 import { useWorkoutContext } from '../Contexts/WorkoutContext';
 
 
 function WorkoutPage(){
-    const {activeViewWorkoutData} = useWorkoutContext();
+    const {activeViewWorkoutData, onFilter} = useWorkoutContext();
+    const [searchValue, setSearchValue] = useState(null)
 
+    const handleSearch = () => {
+        alert(searchValue)
+        onFilter(searchValue)
+    }
+
+    const onChange = (e) => {
+        e.preventDefailt()
+
+
+    }
 
     return (
         <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem', maxWidth:'500px', pb:'2vh'}}>
@@ -31,10 +42,12 @@ function WorkoutPage(){
                     <InputBase
                         sx={{ ml: 1, flex: 1 }}
                         placeholder="Search for a Workout"
-                        inputProps={{ 'aria-label': 'search google maps' }}
+                        onChange={onChange}
+                        inputProps={{ 'aria-label': 'Search for a workout' }}
+                        value={searchValue}
                     />
                     <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={()=>{alert('search')}}>
+                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
                         <SearchIcon />
                     </IconButton>
                 </Box>

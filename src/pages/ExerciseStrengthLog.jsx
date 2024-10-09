@@ -109,7 +109,6 @@ function ExerciseStrengthLog () {
     const {getExerciseRecords, exerciseLogRecords, deleteExercise, toggleView, updateRecords} = useStrengthLevelContext();
     const [rowModesModel, setRowModesModel] = useState({});
     const [rows, setRows] = useState(exerciseLogRecords || [])
-    const [originalRows, setOriginalRows] = useState(exerciseLogRecords || [])
     const [selectedCellParams, setSelectedCellParams] = useState(null);
     const [cellModesModel, setCellModesModel] = useState({});
     const [editMode, setEditMode] = useState(false)
@@ -145,7 +144,6 @@ function ExerciseStrengthLog () {
             });
     
             setRows(convertedRecords);
-            setOriginalRows(convertedRecords);
             setLoading(false); // Data is now available
         } else {
             setLoading(true); // Data is not yet available
@@ -194,7 +192,8 @@ function ExerciseStrengthLog () {
     const discardChanges  = useCallback(() => {
         console.log('cancel', unsavedChangesRef.current.rowsBeforeChange)
         if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
-            setRows(originalRows);
+            // setRows(originalRows);
+            setRows(unsavedChangesRef.current.rowsBeforeChange);
             setRowModesModel({});
             setHasUnsavedRows(false);
     
