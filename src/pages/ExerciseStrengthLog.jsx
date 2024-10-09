@@ -130,16 +130,7 @@ function ExerciseStrengthLog () {
     useEffect(() => {
         if (editMode) {
             unsavedChangesRef.current.revertBackRows = rows;
-        } else {
-            setRows(unsavedChangesRef.current.revertBackRows)
-            unsavedChangesRef.current = {
-                revertBackRows: [],
-                unsavedRows: {},
-                rowsBeforeChange: {},
-                addedRecords: [],
-                deletedRecords: [],
-            };
-        }
+        } 
     }, [editMode]);
 
     useEffect(() => {
@@ -207,26 +198,28 @@ function ExerciseStrengthLog () {
 
     const discardChanges  = useCallback(() => {
         console.log('cancel', unsavedChangesRef.current)
-        if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
-            // setRows(originalRows);
-            setRows(unsavedChangesRef.current.revertBackRows);
-            unsavedChangesRef.current = {
-                unsavedRows: {},
-                rowsBeforeChange: {},
-                addedRecords: [],
-                deletedRecords: [],
-            };
-            setRowModesModel({});
-            setHasUnsavedRows(false);
+        // if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
+        //     // setRows(originalRows);
+        //     setRowModesModel({});
+        //     setHasUnsavedRows(false);
     
-            Object.values(unsavedChangesRef.current.rowsBeforeChange).forEach((row) => {
-                apiRef.current.updateRows([row]);
-              });
-            unsavedChangesRef.current = {
-                unsavedRows: {},
-                rowsBeforeChange: {},
-            };
-        }
+        //     Object.values(unsavedChangesRef.current.rowsBeforeChange).forEach((row) => {
+        //         apiRef.current.updateRows([row]);
+        //       });
+        //     unsavedChangesRef.current = {
+        //         unsavedRows: {},
+        //         rowsBeforeChange: {},
+        //     };
+        // }
+
+        setRows(unsavedChangesRef.current.revertBackRows)
+        unsavedChangesRef.current = {
+            revertBackRows: [],
+            unsavedRows: {},
+            rowsBeforeChange: {},
+            addedRecords: [],
+            deletedRecords: [],
+        };
         setEditMode(false)
         console.log('editMode: ',editMode)
     }, [apiRef]);
