@@ -5,15 +5,29 @@ import WorkoutCard from "../components/Cards/WorkoutCard/WorkoutCard";
 import WorkoutModal from "../components/Modals/WorkoutModal"
 import {IconButton ,InputBase ,Divider} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
+import { useState } from "react";
 
 
 import { useWorkoutContext } from '../Contexts/WorkoutContext';
 
 
 function WorkoutPage(){
-    const {activeViewWorkoutData} = useWorkoutContext();
+    const {activeViewWorkoutData, onFilter, onSort} = useWorkoutContext();
+    const [searchValue, setSearchValue] = useState('')
 
+    const handleSearch = (value) => {
+        console.log('Searching for workout name like: ', value);
+        onFilter(value);
+    };
+
+    const onChange = (e) => {
+        const newSearchValue = e.target.value;
+        setSearchValue(newSearchValue);
+
+        if (newSearchValue === '') {  
+            handleSearch(''); 
+        }
+    };
 
     return (
         <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem', maxWidth:'500px', pb:'2vh'}}>
@@ -31,14 +45,16 @@ function WorkoutPage(){
                     <InputBase
                         sx={{ ml: 1, flex: 1 }}
                         placeholder="Search for a Workout"
-                        inputProps={{ 'aria-label': 'search google maps' }}
+                        onChange={onChange}
+                        inputProps={{ 'aria-label': 'Search for a workout' }}
+                        value={searchValue}
                     />
                     <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={()=>{alert('search')}}>
+                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={()=>handleSearch(searchValue)}>
                         <SearchIcon />
                     </IconButton>
                 </Box>
-                <SortPopover buttonDisplay={<SwapVertIcon/>}/>
+                <SortPopover buttonDisplay={<SwapVertIcon/>} onSort={onSort}/>
             </Box>
             <Stack spacing={2} width='100%'>
                 {activeViewWorkoutData.map((workout)=>{

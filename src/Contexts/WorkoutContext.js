@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { UserDataContext } from './UserDataContext';
+import { useStrengthLevelContext } from './StrengthLevelContext';
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
 import {convertKgtoLb, convertLbtoKg} from '../utils/utils'
@@ -10,9 +11,12 @@ export const WorkoutProvider = ({ children }) => {
     // use UserData to send data to strengthCalc
     //  Convert lift mass back to lbs or user preferred uom
     const {userData, isAuthenticated} = useContext(UserDataContext)
+    const {fetchStrengthData} = useStrengthLevelContext()
     const [workoutListData,  setWorkoutListData] = useState([]);
+    // Workout Detail Page
     const [activeWorkoutData, setActiveWorkoutData] = useState({});
     const [workoutData, setWorkoutData] = useState({});
+    // Workout page active view
     const [activeViewWorkoutData, setActiveViewWorkoutData] = useState([]);
     const [activeViewExerciseData, setActiveViewExerciseData] = useState([]);
     const [workoutMode, setWorkoutMode] = useState(false);
@@ -83,7 +87,8 @@ export const WorkoutProvider = ({ children }) => {
 
         try {
             const response = await axiosInstance.post('/strength', data);
-          
+            // // TODO: move elsewhere?
+            await fetchStrengthData()
             return { result: response.data[0], error: null };
             
         } catch (error) {
@@ -281,22 +286,26 @@ export const WorkoutProvider = ({ children }) => {
             }
         });
         console.log('Sort Data ' , sortedData);
-         setWorkoutListData(sortedData);
-         setWorkoutListData(sortedData);
+        setActiveViewWorkoutData(sortedData);
+
     };
 
     
 
     const onFilter = (filterText) => {
-        if (!filterText) {
-             setWorkoutListData(workoutListData);
-        } else { 
+        console.log('filterText: ', filterText)
+        if (filterText === '') {
+            console.log(workoutListData)
+            setActiveViewWorkoutData(workoutListData);
+        } else {
+            handleFilter(filterText)
         }
     }
 
     const handleFilter = (filterCriteria) => {
-        const filteredData = workoutListData.filter(item => item.workout_name === filterCriteria)
-         setWorkoutListData(filteredData);
+        const filteredData = workoutListData.filter(item => item.workout_name.toLowerCase() === filterCriteria.toLowerCase())
+        setActiveViewWorkoutData(filteredData);
+        console.log('filtered: ',filteredData)
     };
 
     return (

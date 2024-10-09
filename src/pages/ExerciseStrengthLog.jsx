@@ -109,7 +109,6 @@ function ExerciseStrengthLog () {
     const {getExerciseRecords, exerciseLogRecords, deleteExercise, toggleView, updateRecords} = useStrengthLevelContext();
     const [rowModesModel, setRowModesModel] = useState({});
     const [rows, setRows] = useState(exerciseLogRecords || [])
-    const [originalRows, setOriginalRows] = useState(exerciseLogRecords || [])
     const [selectedCellParams, setSelectedCellParams] = useState(null);
     const [cellModesModel, setCellModesModel] = useState({});
     const [editMode, setEditMode] = useState(false)
@@ -121,11 +120,18 @@ function ExerciseStrengthLog () {
     const [hasUnsavedRows, setHasUnsavedRows] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const unsavedChangesRef = useRef({
+        revertBackRows: [],
         unsavedRows: {},
         rowsBeforeChange: {},
         addedRecords:[],
         deletedRecords:[]
     });
+
+    useEffect(() => {
+        if (editMode) {
+            unsavedChangesRef.current.revertBackRows = rows;
+        } 
+    }, [editMode]);
 
     useEffect(() => {
         if (exerciseLogRecords) {
@@ -145,7 +151,6 @@ function ExerciseStrengthLog () {
             });
     
             setRows(convertedRecords);
-            setOriginalRows(convertedRecords);
             setLoading(false); // Data is now available
         } else {
             setLoading(true); // Data is not yet available
@@ -192,20 +197,29 @@ function ExerciseStrengthLog () {
 
 
     const discardChanges  = useCallback(() => {
-        console.log('cancel', unsavedChangesRef.current.rowsBeforeChange)
-        if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
-            setRows(originalRows);
-            setRowModesModel({});
-            setHasUnsavedRows(false);
+        console.log('cancel', unsavedChangesRef.current)
+        // if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
+        //     // setRows(originalRows);
+        //     setRowModesModel({});
+        //     setHasUnsavedRows(false);
     
-            Object.values(unsavedChangesRef.current.rowsBeforeChange).forEach((row) => {
-                apiRef.current.updateRows([row]);
-              });
-            unsavedChangesRef.current = {
-                unsavedRows: {},
-                rowsBeforeChange: {},
-            };
-        }
+        //     Object.values(unsavedChangesRef.current.rowsBeforeChange).forEach((row) => {
+        //         apiRef.current.updateRows([row]);
+        //       });
+        //     unsavedChangesRef.current = {
+        //         unsavedRows: {},
+        //         rowsBeforeChange: {},
+        //     };
+        // }
+
+        setRows(unsavedChangesRef.current.revertBackRows)
+        unsavedChangesRef.current = {
+            revertBackRows: [],
+            unsavedRows: {},
+            rowsBeforeChange: {},
+            addedRecords: [],
+            deletedRecords: [],
+        };
         setEditMode(false)
         console.log('editMode: ',editMode)
     }, [apiRef]);

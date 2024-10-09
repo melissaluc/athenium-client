@@ -12,29 +12,29 @@ export const StrengthLevelProvider = ({ children }) => {
     const [sortedExercises, setSortedExercises] = useState([]);
     
 
+    const fetchStrengthData = useCallback(async () => {
+        try {
+            const response = await axiosInstance.get(`/strength`);
+            const data = response.data;
+            const groupScores = calcNormalizedScore(data);
+            const sortExercises = sortExercisesByStrengthLevel(data);
+    
+            const sortedGroups = Object.entries(groupScores)
+                .sort((a, b) => b[1] - a[1])
+                .map(([group, score]) => ({
+                    group,
+                    score,
+                    exercises: data[group],
+                }));
+    
+            setStrengthData(sortedGroups);
+            setSortedExercises(sortExercises);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []); // Add dependencies if needed
 
     useEffect(() => {
-        const fetchStrengthData = async () => {
-            try {
-                const response = await axiosInstance.get(`/strength`);
-                const data = response.data;
-                const groupScores = calcNormalizedScore(data);
-                const sortExercises = sortExercisesByStrengthLevel(data);
-    
-                const sortedGroups = Object.entries(groupScores)
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([group, score]) => ({
-                        group,
-                        score,
-                        exercises: data[group],
-                    }));
-    
-                setStrengthData(sortedGroups);
-                setSortedExercises(sortExercises);
-            } catch (error) {
-                console.error(error);
-            }
-        };
     
         fetchStrengthData();
     }, [userData, exerciseLogRecords]);
@@ -178,7 +178,8 @@ export const StrengthLevelProvider = ({ children }) => {
                 getExerciseRecords,
                 exerciseLogRecords,
                 deleteExercise,
-                updateRecords
+                updateRecords,
+                fetchStrengthData 
             }}
         >
             {children}
