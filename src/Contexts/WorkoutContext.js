@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { UserDataContext } from './UserDataContext';
+import { useStrengthLevelContext } from './StrengthLevelContext';
 import axiosInstance from '../utils/axiosConfig';
 import { v4 as uuidv4 } from 'uuid';
 import {convertKgtoLb, convertLbtoKg} from '../utils/utils'
@@ -10,6 +11,7 @@ export const WorkoutProvider = ({ children }) => {
     // use UserData to send data to strengthCalc
     //  Convert lift mass back to lbs or user preferred uom
     const {userData, isAuthenticated} = useContext(UserDataContext)
+    const {fetchStrengthData} = useStrengthLevelContext()
     const [workoutListData,  setWorkoutListData] = useState([]);
     const [activeWorkoutData, setActiveWorkoutData] = useState({});
     const [workoutData, setWorkoutData] = useState({});
@@ -83,7 +85,8 @@ export const WorkoutProvider = ({ children }) => {
 
         try {
             const response = await axiosInstance.post('/strength', data);
-          
+            // // TODO: move elsewhere?
+            await fetchStrengthData()
             return { result: response.data[0], error: null };
             
         } catch (error) {

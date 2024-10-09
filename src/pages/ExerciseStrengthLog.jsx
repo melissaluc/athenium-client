@@ -120,11 +120,27 @@ function ExerciseStrengthLog () {
     const [hasUnsavedRows, setHasUnsavedRows] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const unsavedChangesRef = useRef({
+        revertBackRows: [],
         unsavedRows: {},
         rowsBeforeChange: {},
         addedRecords:[],
         deletedRecords:[]
     });
+
+    useEffect(() => {
+        if (editMode) {
+            unsavedChangesRef.current.revertBackRows = rows;
+        } else {
+            setRows(unsavedChangesRef.current.revertBackRows)
+            unsavedChangesRef.current = {
+                revertBackRows: [],
+                unsavedRows: {},
+                rowsBeforeChange: {},
+                addedRecords: [],
+                deletedRecords: [],
+            };
+        }
+    }, [editMode]);
 
     useEffect(() => {
         if (exerciseLogRecords) {
@@ -190,10 +206,16 @@ function ExerciseStrengthLog () {
 
 
     const discardChanges  = useCallback(() => {
-        console.log('cancel', unsavedChangesRef.current.rowsBeforeChange)
+        console.log('cancel', unsavedChangesRef.current)
         if(Object.keys(unsavedChangesRef.current.rowsBeforeChange).length >0){
             // setRows(originalRows);
-            setRows(unsavedChangesRef.current.rowsBeforeChange);
+            setRows(unsavedChangesRef.current.revertBackRows);
+            unsavedChangesRef.current = {
+                unsavedRows: {},
+                rowsBeforeChange: {},
+                addedRecords: [],
+                deletedRecords: [],
+            };
             setRowModesModel({});
             setHasUnsavedRows(false);
     
